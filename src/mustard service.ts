@@ -45,7 +45,6 @@ import {
 
 import {
   $effect,
-  $effects,
   $familiar,
   $item,
   $items,
@@ -53,7 +52,6 @@ import {
   $monster,
   $skill,
   $slot,
-  //$slots,
   Clan,
   ensureEffect,
   get,
@@ -76,17 +74,6 @@ import {
   Witchess,
 } from "libram/dist/resources";
 import { currentOutfit, equipOutfit, fallGuy, juneCleaver, preAdventure } from "./lib";
-
-/*
-export function cleaver(): void {
-  if (get(`_juneCleaverFightsLeft`) === 0) {
-    const outfit = currentOutfit();
-    equip($slot`weapon`, $item`June cleaver`);
-    adv1($location`The Sleazy Back Alley`, -1);
-    equipOutfit(outfit);
-  }
-}
-*/
 
 export function kramMode(): void {
   if (getKramcoWandererChance() === 1) {
@@ -148,42 +135,13 @@ export function preVenture(): void {
   );
 }
 
-/*
-export function preAdventure(): void {
-  while (myHp() <= 0.85 * myMaxhp()) {
-    cliExecute(`restore hp`);
-  }
-  mpRestore();
-
-  pilsners();
-  kramGo();
-}
-
-export function currentOutfit(): Item[] {
-  const outfit: Item[] = [];
-  for (const slot of $slots``) {
-    outfit.push(equippedItem(slot));
-  }
-  return outfit;
-}
-
-
-export function equipOutfit(outfit: Item[]): void {
-  for (let i = 0; i < outfit.length; i++) {
-    if (!$slots`crown-of-thrones, buddy-bjorn, fakehand`.includes($slots``[i])) {
-      equip($slots``[i], outfit[i]);
-    }
-  }
-}
-*/
-
 export function deepDarkVisions(): void {
   const outfit = currentOutfit();
   equip($item`Jurassic Parka`);
   cliExecute(`parka ghostasaurus`);
   equip($item`Fourth of May Cosplay Saber`);
   equip($item`cursed monkey's paw`);
-  for (const eff of $effects`Astral Shell, Elemental Saucesphere`) {
+  for (const eff of [$effect`Astral Shell`, $effect`Elemental Saucesphere`]) {
     if (!have(eff)) {
       ensureEffect(eff);
     }
@@ -260,9 +218,6 @@ export function setup(): void {
   if (!have(floundryItem)) {
     Clan.join(`Floundry`);
     retrieveItem(1, floundryItem);
-    //use(1, $item`codpiece`);
-    //use(8, $item`bubblin' crude`);
-    //autosell(1, $item`oil cap`);
     Clan.join(`Bonus Adventures from Hell`);
   }
 
@@ -290,7 +245,7 @@ export function setup(): void {
     }
   }
 
-  for (const item of $items`toy accordion, turtle totem, saucepan`) {
+  for (const item of [$item`toy accordion`, $item`turtle totem`, $item`saucepan`]) {
     if (!have(item)) {
       retrieveItem(1, item);
     }
@@ -363,6 +318,7 @@ export function setup(): void {
     ]);
   }
 
+  cliExecute(`mcd 10`);
   cliExecute(`mcd 11`);
 
   cliExecute(`fold wad of used tape`);
@@ -377,26 +333,8 @@ export function setup(): void {
   equip($slot`acc2`, $item`your cowboy boots`);
   equip($slot`acc3`, $item`combat lover's locket`);
 
-  /*
-  if (visitUrl(`place.php?whichplace=chateau`).includes(`Rest in Bed (free)`)) {
-    if (getProperty(`timesRested`) === `0`) {
-      visitUrl(`place.php?whichplace=chateau&action=chateau_restlabelfree`);
-    }
-  }
-  */
-
   skeletons();
 }
-
-/*
-map the monsters
-purchase 1 yellow rocket
-skeleton store => novelty tropical skeleton (yellow rocket)
-use mayday
-numberology 69 for +3 adv
-::here, instant does 2 more skeleton store. perhaps, train prep? we will be unlocking guild instead
-TEST: coil wire (60)
-*/
 
 export function skeletons(): void {
   setProperty(`_mustardServiceStage`, `Skeletons to Coil Wire`);
@@ -481,9 +419,7 @@ export function skeletons(): void {
     ];
 
     for (const effect of effs) {
-      if (!have(effect)) {
-        useSkill(1, toSkill(effect));
-      }
+      ensureEffect(effect);
     }
 
     useFamiliar($familiar`Pair of Stomping Boots`);
@@ -529,27 +465,6 @@ export function skeletons(): void {
 
   nextLevelling();
 }
-
-/*
-clan shower warm
-facial exp mus%
-pull: deep dish of legend, calzone of legend, pizza of legend, abstraction:purpose
-monkey wish: HGH-charged
-chew abstratcion:purpose
-use ten-percent bonus
-maximize for mp, restore mp
-eat calzone, deep dish
-cast scurvy and sobriety
-consult Gunther, Lord of Smackdown
-buy and use 5 bengal balm
-maximize for levling
-buff way up for leveling
-
-buy a blue and red rocket
-scaler zone: gnats; red rocket; blue rocket; weaksauce; stuffed mortar shell; saucegeyser (fallbot returns)
-eat 1 pizza of legend
-change boombox to meat??
-*/
 
 export function levellingPrep(): void {
   setProperty(`_mustardServiceStage`, `Levelling Preparation`);
@@ -719,11 +634,6 @@ export function levellingPrep(): void {
   ];
   for (const effect of effects) {
     ensureEffect(effect);
-    /*
-    if (!have(effect)) {
-      useSkill(1, toSkill(effect));
-    }
-    */
   }
   if (!have($effect`Frostbeard`)) {
     abort(`Failed to obtain effects?`);
@@ -790,14 +700,6 @@ export function payphoneFights(): void {
   if (get(`_shadowAffinityToday`) === false) {
     setProperty(`choiceAdventure1497`, `1`);
     use(1, $item`closed-circuit pay phone`);
-    /*
-    const shadowBoss = get(`rufusDesiredEntity`);
-    if (shadowBoss) {
-      runChoice(1);
-    } else {
-      runChoice(2);
-    }
-    */
   }
 
   while (have($effect`Shadow Affinity`) && get(`encountersUntilSRChoice`) > 0) {
@@ -983,21 +885,6 @@ export function neverendingFreefights(): void {
   nextLevelling();
 }
 
-/*
-scaler zone powerlevling: idk when this can end. depends on cookbat? depends on level? looks like instant stops after 2 combats with cbb drops
-cook and eat: whatever you can? rich ricotta, plain calzone, vegetable of jarlsberg?, ricotta casserole (6 jarls, 6 whey, 3 yeast)
-visit lyle
-look high telescope
-kill witch now if attempting, otherwise kill another bishop
-feel pride and free kills in scaler zone
-the fights continue but are not free: they stop with 3 more veggie drops
-buff up for stat tests
-TEST: stat (1)
-TEST: stat (1)
-TEST: stat (1)
-TEST: hp (1)
-*/
-
 export function freekillConsult(): string {
   let freeFights = `if hasskill 7406; skill 7406; endif; if hasskill 7340; skill 7340; endif;`;
   if (get(`_shatteringPunchUsed`) < 3) {
@@ -1054,16 +941,6 @@ export function freekillBonanza(): void {
   }
 
   if (famRoute === $familiar`Cookbookbat`) {
-    /*
-  if (haveEffect($effect`Rippin' Ricotta`) === 0) {
-    retrieveItem(1, $item`Pete's rich ricotta`);
-    eat(1, $item`Pete's rich ricotta`);
-  }
-  if (haveEffect($effect`Wizard Sight`) === 0) {
-    retrieveItem(1, $item`roasted vegetable of Jarlsberg`);
-    eat(1, $item`roasted vegetable of Jarlsberg`);
-  }
-  */
     if (!have($effect`Inspired Chef`)) {
       retrieveItem(1, $item`Boris's bread`);
       eat(1, $item`Boris's bread`);
@@ -1118,6 +995,8 @@ export function musTest(): void {
       } [Expected: ${musTurnsave}]`
     );
     print(`MUS TEST: Took ${testTurns - myAdventures()}`, `blue`);
+  } else {
+    abort(`uh oh!`);
   }
 
   nextTest();
@@ -1142,6 +1021,8 @@ export function mysTest(): void {
       } [Expected: ${mysTurnsave}]`
     );
     print(`MYS TEST: Took ${testTurns - myAdventures()}`, `blue`);
+  } else {
+    abort(`uh oh!`);
   }
 
   nextTest();
@@ -1166,6 +1047,8 @@ export function moxTest(): void {
       } [Expected: ${moxTurnsave}]`
     );
     print(`MOX TEST: Took ${testTurns - myAdventures()}`, `blue`);
+  } else {
+    abort(`uh oh!`);
   }
 
   nextTest();
@@ -1189,6 +1072,8 @@ export function hpTest(): void {
       } [Expected: ${hpTurnsave}]`
     );
     print(`HP TEST: Took ${testTurns - myAdventures()}`, `blue`);
+  } else {
+    abort(`uh oh!`);
   }
 
   nextTest();
@@ -1233,6 +1118,8 @@ export function famwtTest(): void {
       } [Expected: ${famwtTurnsave}]`
     );
     print(`FAMWT TEST: Took ${testTurns - myAdventures()}`, `blue`);
+  } else {
+    abort(`uh oh!`);
   }
 
   nextTest();
@@ -1290,6 +1177,8 @@ export function noncomTest(): void {
       } [Expected: ${ncTurnsave}]`
     );
     print(`NC TEST: Took ${testTurns - myAdventures()}`, `blue`);
+  } else {
+    abort(`uh oh!`);
   }
 
   nextTest();
@@ -1307,19 +1196,6 @@ export function itemTest(): void {
     adv1($location`The Limerick Dungeon`, -1, `abort;`);
     use(1, $item`cyclops eyedrops`);
   }
-
-  /*
-  if (haveEffect($effect`Sacré Mental`) === 0) {
-    useSkill(1, $skill`The Ode to Booze`);
-    drink(1, $item`Sacramento Wine`);
-  }
-  */
-  /*
-  if (haveEffect($effect`Wizard Sight`) === 0) {
-    retrieveItem(1, $item`roasted vegetable of Jarlsberg`);
-    eat(1, $item`roasted vegetable of Jarlsberg`);
-  }
-  */
 
   if (!have($effect`Feeling Lost`)) {
     useSkill(1, $skill`Feel Lost`);
@@ -1362,6 +1238,8 @@ export function itemTest(): void {
       } [Expected: ${itemTurnsave}]`
     );
     print(`ITEM TEST: Took ${testTurns - myAdventures()}`, `blue`);
+  } else {
+    abort(`uh oh!`);
   }
 
   nextTest();
@@ -1420,6 +1298,8 @@ export function hotresTest(): void {
       } [Expected: ${hotresTurnsave}]`
     );
     print(`HOTRES TEST: Took ${testTurns - myAdventures()} [Expected: ${hotresTurnsave}]`);
+  } else {
+    abort(`uh oh!`);
   }
 
   nextTest();
@@ -1446,8 +1326,6 @@ export function wdmgTest(): void {
   }
 
   fallGuy();
-
-  retrieveItem(1, $item`potion of potency`);
 
   //attempt deep dark visions of course :slightsmile: must be done before cowrruption, must last until spelltest
   deepDarkVisions();
@@ -1481,12 +1359,6 @@ export function wdmgTest(): void {
     visitUrl(`choice.php?whichchoice=1100&option=4`);
   }
 
-  /*
-  if (getProperty(`_monkeyPawWishesUsed`) === `2`) {
-    cliExecute(`monkeypaw effect Spit Upon`);
-    cliExecute(`monkeypaw effect Pyramid Power`);
-  }
-*/
   maximize(`weapon dmg`, false);
   if (!getProperty(`csServicesPerformed`).includes(`Reduce Gazelle Population`)) {
     const testTurns = myAdventures();
@@ -1504,6 +1376,8 @@ export function wdmgTest(): void {
       } [Expected: ${wdmgTurnsave}]`
     );
     print(`WDMG TEST: Took ${testTurns - myAdventures()}`);
+  } else {
+    abort(`uh oh!`);
   }
 
   nextTest();
@@ -1561,6 +1435,8 @@ export function sdmgTest(): void {
       } [Expected: ${sdmgTurnsave}]`
     );
     print(`SDMG TEST: Took ${testTurns - myAdventures()}`);
+  } else {
+    abort(`uh oh!`);
   }
 
   nextTest();

@@ -283,10 +283,8 @@ export function coldConsult(): void {
     get(`_coldMedicineConsults`) <= 5 &&
     totalTurnsPlayed() >= get(`_nextColdMedicineConsult`)
   ) {
-    if (
-      visitUrl(`campground.php?action=workshed`, false, true).includes("Extrovermectin&trade;") ||
-      visitUrl(`campground.php?action=workshed`, false, true).includes("Breathitin")
-    ) {
+    const workshed = visitUrl(`campground.php?action=workshed`, false, true);
+    if (workshed.includes("Extrovermectin&trade;") || workshed.includes("Breathitin")) {
       visitUrl("campground.php?action=workshed");
       runChoice(5);
     }

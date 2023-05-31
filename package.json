@@ -31,8 +31,8 @@
   },
   "dependencies": {
     "core-js": "^3.16.4",
-    "kolmafia": "^5.27382.0",
-    "libram": "^0.8.1"
+    "kolmafia": "^5.27383.0",
+    "libram": "^0.8.2"
   },
   "author": "Xyghra",
   "license": "ISC",
