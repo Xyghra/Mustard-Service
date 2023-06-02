@@ -63,7 +63,7 @@ const defaultTasks: (() => void)[] = [
   sweatSweat,
   juneCleaver,
   rayMode,
-  fallGuy,
+  () => fallGuy($location`Shadow Rift`),
   stillSuit,
   coldConsult,
 ];
@@ -130,6 +130,11 @@ export function currentOutfit(): [Map<Slot, Item>, Familiar] {
   const curFam = myFamiliar();
 
   return [curFit, curFam];
+}
+
+export function mustardPreadventure(): void {
+  restoreHp(Math.min(4000, 0.9 * myMaxhp()));
+  juneCleaver();
 }
 
 export function died(): void {
@@ -258,13 +263,13 @@ export function rayMode(): void {
   }
 }
 
-export function fallGuy(): void {
+export function fallGuy(zone: Location): void {
   if (AutumnAton.available()) {
     print(`Fallguy is available!`, `blue`);
     AutumnAton.upgrade();
     if (AutumnAton.turnsForQuest() < myAdventures()) {
-      print(`Sending him to Shadow Rift`, `blue`);
-      AutumnAton.sendTo($location`Shadow Rift`);
+      print(`Sending him to ${zone}`, `blue`);
+      AutumnAton.sendTo(zone);
     } else {
       print(`He won't come back in time so we won't send him`, `blue`);
     }

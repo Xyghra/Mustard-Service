@@ -251,6 +251,7 @@ export function setup(): void {
     }
   }
 
+  //startquest
   visitUrl(`shop.php?whichshop=meatsmith&action=talk`);
   visitUrl(`choice.php?pwd=${myHash}&whichchoice=1059&option=1`);
 
@@ -412,7 +413,7 @@ export function skeletons(): void {
       $effect`Musk of the Moose`,
       $effect`Carlweather's Cantata of Confrontation`,
       $effect`Pride of the Puffin`,
-      $effect`Carol of the Thrills`,
+      //$effect`Carol of the Thrills`,
       $effect`Empathy`,
       $effect`Leash of Linguini`,
       $effect`Drescher's Annoying Noise`,
@@ -722,7 +723,7 @@ export function payphoneFights(): void {
     use(1, $item`closed-circuit pay phone`);
   }
 
-  fallGuy();
+  fallGuy($location`Shadow Rift`);
 
   if (have($effect`Beaten Up`)) {
     abort(`Died? Shadow Boss?`);
@@ -1325,7 +1326,7 @@ export function wdmgTest(): void {
     equip($slot`off-hand`, $item`Stick-Knife of Loathing`);
   }
 
-  fallGuy();
+  fallGuy($location`Shadow Rift`);
 
   //attempt deep dark visions of course :slightsmile: must be done before cowrruption, must last until spelltest
   deepDarkVisions();
