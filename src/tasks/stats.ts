@@ -1,12 +1,27 @@
 import { Quest, Task } from "grimoire-kolmafia";
 import { print } from "kolmafia";
-import { $effect, CommunityService, ensureEffect, get, set, uneffect } from "libram";
+import { $effect, CommunityService, ensureEffect, get, set, TrainSet, uneffect } from "libram";
 import { printModtrace } from "libram/dist/modifier";
 
 export const muscleQuest: Quest<Task> = {
   name: `Muscle Test`,
   completed: () => CommunityService.Muscle.isDone(),
   tasks: [
+    {
+      name: `Train!`,
+      completed: () => get(`lastTrainsetConfiguration`) !== 0,
+      do: () =>
+        TrainSet.setConfiguration([
+          TrainSet.Station.COAL_HOPPER,
+          TrainSet.Station.GAIN_MEAT,
+          TrainSet.Station.TOWER_FIZZY,
+          TrainSet.Station.CANDY_FACTORY,
+          TrainSet.Station.ORE_HOPPER,
+          TrainSet.Station.GRAIN_SILO,
+          TrainSet.Station.VIEWING_PLATFORM,
+          TrainSet.Station.TRACKSIDE_DINER,
+        ]),
+    },
     {
       name: `Muscle Test`,
       prepare: (): void => {

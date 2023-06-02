@@ -192,7 +192,7 @@ export const levellingQuest: Quest<Task> = {
     },
     {
       name: `April Shower`,
-      completed: () => have(showerEffect),
+      completed: () => have(showerEffect) || get(`_aprilShower`),
       do: () => ensureEffect(showerEffect),
     },
     {
@@ -254,11 +254,12 @@ export const levellingQuest: Quest<Task> = {
     },
     {
       name: `Use Wasabi Marble Soda`,
-      completed: () => !have($item`wasabi marble soda`),
+      completed: () => !have($item`wasabi marble soda`) || have($effect`Wasabi With You`),
       do: () => use(1, $item`wasabi marble soda`),
     },
     {
       name: `Eat sosig`,
+      ready: () => availableAmount($item`magical sausage casing`) > 0,
       completed: () => get(`_sausagesEaten`) > 0,
       do: (): void => {
         retrieveItem(1, $item`magical sausage`);
@@ -340,7 +341,7 @@ export const levellingQuest: Quest<Task> = {
     },
     {
       name: `Flapper Mapper`,
-      completed: () => get(`_monstersMapped`) >= 1,
+      completed: () => get(`_monstersMapped`) >= 2,
       do: () =>
         Cartography.mapMonster(
           $location`An Unusually Quiet Barroom Brawl`,
@@ -468,7 +469,7 @@ export const levellingQuest: Quest<Task> = {
     },
     {
       name: `Witchess Fights`,
-      completed: () => get(`_witchessFights`) === 4,
+      completed: () => get(`_witchessFights`) >= 4,
       do: () => Witchess.fightPiece($monster`Witchess Bishop`),
       combat: new CombatStrategy().macro(
         Macro.trySkill($skill`%fn, spit on me!`)
@@ -495,10 +496,6 @@ export const levellingQuest: Quest<Task> = {
       completed: () => get(`_neverendingPartyFreeTurns`) >= 10,
       do: $location`The Neverending Party`,
       choices: { 1322: 2, 1324: 5, 1326: 2 },
-      outfit: {
-        familiar: $familiar`Hovering Sombrero`,
-        famequip: $item`tiny stillsuit`,
-      },
       combat: new CombatStrategy().macro(
         Macro.trySkill($skill`Bowl Sideways`)
           .trySkill($skill`%fn\, spit on me!`)

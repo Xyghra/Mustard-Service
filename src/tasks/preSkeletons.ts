@@ -70,12 +70,10 @@ export const runStartQuest: Quest<Task> = {
     },
     {
       name: `Acquire Floundry Item`,
+      prepare: () => Clan.join(`Floundry`),
       completed: () => get(`_floundryItemCreated`),
-      do: (): void => {
-        Clan.join(`Floundry`);
-        retrieveItem(1, floundryItem);
-        Clan.join(`Bonus Adventures from Hell`);
-      },
+      do: () => retrieveItem(1, floundryItem),
+      post: () => Clan.join(`Bonus Adventures from Hell`),
     },
 
     {

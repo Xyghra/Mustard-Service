@@ -5,6 +5,8 @@ import {
   autosell,
   cliExecute,
   drink,
+  equip,
+  equippedItem,
   myAdventures,
   retrieveItem,
   use,
@@ -17,6 +19,7 @@ import {
   $location,
   $monster,
   $skill,
+  $slot,
   byStat,
   Cartography,
   CombatLoversLocket,
@@ -30,13 +33,6 @@ import {
   uneffect,
 } from "libram";
 
-/*
-const {guildZone, guildQuest} = byStat({
-  Muscle: {guildZone: $location`The Outskirts of Cobb's Knob`, guildQuest: `questG09Muscle`},
-  Mysticality: {$location`The Haunted Pantry`, `questG07Myst`},
-  Moxie:{ $location`The Sleazy Back Alley`, `questG08Moxie`},
-});
-*/
 const { guildZone, guildQuestPref } = byStat({
   Muscle: {
     guildZone: $location`The Outskirts of Cobb's Knob`,
@@ -52,6 +48,8 @@ const { guildZone, guildQuestPref } = byStat({
   },
 });
 
+let curWeapon = $item`June cleaver`;
+
 export const skeletonsQuest: Quest<Task> = {
   name: `Skeletons to Wire Coiling`,
   completed: () => CommunityService.CoilWire.isDone(),
@@ -62,6 +60,22 @@ export const skeletonsQuest: Quest<Task> = {
       do: (): void => {
         adv1($location`Uncle Gator's Country Fun-Time Liquid Waste Sluice`, -1, `abort;`);
         set(`_mustardServiceDiner`, `true`);
+      },
+    },
+    {
+      name: `June Cleave`,
+      ready: () => get(`_juneCleaverFightsLeft`) === 0,
+      prepare: () => (curWeapon = equippedItem($slot`weapon`)),
+      completed: () => get(`_juneCleaverFightsLeft`) > 0,
+      do: () => adv1($location`The Sleazy Back Alley`, -1, "abort;"),
+      outfit: {
+        weapon: $item`June cleaver`,
+      },
+      post: (): void => {
+        if (have($effect`Beaten Up`)) {
+          uneffect($effect`Beaten Up`);
+        }
+        equip($slot`weapon`, curWeapon);
       },
     },
     {
@@ -93,7 +107,9 @@ export const skeletonsQuest: Quest<Task> = {
     {
       name: `Red Skeleton`,
       prepare: () => retrieveItem(1, $item`red rocket`),
-      completed: () => get(`lastCopyableMonster`) === $monster`red skeleton`,
+      completed: () =>
+        get(`lastCopyableMonster`) === $monster`red skeleton` ||
+        get(`_locketMonstersFought`).includes(`1521`),
       do: (): void => {
         CombatLoversLocket.reminisce($monster`red skeleton`);
       },
