@@ -461,7 +461,7 @@ export const levellingQuest: Quest<Task> = {
         famequip: $item`tiny stillsuit`,
       },
       combat: new CombatStrategy().macro(
-        Macro.trySkill($skill`%fn\, spit on me!`)
+        Macro.trySkill($skill`%fn, spit on me!`)
           .attack()
           .repeat()
       ),
@@ -486,7 +486,7 @@ export const levellingQuest: Quest<Task> = {
         famequip: $item`tiny stillsuit`,
       },
       combat: new CombatStrategy().macro(
-        Macro.trySkill($skill`%fn\, spit on me!`)
+        Macro.trySkill($skill`%fn, spit on me!`)
           .attack()
           .repeat()
       ),
@@ -498,7 +498,7 @@ export const levellingQuest: Quest<Task> = {
       choices: { 1322: 2, 1324: 5, 1326: 2 },
       combat: new CombatStrategy().macro(
         Macro.trySkill($skill`Bowl Sideways`)
-          .trySkill($skill`%fn\, spit on me!`)
+          .trySkill($skill`%fn, spit on me!`)
           .trySkill($skill`Lunging Thrust-Smack`)
           .repeat()
       ),
@@ -509,7 +509,7 @@ export const levellingQuest: Quest<Task> = {
       completed: () => have($item`battle broom`),
       do: () => Witchess.fightPiece($monster`Witchess Witch`),
       combat: new CombatStrategy().macro(
-        Macro.trySkill($skill`%fn\, spit on me!`)
+        Macro.trySkill($skill`%fn, spit on me!`)
           .trySkill($skill`Lunging Thrust-Smack`)
           .repeat()
       ),
@@ -523,7 +523,7 @@ export const levellingQuest: Quest<Task> = {
         acc2: $item`Cincho de Mayo`,
       },
       combat: new CombatStrategy().macro(
-        Macro.trySkill($skill`%fn\, spit on me!`)
+        Macro.trySkill($skill`%fn, spit on me!`)
           .trySkill($skill`Bowl Sideways`)
           .trySkill($skill`Feel Pride`)
           .trySkill($skill`Cincho: Confetti Extravaganza`)
@@ -540,7 +540,7 @@ export const levellingQuest: Quest<Task> = {
         acc2: $item`Lil' Doctor™ bag`,
       },
       combat: new CombatStrategy().macro(
-        Macro.trySkill($skill`%fn\, spit on me!`)
+        Macro.trySkill($skill`%fn, spit on me!`)
           .trySkill($skill`Bowl Sideways`)
           .trySkill($skill`Chest X-Ray`)
           .abort()
@@ -552,7 +552,7 @@ export const levellingQuest: Quest<Task> = {
       do: $location`The Neverending Party`,
       choices: { 1322: 2, 1324: 5, 1326: 2 },
       combat: new CombatStrategy().macro(
-        Macro.trySkill($skill`%fn\, spit on me!`)
+        Macro.trySkill($skill`%fn, spit on me!`)
           .trySkill($skill`Bowl Sideways`)
           .trySkill($skill`Gingerbread Mob Hit`)
           .abort()
