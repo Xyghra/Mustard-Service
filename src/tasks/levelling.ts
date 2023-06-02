@@ -30,6 +30,7 @@ import {
   $monster,
   $skill,
   $slot,
+  $stat,
   byStat,
   Cartography,
   clamp,
@@ -181,11 +182,13 @@ export const levellingQuest: Quest<Task> = {
       prepare: (): void => {
         curOffhand = equippedItem($slot`off-hand`);
       },
-      ready: () => getKramcoWandererChance() === 1,
+      ready: () => getKramcoWandererChance() === 1 && get(`_latteRefillsUsed`) >= 3,
       completed: () => getKramcoWandererChance() < 1,
       do: () => $location`The Sleazy Back Alley`,
       outfit: {
         offhand: $item`Kramco Sausage-o-Matic™`,
+        familiar: $familiar`Melodramedary`,
+        famequip: $item`tiny stillsuit`,
       },
       combat: new CombatStrategy().macro(Macro.attack().repeat()),
       post: () => equip($slot`off-hand`, curOffhand),
@@ -240,15 +243,13 @@ export const levellingQuest: Quest<Task> = {
     {
       name: `Use Market Consumables`,
       completed: () =>
-        [
-          $effect`Glittering Eyelashes`,
-          $effect`Go Get 'Em\, Tiger!`,
-          $effect`Butt-Rock Hair`,
-        ].every((ef) => have(ef)),
+        [$effect`Glittering Eyelashes`, $effect`Go Get 'Em, Tiger!`, $effect`Butt-Rock Hair`].every(
+          (ef) => have(ef)
+        ),
       do: () =>
         [
           $effect`Glittering Eyelashes`,
-          $effect`Go Get 'Em\, Tiger!`,
+          $effect`Go Get 'Em, Tiger!`,
           $effect`Butt-Rock Hair`,
         ].forEach((ef) => ensureEffect(ef, 9)),
     },
@@ -319,7 +320,7 @@ export const levellingQuest: Quest<Task> = {
     },
     {
       name: `Buff the heck up oomfie!`,
-      completed: () => have($effect`Bendin' Hell`),
+      completed: () => have($effect`Bendin' Hell`) || get(`_speakeasyFreeFights`) === 3,
       do: () => levellingEffects.forEach((ef) => ensureEffect(ef)),
     },
     {
@@ -337,7 +338,6 @@ export const levellingQuest: Quest<Task> = {
           .trySkill($skill`Throw Latte on Opponent`)
           .abort()
       ),
-      post: () => equip($item`unbreakable umbrella`),
     },
     {
       name: `Flapper Mapper`,
@@ -348,6 +348,7 @@ export const levellingQuest: Quest<Task> = {
           $monster`goblin flapper`
         ),
       outfit: {
+        offhand: $item`unbreakable umbrella`,
         familiar: $familiar`Nanorhino`,
         famequip: $item`tiny stillsuit`,
       },
@@ -367,8 +368,12 @@ export const levellingQuest: Quest<Task> = {
       combat: new CombatStrategy().macro(Macro.attack().repeat()),
     },
     {
+      name: `Pick up a club!`,
+      completed: () => have($item`seal-clubbing club`),
+      do: () => retrieveItem(1, $item`seal-clubbing club`),
+    },
+    {
       name: `Seal Fights`,
-      prepare: () => retrieveItem(1, $item`seal-clubbing club`),
       completed: () => myClass() !== Class.get(`Seal Clubber`) || get(`_sealsSummoned`) >= 5,
       do: (): void => {
         retrieveItem(1, $item`figurine of an ancient seal`);
@@ -383,11 +388,16 @@ export const levellingQuest: Quest<Task> = {
     {
       name: `Get Payphone Quest`,
       completed: () => get(`_shadowAffinityToday`),
-      do: () => withChoice(1497, 1, () => use(1, $item`closed-circuit phone system`)),
+      do: () => withChoice(1497, 1, () => use(1, $item`closed-circuit pay phone`)),
+    },
+    {
+      name: `Get Non-Com hat (it sort of helps here)`,
+      completed: () => have($item`porkpie-mounted popper`),
+      do: () => retrieveItem(1, $item`porkpie-mounted popper`),
     },
     {
       name: `Payphone Freefights (extingo)`,
-      prepare: () => retrieveItem(1, $item`porkpie-mounted popper`),
+      ready: () => have($effect`Shadow Affinity`),
       completed: () =>
         get(`encountersUntilSRChoice`) === 0 ||
         have($item`Rufus's shadow lodestone`) ||
@@ -416,6 +426,7 @@ export const levellingQuest: Quest<Task> = {
     },
     {
       name: `Payphone Freefights (cleaver)`,
+      ready: () => have($effect`Shadow Affinity`),
       completed: () =>
         get(`encountersUntilSRChoice`) === 0 || have($item`Rufus's shadow lodestone`),
       do: $location`Shadow Rift (The Misspelled Cemetary)`,
@@ -426,8 +437,9 @@ export const levellingQuest: Quest<Task> = {
     },
     {
       name: `Payphone Freefights (bossa)`,
+      prepare: () => restoreHp(myMaxhp()),
       ready: () => get(`encountersUntilSRChoice`) === 0,
-      completed: () => have($item`Rufus's shadow lodestone`),
+      completed: () => have($item`Rufus's shadow lodestone`) || get(`questRufus`) === `step1`,
       do: $location`Shadow Rift (The Misspelled Cemetary)`,
       outfit: {
         weapon: $item`June cleaver`,
@@ -437,22 +449,28 @@ export const levellingQuest: Quest<Task> = {
       combat: new CombatStrategy().macro(
         Macro.if_(
           $monster`shadow matrix`,
-          Macro.trySkill($skill`Stuffed Mortar Shell`)
-            .trySkill($skill`Saucegeyser`)
-            .repeat()
-        )
-          .trySkill($skill`Northern Explosion`)
-          .repeat()
+          Macro.trySkill($skill`Stuffed Mortar Shell`).trySkillRepeat($skill`Saucegeyser`)
+        ).trySkillRepeat($skill`Northern Explosion`)
       ),
       post: () => fallGuy($location`Shadow Rift`),
     },
     {
-      name: `Snojo Fights`,
-      prepare: (): void => {
+      name: `Retrieve Spooky Lodestone`,
+      ready: () => get(`questRufus`) === `step1`,
+      completed: () => have($item`Rufus's shadow lodestone`),
+      do: () => use(1, $item`closed-circuit pay phone`),
+      post: () => cliExecute(`fold garbage shirt`),
+    },
+    {
+      name: `Set Snojo Controls`,
+      completed: () => get(`snojoSetting`) === $stat`Moxie`,
+      do: (): void => {
         visitUrl(`place.php?whichplace=snojo&action=snojo_controller`);
         visitUrl(`choice.php?pwd=${myHash()}&whichchoice=1118&option=3`);
-        cliExecute(`fold garbage shirt`);
       },
+    },
+    {
+      name: `Snojo Fights`,
       completed: () => get(`_snojoFreeFights`) >= 10,
       do: $location`The X-32-F Combat Training Snowman`,
       outfit: {
@@ -465,7 +483,18 @@ export const levellingQuest: Quest<Task> = {
           .attack()
           .repeat()
       ),
-      post: () => visitUrl(`clan_viplounge.php?action=hottub`),
+    },
+    {
+      name: `Visit Hottub`,
+      completed: () =>
+        [
+          $effect`Snowballed`,
+          $effect`Bruised`,
+          $effect`Relaxed Muscles`,
+          $effect`Hypnotized`,
+          $effect`Bad Haircut`,
+        ].every((ef) => !have(ef)),
+      do: () => visitUrl(`clan_viplounge.php?action=hottub`),
     },
     {
       name: `Witchess Fights`,
@@ -492,6 +521,11 @@ export const levellingQuest: Quest<Task> = {
       ),
     },
     {
+      name: `Awful Bad things have happened, need more spit`,
+      completed: () => have($effect`Spit Upon`) || myFamiliar() === $familiar`Melodramedary`,
+      do: () => useFamiliar($familiar`Melodramedary`),
+    },
+    {
       name: `Neverending Free Fights`,
       completed: () => get(`_neverendingPartyFreeTurns`) >= 10,
       do: $location`The Neverending Party`,
@@ -499,8 +533,7 @@ export const levellingQuest: Quest<Task> = {
       combat: new CombatStrategy().macro(
         Macro.trySkill($skill`Bowl Sideways`)
           .trySkill($skill`%fn, spit on me!`)
-          .trySkill($skill`Lunging Thrust-Smack`)
-          .repeat()
+          .trySkillRepeat($skill`Lunging Thrust-Smack`)
       ),
     },
     {
@@ -509,9 +542,7 @@ export const levellingQuest: Quest<Task> = {
       completed: () => have($item`battle broom`),
       do: () => Witchess.fightPiece($monster`Witchess Witch`),
       combat: new CombatStrategy().macro(
-        Macro.trySkill($skill`%fn, spit on me!`)
-          .trySkill($skill`Lunging Thrust-Smack`)
-          .repeat()
+        Macro.trySkill($skill`%fn, spit on me!`).trySkillRepeat($skill`Lunging Thrust-Smack`)
       ),
     },
     {

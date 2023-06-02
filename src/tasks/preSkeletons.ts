@@ -23,7 +23,6 @@ import {
   AutumnAton,
   byStat,
   Clan,
-  CommunityService,
   get,
   have,
   set,
@@ -36,9 +35,16 @@ import { fallGuy } from "../lib";
 const floundryItem = $item`fish hatchet`;
 const famRoute = $familiar`Melodramedary`;
 
+const guildQuest = byStat({
+  Muscle: `questG09Muscle`,
+  Mysticality: `questG07Myst`,
+  Moxie: `questG08Moxie`,
+});
+
 export const runStartQuest: Quest<Task> = {
   name: `Post-Ascension to Pre-Skeletons`,
-  completed: () => CommunityService.CoilWire.isDone(),
+  completed: () =>
+    get(guildQuest) === `started` || get(guildQuest) === `step1` || get(guildQuest) === `finished`,
   tasks: [
     {
       name: `Pull Pulls`,
@@ -102,7 +108,7 @@ export const runStartQuest: Quest<Task> = {
       completed: () =>
         [$item`letter from King Ralph XI`, $item`baconstone`, $item`hamethyst`].every(
           (i) => !have(i)
-        ),
+        ) && get(`questM05Toot`) === `finished`,
       do: (): void => {
         use(1, $item`letter from King Ralph XI`);
         use(1, $item`pork elf goodies sack`);
@@ -171,7 +177,7 @@ export const runStartQuest: Quest<Task> = {
     {
       name: `Configure Saber`,
       completed: () => get(`_saberMod`) !== 0,
-      do: () => withChoice(1386, 4, () => visitUrl(`main.php?action=may4`)),
+      do: () => cliExecute(`saber familiar`),
     },
     {
       name: `Create Ebonee Epee`,

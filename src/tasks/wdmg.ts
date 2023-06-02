@@ -63,8 +63,10 @@ export const wdmgQuest: Quest<Task> = {
     {
       name: `Barrel Shrine`,
       completed: () => myClass() !== Class.get(`Seal Clubber`) || get(`_barrelPrayer`),
-      do: () => visitUrl(`da.php?barrelshrine=1`),
-      choices: { 1100: 4 },
+      do: (): void => {
+        visitUrl(`da.php?barrelshrine=1`);
+        visitUrl(`choice.php?whichchoice=1100&option=4`);
+      },
     },
     {
       name: `Corrupted Marrow`,
@@ -99,6 +101,11 @@ export const wdmgQuest: Quest<Task> = {
         const testTurns = CommunityService.WeaponDamage.actualCost();
         printModtrace(`weapon damage`);
         printModtrace(`weapon damage percent`);
+
+        if (testTurns > 1) {
+          print(`This is annoying, how sad! Manual or fix`);
+        }
+
         print(`Expecting: [${predictedTestTurns}]`, `blue`);
         print(`Took: [${testTurns}]`, `blue`);
 
@@ -114,6 +121,7 @@ export const wdmgQuest: Quest<Task> = {
       outfit: {
         modifier: `weapon dmg`,
       },
+      limit: { tries: 1 },
     },
   ],
 };

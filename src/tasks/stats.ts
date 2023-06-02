@@ -30,7 +30,7 @@ export const muscleQuest: Quest<Task> = {
         );
         [
           $effect`Big`,
-          $effect`Go Get 'Em\, Tiger!`,
+          $effect`Go Get 'Em, Tiger!`,
           $effect`Quiet Determination`,
           $effect`Rage of the Reindeer`,
           $effect`Song of Bravado`,
@@ -152,7 +152,7 @@ export const hpQuest: Quest<Task> = {
       prepare: () =>
         [
           $effect`Big`,
-          $effect`Go Get 'Em\, Tiger!`,
+          $effect`Go Get 'Em, Tiger!`,
           $effect`Reptilian Fortitude`,
           $effect`Quiet Determination`,
           $effect`Song of Bravado`,
@@ -165,7 +165,7 @@ export const hpQuest: Quest<Task> = {
         const testTurns = CommunityService.HP.actualCost();
         const predictedTestTurns = CommunityService.HP.prediction;
         printModtrace(`maximum hp`);
-        printModtrace(`maximim hp percent`);
+        printModtrace(`maximum hp percent`);
         print(`Expecting: [${predictedTestTurns}]`, `blue`);
         print(`Took: [${testTurns}]`, `blue`);
 

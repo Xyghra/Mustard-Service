@@ -80,9 +80,17 @@ export const skeletonsQuest: Quest<Task> = {
       },
     },
     {
-      name: `Pre-Coil Kramco`,
-      prepare: () =>
+      name: `Fold the able`,
+      completed: () =>
+        (have($item`wad of used tape`) &&
+          get(`parkaMode`) === `kachungasaur` &&
+          get(`backupCameraMode`) === `init`) ||
+        getKramcoWandererChance() < 1,
+      do: () =>
         cliExecute(`fold wad of used tape; parka kachungasaur; umbrella dr; backupcamera init`),
+    },
+    {
+      name: `Pre-Coil Kramco`,
       completed: () => getKramcoWandererChance() < 1,
       do: (): void => {
         adv1(guildZone, -1, `attack; repeat;`);
@@ -121,7 +129,7 @@ export const skeletonsQuest: Quest<Task> = {
       name: `Novelty Tropical Skeleton`,
       ready: () =>
         get(`lastCopyableMonster`) === $monster`red skeleton` && get(`parkaMode`) === `dilophosaur`,
-      completed: () => have($effect`Everything Looks Yellow`),
+      completed: () => have($effect`Everything Looks Yellow`) && have($item`cherry`),
       do: (): void => {
         Cartography.mapMonster($location`The Skeleton Store`, $monster`novelty tropical skeleton`);
       },
@@ -155,7 +163,7 @@ export const skeletonsQuest: Quest<Task> = {
           $effect`Empathy`,
           $effect`Blood Bond`,
         ].forEach((ef) => ensureEffect(ef)),
-      completed: () => get(guildQuestPref) === `step1`,
+      completed: () => get(guildQuestPref) === `step1` || get(guildQuestPref) === `finished`,
       do: guildZone,
       outfit: {
         familiar: $familiar`Pair of Stomping Boots`,
