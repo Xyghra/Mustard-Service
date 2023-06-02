@@ -9059,7 +9059,7 @@ var levellingQuest = {
       familiar: template_string_$familiar(_templateObject162 || (_templateObject162 = levelling_taggedTemplateLiteral(["Melodramedary"]))),
       famequip: template_string_$item(_templateObject163 || (_templateObject163 = levelling_taggedTemplateLiteral(["tiny stillsuit"])))
     },
-    combat: new CombatStrategy().macro(Macro.trySkill(template_string_$skill(_templateObject164 || (_templateObject164 = levelling_taggedTemplateLiteral(["%fn, spit on me!"], ["%fn\\, spit on me!"])))).attack().repeat()),
+    combat: new CombatStrategy().macro(Macro.trySkill(template_string_$skill(_templateObject164 || (_templateObject164 = levelling_taggedTemplateLiteral(["%fn, spit on me!"])))).attack().repeat()),
     post: () => (0,external_kolmafia_namespaceObject.visitUrl)("clan_viplounge.php?action=hottub")
   }, {
     name: "Witchess Fights",
@@ -9074,7 +9074,7 @@ var levellingQuest = {
       familiar: template_string_$familiar(_templateObject168 || (_templateObject168 = levelling_taggedTemplateLiteral(["Machine Elf"]))),
       famequip: template_string_$item(_templateObject169 || (_templateObject169 = levelling_taggedTemplateLiteral(["tiny stillsuit"])))
     },
-    combat: new CombatStrategy().macro(Macro.trySkill(template_string_$skill(_templateObject170 || (_templateObject170 = levelling_taggedTemplateLiteral(["%fn, spit on me!"], ["%fn\\, spit on me!"])))).attack().repeat())
+    combat: new CombatStrategy().macro(Macro.trySkill(template_string_$skill(_templateObject170 || (_templateObject170 = levelling_taggedTemplateLiteral(["%fn, spit on me!"])))).attack().repeat())
   }, {
     name: "Neverending Free Fights",
     completed: () => property_get("_neverendingPartyFreeTurns") >= 10,
@@ -9084,13 +9084,13 @@ var levellingQuest = {
       1324: 5,
       1326: 2
     },
-    combat: new CombatStrategy().macro(Macro.trySkill(template_string_$skill(_templateObject172 || (_templateObject172 = levelling_taggedTemplateLiteral(["Bowl Sideways"])))).trySkill(template_string_$skill(_templateObject173 || (_templateObject173 = levelling_taggedTemplateLiteral(["%fn, spit on me!"], ["%fn\\, spit on me!"])))).trySkill(template_string_$skill(_templateObject174 || (_templateObject174 = levelling_taggedTemplateLiteral(["Lunging Thrust-Smack"])))).repeat())
+    combat: new CombatStrategy().macro(Macro.trySkill(template_string_$skill(_templateObject172 || (_templateObject172 = levelling_taggedTemplateLiteral(["Bowl Sideways"])))).trySkill(template_string_$skill(_templateObject173 || (_templateObject173 = levelling_taggedTemplateLiteral(["%fn, spit on me!"])))).trySkill(template_string_$skill(_templateObject174 || (_templateObject174 = levelling_taggedTemplateLiteral(["Lunging Thrust-Smack"])))).repeat())
   }, {
     name: "Witchess Witch",
     prepare: () => (0,external_kolmafia_namespaceObject.restoreHp)((0,external_kolmafia_namespaceObject.myMaxhp)()),
     completed: () => have(template_string_$item(_templateObject175 || (_templateObject175 = levelling_taggedTemplateLiteral(["battle broom"])))),
     do: () => fightPiece($monster(_templateObject176 || (_templateObject176 = levelling_taggedTemplateLiteral(["Witchess Witch"])))),
-    combat: new CombatStrategy().macro(Macro.trySkill(template_string_$skill(_templateObject177 || (_templateObject177 = levelling_taggedTemplateLiteral(["%fn, spit on me!"], ["%fn\\, spit on me!"])))).trySkill(template_string_$skill(_templateObject178 || (_templateObject178 = levelling_taggedTemplateLiteral(["Lunging Thrust-Smack"])))).repeat())
+    combat: new CombatStrategy().macro(Macro.trySkill(template_string_$skill(_templateObject177 || (_templateObject177 = levelling_taggedTemplateLiteral(["%fn, spit on me!"])))).trySkill(template_string_$skill(_templateObject178 || (_templateObject178 = levelling_taggedTemplateLiteral(["Lunging Thrust-Smack"])))).repeat())
   }, {
     name: "Shattering Punches",
     completed: () => property_get("_shatteringPunchUsed") >= 3,
@@ -9103,7 +9103,7 @@ var levellingQuest = {
     outfit: {
       acc2: template_string_$item(_templateObject180 || (_templateObject180 = levelling_taggedTemplateLiteral(["Cincho de Mayo"])))
     },
-    combat: new CombatStrategy().macro(Macro.trySkill(template_string_$skill(_templateObject181 || (_templateObject181 = levelling_taggedTemplateLiteral(["%fn, spit on me!"], ["%fn\\, spit on me!"])))).trySkill(template_string_$skill(_templateObject182 || (_templateObject182 = levelling_taggedTemplateLiteral(["Bowl Sideways"])))).trySkill(template_string_$skill(_templateObject183 || (_templateObject183 = levelling_taggedTemplateLiteral(["Feel Pride"])))).trySkill(template_string_$skill(_templateObject184 || (_templateObject184 = levelling_taggedTemplateLiteral(["Cincho: Confetti Extravaganza"])))).trySkill(template_string_$skill(_templateObject185 || (_templateObject185 = levelling_taggedTemplateLiteral(["Shattering Punch"])))).abort())
+    combat: new CombatStrategy().macro(Macro.trySkill(template_string_$skill(_templateObject181 || (_templateObject181 = levelling_taggedTemplateLiteral(["%fn, spit on me!"])))).trySkill(template_string_$skill(_templateObject182 || (_templateObject182 = levelling_taggedTemplateLiteral(["Bowl Sideways"])))).trySkill(template_string_$skill(_templateObject183 || (_templateObject183 = levelling_taggedTemplateLiteral(["Feel Pride"])))).trySkill(template_string_$skill(_templateObject184 || (_templateObject184 = levelling_taggedTemplateLiteral(["Cincho: Confetti Extravaganza"])))).trySkill(template_string_$skill(_templateObject185 || (_templateObject185 = levelling_taggedTemplateLiteral(["Shattering Punch"])))).abort())
   }, {
     name: "Chest X-rays",
     completed: () => property_get("_chestXRayUsed") >= 3,
@@ -9116,7 +9116,7 @@ var levellingQuest = {
     outfit: {
       acc2: template_string_$item(_templateObject187 || (_templateObject187 = levelling_taggedTemplateLiteral(["Lil' Doctor\u2122 bag"])))
     },
-    combat: new CombatStrategy().macro(Macro.trySkill(template_string_$skill(_templateObject188 || (_templateObject188 = levelling_taggedTemplateLiteral(["%fn, spit on me!"], ["%fn\\, spit on me!"])))).trySkill(template_string_$skill(_templateObject189 || (_templateObject189 = levelling_taggedTemplateLiteral(["Bowl Sideways"])))).trySkill(template_string_$skill(_templateObject190 || (_templateObject190 = levelling_taggedTemplateLiteral(["Chest X-Ray"])))).abort())
+    combat: new CombatStrategy().macro(Macro.trySkill(template_string_$skill(_templateObject188 || (_templateObject188 = levelling_taggedTemplateLiteral(["%fn, spit on me!"])))).trySkill(template_string_$skill(_templateObject189 || (_templateObject189 = levelling_taggedTemplateLiteral(["Bowl Sideways"])))).trySkill(template_string_$skill(_templateObject190 || (_templateObject190 = levelling_taggedTemplateLiteral(["Chest X-Ray"])))).abort())
   }, {
     name: "Mob-Hit",
     completed: () => property_get("_gingerbreadMobHitUsed"),
@@ -9126,7 +9126,7 @@ var levellingQuest = {
       1324: 5,
       1326: 2
     },
-    combat: new CombatStrategy().macro(Macro.trySkill(template_string_$skill(_templateObject192 || (_templateObject192 = levelling_taggedTemplateLiteral(["%fn, spit on me!"], ["%fn\\, spit on me!"])))).trySkill(template_string_$skill(_templateObject193 || (_templateObject193 = levelling_taggedTemplateLiteral(["Bowl Sideways"])))).trySkill(template_string_$skill(_templateObject194 || (_templateObject194 = levelling_taggedTemplateLiteral(["Gingerbread Mob Hit"])))).abort())
+    combat: new CombatStrategy().macro(Macro.trySkill(template_string_$skill(_templateObject192 || (_templateObject192 = levelling_taggedTemplateLiteral(["%fn, spit on me!"])))).trySkill(template_string_$skill(_templateObject193 || (_templateObject193 = levelling_taggedTemplateLiteral(["Bowl Sideways"])))).trySkill(template_string_$skill(_templateObject194 || (_templateObject194 = levelling_taggedTemplateLiteral(["Gingerbread Mob Hit"])))).abort())
   }]
 };
 ;// CONCATENATED MODULE: ./src/tasks/stats.ts
