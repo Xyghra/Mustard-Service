@@ -3,6 +3,7 @@ import {
   abort,
   adv1,
   autosell,
+  canAdventure,
   cliExecute,
   drink,
   equip,
@@ -130,6 +131,9 @@ export const skeletonsQuest: Quest<Task> = {
           .trySkill($skill`Spit jurassic acid`)
           .abort()
       ),
+      outfit: {
+        shirt: $item`Jurassic Parka`,
+      },
       post: () => cliExecute(`parka ml`),
     },
     {
@@ -158,7 +162,11 @@ export const skeletonsQuest: Quest<Task> = {
         famequip: $item`tiny stillsuit`,
       },
       combat: new CombatStrategy().macro(Macro.runaway().abort()),
-      post: (): void => {
+    },
+    {
+      name: `Cemetary Unlock`,
+      completed: () => canAdventure($location`The Unquiet Garves`),
+      do: (): void => {
         visitUrl(`guild.php?guild=f`);
         visitUrl(`guild.php?place=challenge`);
         visitUrl(`guild.php?place=scg`);

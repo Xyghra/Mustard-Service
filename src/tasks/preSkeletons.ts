@@ -2,7 +2,6 @@ import { Quest, Task } from "grimoire-kolmafia";
 import {
   autosell,
   availableAmount,
-  canAdventure,
   cliExecute,
   equip,
   getWorkshed,
@@ -130,7 +129,7 @@ export const runStartQuest: Quest<Task> = {
     },
     {
       name: `Open Skeleton Store`,
-      completed: () => canAdventure($location`The Skeleton Store`),
+      completed: () => get(`skeletonStoreAvailable`),
       do: (): void => {
         visitUrl(`shop.php?whichshop=meatsmith&action=talk`);
         visitUrl(`choice.php?pwd=${myHash}&whichchoice=1059&option=1`);
