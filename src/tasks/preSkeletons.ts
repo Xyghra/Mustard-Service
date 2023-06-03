@@ -2,12 +2,12 @@ import { Quest, Task } from "grimoire-kolmafia";
 import {
   autosell,
   availableAmount,
+  canadiaAvailable,
   changeMcd,
   cliExecute,
   currentMcd,
   equip,
   getWorkshed,
-  inMysticalitySign,
   myFamiliar,
   myHash,
   nowToInt,
@@ -45,7 +45,9 @@ export const runStartQuest: Quest<Task> = {
     {
       name: `Fall Guy!`,
       completed: () => !AutumnAton.available(),
-      do: () => AutumnAton.sendTo($location`The Sleazy Back Alley`),
+      do: (): void => {
+        AutumnAton.sendTo($location`The Sleazy Back Alley`);
+      },
     },
     {
       name: `Pull Pulls`,
@@ -201,17 +203,9 @@ export const runStartQuest: Quest<Task> = {
     },
     {
       name: `Mind Control`,
-      completed: (): boolean => {
-        if (inMysticalitySign()) return currentMcd() === 11;
-        else return currentMcd() === 10;
-      },
-      do: (): void => {
-        if (inMysticalitySign()) {
-          changeMcd(11);
-        } else {
-          changeMcd(10);
-        }
-      },
+      ready: () => canadiaAvailable(),
+      completed: () => currentMcd() === 11,
+      do: () => changeMcd(11),
     },
     {
       name: `Arrange Trainset`,

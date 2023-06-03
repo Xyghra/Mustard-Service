@@ -148,14 +148,16 @@ export const levellingQuest: Quest<Task> = {
       name: `Fall Guy!`,
       ready: () => get(`_shadowAffinityToday`),
       completed: () => !AutumnAton.available(),
-      do: () => AutumnAton.sendTo($location`The Sleazy Back Alley`),
+      do: (): void => {
+        AutumnAton.sendTo($location`Shadow Rift`);
+      },
     },
     {
       name: `Swap Sombrero`,
       ready: () =>
         have($effect`Spit Upon`) &&
-        myFamiliar() !== $familiar`Hovering Sombrero` &&
-        myFamiliar() !== $familiar`Machine Elf`,
+        (myFamiliar() !== $familiar`Machine Elf` ||
+          ![1, 2, 3, 4].includes(get(`_machineTunnelsAdv`))),
       completed: () => myFamiliar() === $familiar`Hovering Sombrero`,
       do: () => useFamiliar($familiar`Hovering Sombrero`),
     },

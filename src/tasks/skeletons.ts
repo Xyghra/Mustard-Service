@@ -165,6 +165,10 @@ export const skeletonsQuest: Quest<Task> = {
         visitUrl(`guild.php?place=scg`);
         visitUrl(`guild.php?place=scg`);
       },
+      outfit: {
+        familiar: $familiar`Melodramedary`,
+        famequip: $item`tiny stillsuit`,
+      },
     },
     {
       name: `Numberology Attempt DEUX`,
