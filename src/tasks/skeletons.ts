@@ -21,7 +21,6 @@ import {
   $monster,
   $skill,
   $slot,
-  byStat,
   Cartography,
   CombatLoversLocket,
   CommunityService,
@@ -33,21 +32,7 @@ import {
   set,
   uneffect,
 } from "libram";
-
-const { guildZone, guildQuestPref } = byStat({
-  Muscle: {
-    guildZone: $location`The Outskirts of Cobb's Knob`,
-    guildQuestPref: `questG09Muscle`,
-  },
-  Mysticality: {
-    guildZone: $location`The Haunted Pantry`,
-    guildQuestPref: `questG07Myst`,
-  },
-  Moxie: {
-    guildZone: $location`The Sleazy Back Alley`,
-    guildQuestPref: `questG08Moxie`,
-  },
-});
+import { guildQuest, guildZone } from "../lib";
 
 let curWeapon = $item`June cleaver`;
 
@@ -163,7 +148,7 @@ export const skeletonsQuest: Quest<Task> = {
           $effect`Empathy`,
           $effect`Blood Bond`,
         ].forEach((ef) => ensureEffect(ef)),
-      completed: () => get(guildQuestPref) === `step1` || get(guildQuestPref) === `finished`,
+      completed: () => get(guildQuest) === `step1` || get(guildQuest) === `finished`,
       do: guildZone,
       outfit: {
         familiar: $familiar`Pair of Stomping Boots`,

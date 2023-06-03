@@ -82,6 +82,7 @@ export const sdmgQuest: Quest<Task> = {
       outfit: {
         modifier: `spell damage`,
       },
+      limit: { tries: 1 },
     },
   ],
 };

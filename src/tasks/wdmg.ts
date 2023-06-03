@@ -24,7 +24,6 @@ import {
   Macro,
   set,
 } from "libram";
-import { fallGuy } from "../lib";
 import { printModtrace } from "libram/dist/modifier";
 
 export const wdmgQuest: Quest<Task> = {
@@ -49,7 +48,6 @@ export const wdmgQuest: Quest<Task> = {
       },
       choices: { 326: 1 },
       combat: new CombatStrategy().macro(Macro.trySkill($skill`Snokebomb`).abort()),
-      post: () => fallGuy($location`Shadow Rift`),
     },
     {
       name: `Deep Dark Visions`,

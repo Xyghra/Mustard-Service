@@ -2,9 +2,12 @@ import { Quest, Task } from "grimoire-kolmafia";
 import {
   autosell,
   availableAmount,
+  changeMcd,
   cliExecute,
+  currentMcd,
   equip,
   getWorkshed,
+  inMysticalitySign,
   myFamiliar,
   myHash,
   nowToInt,
@@ -21,7 +24,6 @@ import {
   $location,
   $slot,
   AutumnAton,
-  byStat,
   Clan,
   get,
   have,
@@ -30,22 +32,21 @@ import {
   TrainSet,
   withChoice,
 } from "libram";
-import { fallGuy } from "../lib";
+import { guildQuest, guildURL } from "../lib";
 
 const floundryItem = $item`fish hatchet`;
 const famRoute = $familiar`Melodramedary`;
-
-const guildQuest = byStat({
-  Muscle: `questG09Muscle`,
-  Mysticality: `questG07Myst`,
-  Moxie: `questG08Moxie`,
-});
 
 export const runStartQuest: Quest<Task> = {
   name: `Post-Ascension to Pre-Skeletons`,
   completed: () =>
     get(guildQuest) === `started` || get(guildQuest) === `step1` || get(guildQuest) === `finished`,
   tasks: [
+    {
+      name: `Fall Guy!`,
+      completed: () => !AutumnAton.available(),
+      do: () => AutumnAton.sendTo($location`The Sleazy Back Alley`),
+    },
     {
       name: `Pull Pulls`,
       completed: () => get(`_roninStoragePulls`).split(`,`).length === 5,
@@ -194,9 +195,23 @@ export const runStartQuest: Quest<Task> = {
       do: () => visitUrl(`clan_viplounge.php?action=lookingglass&whichfloor=2`),
     },
     {
-      name: `Send Fallguy for Autumn Leaf`,
-      completed: () => !AutumnAton.available(),
-      do: () => fallGuy($location`The Sleazy Back Alley`),
+      name: `Enable Reverser`,
+      completed: () => get(`backupCameraReverserEnabled`),
+      do: () => cliExecute(`backupcamera reverser`),
+    },
+    {
+      name: `Mind Control`,
+      completed: (): boolean => {
+        if (inMysticalitySign()) return currentMcd() === 11;
+        else return currentMcd() === 10;
+      },
+      do: (): void => {
+        if (inMysticalitySign()) {
+          changeMcd(11);
+        } else {
+          changeMcd(10);
+        }
+      },
     },
     {
       name: `Arrange Trainset`,
@@ -217,20 +232,8 @@ export const runStartQuest: Quest<Task> = {
     },
     {
       name: `Start Guild Unlock`,
-      completed: (): boolean => {
-        const guildQuest = byStat({
-          Muscle: `questG09Muscle`,
-          Mysticality: `questG07Myst`,
-          Moxie: `questG08Moxie`,
-        });
-        return get(guildQuest) === `started`;
-      },
+      completed: () => get(guildQuest) === `started`,
       do: (): void => {
-        const guildURL = byStat({
-          Muscle: `guild.php?guild=f`,
-          Mysticality: `guild.php?guild=m`,
-          Moxie: `guild.php?guild=t`,
-        });
         visitUrl(guildURL);
         visitUrl(`guild.php?place=challenge`);
       },

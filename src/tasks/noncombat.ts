@@ -83,6 +83,7 @@ export const noncombatQuest: Quest<Task> = {
         familiar: $familiar`Disgeist`,
         famequip: $item`tiny stillsuit`,
       },
+      limit: { tries: 1 },
     },
   ],
 };

@@ -65,6 +65,7 @@ export const famwtQuest: Quest<Task> = {
         familiar: $familiar`Mini-Trainbot`,
         famequip: $item`overloaded Yule battery`,
       },
+      limit: { tries: 1 },
     },
   ],
 };

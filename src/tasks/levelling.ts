@@ -1,5 +1,6 @@
 import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
 import {
+  abort,
   adv1,
   availableAmount,
   Class,
@@ -31,6 +32,7 @@ import {
   $skill,
   $slot,
   $stat,
+  AutumnAton,
   byStat,
   Cartography,
   clamp,
@@ -44,7 +46,6 @@ import {
   Witchess,
   withChoice,
 } from "libram";
-import { fallGuy } from "../lib";
 
 let curOffhand = $item`unbreakable umbrella`;
 let curWeapon = $item`June cleaver`;
@@ -138,6 +139,17 @@ export const levellingQuest: Quest<Task> = {
   name: `Levelling`,
   completed: () => (get(`_gingerbreadMobHitUsed`) || myLevel() >= 15) && have($item`battle broom`),
   tasks: [
+    {
+      name: `Beaten Up!`,
+      completed: () => !have($effect`Beaten Up`),
+      do: () => abort(`Beaten up unexpectedly!`),
+    },
+    {
+      name: `Fall Guy!`,
+      ready: () => get(`_shadowAffinityToday`),
+      completed: () => !AutumnAton.available(),
+      do: () => AutumnAton.sendTo($location`The Sleazy Back Alley`),
+    },
     {
       name: `Swap Sombrero`,
       ready: () =>
@@ -452,7 +464,6 @@ export const levellingQuest: Quest<Task> = {
           Macro.trySkill($skill`Stuffed Mortar Shell`).trySkillRepeat($skill`Saucegeyser`)
         ).trySkillRepeat($skill`Northern Explosion`)
       ),
-      post: () => fallGuy($location`Shadow Rift`),
     },
     {
       name: `Retrieve Spooky Lodestone`,
