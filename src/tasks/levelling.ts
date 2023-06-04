@@ -146,9 +146,10 @@ export const levellingQuest: Quest<Task> = {
     },
     {
       name: `Fall Guy!`,
-      ready: () => get(`_shadowAffinityToday`),
+      ready: () => get(`_shadowAffinityToday`) && get(`shadowRiftIngress`) !== ``,
       completed: () => !AutumnAton.available(),
       do: (): void => {
+        AutumnAton.upgrade();
         AutumnAton.sendTo($location`Shadow Rift`);
       },
     },

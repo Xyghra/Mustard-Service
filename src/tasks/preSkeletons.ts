@@ -46,6 +46,7 @@ export const runStartQuest: Quest<Task> = {
       name: `Fall Guy!`,
       completed: () => !AutumnAton.available(),
       do: (): void => {
+        AutumnAton.upgrade();
         AutumnAton.sendTo($location`The Sleazy Back Alley`);
       },
     },
