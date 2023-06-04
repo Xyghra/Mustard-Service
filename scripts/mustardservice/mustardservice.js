@@ -6231,10 +6231,10 @@ function sendTo(target) {
  * @returns Whether there were any upgrades to install.
  */
 function upgrade() {
-  directlyUse(item);
-  var canUpgrade = availableChoiceOptions()[1] !== undefined;
-  if (canUpgrade) runChoice(1);
-  visitUrl("main.php");
+  lib_directlyUse(item);
+  var canUpgrade = (0,external_kolmafia_namespaceObject.availableChoiceOptions)()[1] !== undefined;
+  if (canUpgrade) (0,external_kolmafia_namespaceObject.runChoice)(1);
+  (0,external_kolmafia_namespaceObject.visitUrl)("main.php");
   return canUpgrade;
 }
 /**
@@ -7010,6 +7010,7 @@ var runStartQuest = {
     name: "Fall Guy!",
     completed: () => !available(),
     do: () => {
+      upgrade();
       sendTo($location(preSkeletons_templateObject3 || (preSkeletons_templateObject3 = preSkeletons_taggedTemplateLiteral(["The Sleazy Back Alley"]))));
     }
   }, {
@@ -8488,9 +8489,10 @@ var levellingQuest = {
     do: () => (0,external_kolmafia_namespaceObject.abort)("Beaten up unexpectedly!")
   }, {
     name: "Fall Guy!",
-    ready: () => property_get("_shadowAffinityToday"),
+    ready: () => property_get("_shadowAffinityToday") && property_get("shadowRiftIngress") !== "",
     completed: () => !available(),
     do: () => {
+      upgrade();
       sendTo($location(levelling_templateObject56 || (levelling_templateObject56 = levelling_taggedTemplateLiteral(["Shadow Rift"]))));
     }
   }, {
