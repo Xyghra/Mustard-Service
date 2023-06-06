@@ -25,7 +25,7 @@ export const muscleQuest: Quest<Task> = {
     {
       name: `Muscle Test`,
       prepare: (): void => {
-        [$effect`Ur-Kel's Aria of Annoyance`, $effect`Fat Leon's Phat Loot Lyric`].every((ef) =>
+        [$effect`Ur-Kel's Aria of Annoyance`, $effect`Fat Leon's Phat Loot Lyric`].forEach((ef) =>
           uneffect(ef)
         );
         [

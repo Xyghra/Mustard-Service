@@ -1,5 +1,5 @@
 import { Quest, Task } from "grimoire-kolmafia";
-import { cliExecute, equip, haveEquipped, print, use } from "kolmafia";
+import { cliExecute, print, use } from "kolmafia";
 import {
   $effect,
   $familiar,
@@ -42,15 +42,6 @@ export const noncombatQuest: Quest<Task> = {
       do: () => use(1, $item`shady shades`),
     },
     {
-      name: `Fricking >:U mbrella`,
-      completed: () =>
-        haveEquipped($item`unbreakable umbrella`) && get(`umbrellaState`) === `cocoon`,
-      do: (): void => {
-        cliExecute(`umbrella cocoon`);
-        equip($item`unbreakable umbrella`);
-      },
-    },
-    {
       name: `Noncombat Test`,
       prepare: () =>
         [
@@ -79,9 +70,13 @@ export const noncombatQuest: Quest<Task> = {
         );
       },
       outfit: {
-        modifier: `-60 combat rate 13 familiar weight -offhand`,
+        offhand: $item`unbreakable umbrella`,
+        modifier: `-60 combat rate 13 familiar weight`,
         familiar: $familiar`Disgeist`,
         famequip: $item`tiny stillsuit`,
+        modes: {
+          umbrella: `cocoon`,
+        },
       },
       limit: { tries: 1 },
     },

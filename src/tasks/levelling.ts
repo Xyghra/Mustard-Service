@@ -226,7 +226,9 @@ export const levellingQuest: Quest<Task> = {
     {
       name: `Eat Legend Dishes`,
       ready: () => have($effect`Everything Looks Red`),
-      completed: () => get(`pizzaOfLegendEaten`) && get(`calzoneOfLegendEaten`),
+      completed: () =>
+        (get(`pizzaOfLegendEaten`) && get(`calzoneOfLegendEaten`)) ||
+        (!have($item`Pizza of Legend`) && !have($item`Calzone of Legend`)),
       do: () => [$item`Pizza of Legend`, $item`Calzone of Legend`].forEach((i) => eat(1, i)),
     },
     {
@@ -512,7 +514,7 @@ export const levellingQuest: Quest<Task> = {
     },
     {
       name: `Witchess Fights`,
-      completed: () => get(`_witchessFights`) >= 4,
+      completed: () => get(`_witchessFights`) >= 3,
       do: () => Witchess.fightPiece($monster`Witchess Bishop`),
       combat: new CombatStrategy().macro(
         Macro.trySkill($skill`%fn, spit on me!`)
@@ -558,6 +560,14 @@ export const levellingQuest: Quest<Task> = {
       combat: new CombatStrategy().macro(
         Macro.trySkill($skill`%fn, spit on me!`).trySkillRepeat($skill`Lunging Thrust-Smack`)
       ),
+    },
+    {
+      name: `Witchess Queen`,
+      prepare: () => restoreHp(myMaxhp()),
+      completed: () => have($item`very pointy crown`),
+      do: () => Witchess.fightPiece($monster`Witchess Queen`),
+      effects: [$effect`Frigidalmatian`],
+      combat: new CombatStrategy().macro(Macro.attack().repeat()),
     },
     {
       name: `Shattering Punches`,
