@@ -9407,7 +9407,7 @@ var finaleQuest = {
   }, {
     name: "Prismbreak Moment",
     completed: () => property_get("_smithsnessSummons") === 3,
-    do: () => (0,external_kolmafia_namespaceObject.cliExecute)("newgwa prism; newgwa breakfast")
+    do: () => (0,external_kolmafia_namespaceObject.cliExecute)("gwa prism; gwa breakfast")
   }]
 };
 ;// CONCATENATED MODULE: ./src/main.ts
