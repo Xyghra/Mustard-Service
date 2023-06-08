@@ -8,7 +8,6 @@ import {
   $skill,
   Clan,
   CommunityService,
-  ensureEffect,
   get,
   have,
   Macro,
@@ -55,12 +54,6 @@ export const sdmgQuest: Quest<Task> = {
     },
     {
       name: `Spell Damage Test`,
-      prepare: () =>
-        [
-          $effect`Song of Sauce`,
-          $effect`Carol of the Hells`,
-          $effect`Jackasses' Symphony of Destruction`,
-        ].forEach((ef) => ensureEffect(ef)),
       completed: () => CommunityService.SpellDamage.isDone(),
       do: (): void => {
         const predictedTestTurns = CommunityService.SpellDamage.prediction;
@@ -82,6 +75,11 @@ export const sdmgQuest: Quest<Task> = {
       outfit: {
         modifier: `spell damage`,
       },
+      effects: [
+        $effect`Song of Sauce`,
+        $effect`Carol of the Hells`,
+        $effect`Jackasses' Symphony of Destruction`,
+      ],
       limit: { tries: 1 },
     },
   ],

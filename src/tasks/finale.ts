@@ -61,7 +61,7 @@ export const finaleQuest: Quest<Task> = {
     {
       name: `Prismbreak Moment`,
       completed: () => get(`_smithsnessSummons`) === 3,
-      do: () => cliExecute(`gwa prismbreak; gwa breakfast`),
+      do: () => cliExecute(`newgwa prismbreak; newgwa breakfast`),
     },
   ],
 };

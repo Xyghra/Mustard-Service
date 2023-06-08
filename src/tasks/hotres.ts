@@ -8,7 +8,6 @@ import {
   $skill,
   CombatLoversLocket,
   CommunityService,
-  ensureEffect,
   get,
   have,
   Macro,
@@ -37,15 +36,6 @@ export const hotresQuest: Quest<Task> = {
     },
     {
       name: `Hot Resistance Test`,
-      prepare: () =>
-        [
-          $effect`Elemental Saucesphere`,
-          $effect`Feeling Peaceful`,
-          $effect`Astral Shell`,
-          $effect`Blood Bond`,
-          $effect`Empathy`,
-          $effect`Leash of Linguini`,
-        ].forEach((ef) => ensureEffect(ef)),
       completed: () => CommunityService.HotRes.isDone(),
       do: (): void => {
         const predictedTestTurns = CommunityService.HotRes.prediction;
@@ -71,6 +61,14 @@ export const hotresQuest: Quest<Task> = {
         famequip: $item`tiny stillsuit`,
         modifier: `hot resistance`,
       },
+      effects: [
+        $effect`Elemental Saucesphere`,
+        $effect`Feeling Peaceful`,
+        $effect`Astral Shell`,
+        $effect`Blood Bond`,
+        $effect`Empathy`,
+        $effect`Leash of Linguini`,
+      ],
       limit: { tries: 1 },
     },
   ],

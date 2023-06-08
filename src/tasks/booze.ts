@@ -7,7 +7,6 @@ import {
   $skill,
   CommunityService,
   DeckOfEveryCard,
-  ensureEffect,
   get,
   have,
   set,
@@ -62,13 +61,6 @@ export const boozeQuest: Quest<Task> = {
     },
     {
       name: `Item and Booze Drop Test`,
-      prepare: () =>
-        [
-          $effect`Fat Leon's Phat Loot Lyric`,
-          $effect`Singer's Faithful Ocelot`,
-          $effect`Steely-Eyed Squint`,
-          $effect`Spice Haze`,
-        ].forEach((ef) => ensureEffect(ef)),
       completed: () => CommunityService.BoozeDrop.isDone(),
       do: (): void => {
         const predictedTestTurns = CommunityService.BoozeDrop.prediction;
@@ -90,6 +82,12 @@ export const boozeQuest: Quest<Task> = {
       outfit: {
         modifier: `15 Item Drop, 30 Booze Drop, -100 Gear Drop, -equip broken champagne bottle`,
       },
+      effects: [
+        $effect`Fat Leon's Phat Loot Lyric`,
+        $effect`Singer's Faithful Ocelot`,
+        $effect`Steely-Eyed Squint`,
+        $effect`Spice Haze`,
+      ],
       limit: { tries: 1 },
     },
   ],

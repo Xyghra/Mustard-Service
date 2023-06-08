@@ -18,7 +18,6 @@ import {
   $skill,
   Clan,
   CommunityService,
-  ensureEffect,
   get,
   have,
   Macro,
@@ -83,16 +82,6 @@ export const wdmgQuest: Quest<Task> = {
     },
     {
       name: `Weapon Damage Test`,
-      prepare: () =>
-        [
-          $effect`Bow-Legged Swagger`,
-          $effect`Scowl of the Auk`,
-          $effect`Rage of the Reindeer`,
-          $effect`Song of the North`,
-          $effect`Carol of the Bulls`,
-          $effect`Tenacity of the Snapper`,
-          $effect`Jackasses' Symphony of Destruction`,
-        ].forEach((ef) => ensureEffect(ef)),
       completed: () => CommunityService.WeaponDamage.isDone(),
       do: (): void => {
         const predictedTestTurns = CommunityService.WeaponDamage.prediction;
@@ -119,6 +108,15 @@ export const wdmgQuest: Quest<Task> = {
       outfit: {
         modifier: `weapon dmg`,
       },
+      effects: [
+        $effect`Bow-Legged Swagger`,
+        $effect`Scowl of the Auk`,
+        $effect`Rage of the Reindeer`,
+        $effect`Song of the North`,
+        $effect`Carol of the Bulls`,
+        $effect`Tenacity of the Snapper`,
+        $effect`Jackasses' Symphony of Destruction`,
+      ],
       limit: { tries: 1 },
     },
   ],

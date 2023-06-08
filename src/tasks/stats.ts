@@ -1,6 +1,6 @@
 import { Quest, Task } from "grimoire-kolmafia";
 import { print } from "kolmafia";
-import { $effect, CommunityService, ensureEffect, get, set, TrainSet, uneffect } from "libram";
+import { $effect, CommunityService, get, set, TrainSet, uneffect } from "libram";
 import { printModtrace } from "libram/dist/modifier";
 
 export const muscleQuest: Quest<Task> = {
@@ -24,19 +24,10 @@ export const muscleQuest: Quest<Task> = {
     },
     {
       name: `Muscle Test`,
-      prepare: (): void => {
+      prepare: () =>
         [$effect`Ur-Kel's Aria of Annoyance`, $effect`Fat Leon's Phat Loot Lyric`].forEach((ef) =>
           uneffect(ef)
-        );
-        [
-          $effect`Big`,
-          $effect`Go Get 'Em, Tiger!`,
-          $effect`Quiet Determination`,
-          $effect`Rage of the Reindeer`,
-          $effect`Song of Bravado`,
-          $effect`Stevedave's Shanty of Superiority`,
-        ].forEach((ef) => ensureEffect(ef));
-      },
+        ),
       completed: () => CommunityService.Muscle.isDone(),
       do: (): void => {
         const testTurns = CommunityService.Muscle.actualCost();
@@ -58,6 +49,14 @@ export const muscleQuest: Quest<Task> = {
       outfit: {
         modifier: `Muscle`,
       },
+      effects: [
+        $effect`Big`,
+        $effect`Go Get 'Em, Tiger!`,
+        $effect`Quiet Determination`,
+        $effect`Rage of the Reindeer`,
+        $effect`Song of Bravado`,
+        $effect`Stevedave's Shanty of Superiority`,
+      ],
       limit: { tries: 1 },
     },
   ],
@@ -70,16 +69,6 @@ export const mystQuest: Quest<Task> = {
     {
       name: `Mysticality Test`,
       completed: () => CommunityService.Mysticality.isDone(),
-      prepare: () =>
-        [
-          $effect`Big`,
-          $effect`Glittering Eyelashes`,
-          $effect`The Magical Mojomuscular Melody`,
-          $effect`Saucemastery`,
-          $effect`Stevedave's Shanty of Superiority`,
-          $effect`Quiet Judgement`,
-          $effect`Song of Bravado`,
-        ].forEach((ef) => ensureEffect(ef)),
       do: (): void => {
         const testTurns = CommunityService.Mysticality.actualCost();
         const predictedTestTurns = CommunityService.Mysticality.prediction;
@@ -99,6 +88,15 @@ export const mystQuest: Quest<Task> = {
       },
       outfit: { modifier: `Mysticality` },
       post: () => uneffect($effect`The Magical Mojomuscular Melody`),
+      effects: [
+        $effect`Big`,
+        $effect`Glittering Eyelashes`,
+        $effect`The Magical Mojomuscular Melody`,
+        $effect`Saucemastery`,
+        $effect`Stevedave's Shanty of Superiority`,
+        $effect`Quiet Judgement`,
+        $effect`Song of Bravado`,
+      ],
       limit: { tries: 1 },
     },
   ],
@@ -111,15 +109,6 @@ export const moxQuest: Quest<Task> = {
     {
       name: `Moxie Test`,
       completed: () => CommunityService.Moxie.isDone(),
-      prepare: () =>
-        [
-          $effect`Big`,
-          $effect`Butt-Rock Hair`,
-          $effect`Disco Fever`,
-          $effect`Quiet Desperation`,
-          $effect`Song of Bravado`,
-          $effect`Stevedave's Shanty of Superiority`,
-        ].forEach((ef) => ensureEffect(ef)),
       do: (): void => {
         const testTurns = CommunityService.Moxie.actualCost();
         const predictedTestTurns = CommunityService.Moxie.prediction;
@@ -138,6 +127,14 @@ export const moxQuest: Quest<Task> = {
         );
       },
       outfit: { modifier: `Moxie` },
+      effects: [
+        $effect`Big`,
+        $effect`Butt-Rock Hair`,
+        $effect`Disco Fever`,
+        $effect`Quiet Desperation`,
+        $effect`Song of Bravado`,
+        $effect`Stevedave's Shanty of Superiority`,
+      ],
       limit: { tries: 1 },
     },
   ],
@@ -149,17 +146,6 @@ export const hpQuest: Quest<Task> = {
   tasks: [
     {
       name: `HP Test`,
-      prepare: () =>
-        [
-          $effect`Big`,
-          $effect`Go Get 'Em, Tiger!`,
-          $effect`Reptilian Fortitude`,
-          $effect`Quiet Determination`,
-          $effect`Song of Bravado`,
-          $effect`Stevedave's Shanty of Superiority`,
-          $effect`Saucemastery`,
-          $effect`Seal Clubbing Frenzy`,
-        ].forEach((ef) => ensureEffect(ef)),
       completed: () => CommunityService.HP.isDone(),
       do: (): void => {
         const testTurns = CommunityService.HP.actualCost();
@@ -179,6 +165,16 @@ export const hpQuest: Quest<Task> = {
         );
       },
       outfit: { modifier: `HP` },
+      effects: [
+        $effect`Big`,
+        $effect`Go Get 'Em, Tiger!`,
+        $effect`Reptilian Fortitude`,
+        $effect`Quiet Determination`,
+        $effect`Song of Bravado`,
+        $effect`Stevedave's Shanty of Superiority`,
+        $effect`Saucemastery`,
+        $effect`Seal Clubbing Frenzy`,
+      ],
       limit: { tries: 1 },
     },
   ],

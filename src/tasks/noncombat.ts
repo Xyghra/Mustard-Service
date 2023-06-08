@@ -7,7 +7,6 @@ import {
   $location,
   Clan,
   CommunityService,
-  ensureEffect,
   get,
   have,
   set,
@@ -43,15 +42,6 @@ export const noncombatQuest: Quest<Task> = {
     },
     {
       name: `Noncombat Test`,
-      prepare: () =>
-        [
-          $effect`Empathy`,
-          $effect`Blood Bond`,
-          $effect`Leash of Linguini`,
-          $effect`The Sonata of Sneakiness`,
-          $effect`Smooth Movements`,
-          $effect`Feeling Lonely`,
-        ].forEach((ef) => ensureEffect(ef)),
       completed: () => CommunityService.Noncombat.isDone(),
       do: (): void => {
         const predictedTestTurns = CommunityService.Noncombat.prediction;
@@ -78,6 +68,14 @@ export const noncombatQuest: Quest<Task> = {
           umbrella: `cocoon`,
         },
       },
+      effects: [
+        $effect`Empathy`,
+        $effect`Blood Bond`,
+        $effect`Leash of Linguini`,
+        $effect`The Sonata of Sneakiness`,
+        $effect`Smooth Movements`,
+        $effect`Feeling Lonely`,
+      ],
       limit: { tries: 1 },
     },
   ],

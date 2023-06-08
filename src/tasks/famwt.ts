@@ -1,16 +1,6 @@
 import { Quest, Task } from "grimoire-kolmafia";
 import { cliExecute, print, use } from "kolmafia";
-import {
-  $effect,
-  $familiar,
-  $item,
-  Clan,
-  CommunityService,
-  ensureEffect,
-  get,
-  have,
-  set,
-} from "libram";
+import { $effect, $familiar, $item, Clan, CommunityService, get, have, set } from "libram";
 import { printModtrace } from "libram/dist/modifier";
 
 export const famwtQuest: Quest<Task> = {
@@ -39,10 +29,6 @@ export const famwtQuest: Quest<Task> = {
     },
     {
       name: `Familiar Weight Test`,
-      prepare: () =>
-        [$effect`Empathy`, $effect`Blood Bond`, $effect`Leash of Linguini`].forEach((ef) =>
-          ensureEffect(ef)
-        ),
       completed: () => CommunityService.FamiliarWeight.isDone(),
       do: (): void => {
         const predictedTestTurns = CommunityService.FamiliarWeight.prediction;
@@ -66,6 +52,7 @@ export const famwtQuest: Quest<Task> = {
         famequip: $item`overloaded Yule battery`,
       },
       limit: { tries: 1 },
+      effects: [$effect`Empathy`, $effect`Blood Bond`, $effect`Leash of Linguini`],
     },
   ],
 };

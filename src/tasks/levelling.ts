@@ -566,7 +566,6 @@ export const levellingQuest: Quest<Task> = {
       prepare: () => restoreHp(myMaxhp()),
       completed: () => have($item`very pointy crown`),
       do: () => Witchess.fightPiece($monster`Witchess Queen`),
-      effects: [$effect`Frigidalmatian`],
       combat: new CombatStrategy().macro(Macro.attack().repeat()),
     },
     {
