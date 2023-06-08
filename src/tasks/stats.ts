@@ -25,9 +25,11 @@ export const muscleQuest: Quest<Task> = {
     {
       name: `Muscle Test`,
       prepare: () =>
-        [$effect`Ur-Kel's Aria of Annoyance`, $effect`Fat Leon's Phat Loot Lyric`].forEach((ef) =>
-          uneffect(ef)
-        ),
+        [
+          $effect`Ur-Kel's Aria of Annoyance`,
+          $effect`Fat Leon's Phat Loot Lyric`,
+          $effect`Aloysius' Antiphon of Aptitude`,
+        ].forEach((ef) => uneffect(ef)),
       completed: () => CommunityService.Muscle.isDone(),
       do: (): void => {
         const testTurns = CommunityService.Muscle.actualCost();

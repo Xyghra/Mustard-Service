@@ -140,6 +140,11 @@ export const skeletonsQuest: Quest<Task> = {
       },
     },
     {
+      name: `Purchase Fireworks Hat`,
+      completed: () => have($item`sombrero-mounted sparkler`),
+      do: () => retrieveItem(1, $item`sombrero-mounted sparkler`),
+    },
+    {
       name: `Guild Unlock`,
       prepare: () =>
         [
@@ -151,6 +156,7 @@ export const skeletonsQuest: Quest<Task> = {
       completed: () => get(guildQuest) === `step1` || get(guildQuest) === `finished`,
       do: guildZone,
       outfit: {
+        hat: $item`sombrero-mounted sparkler`,
         familiar: $familiar`Pair of Stomping Boots`,
         famequip: $item`tiny stillsuit`,
       },

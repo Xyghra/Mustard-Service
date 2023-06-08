@@ -209,6 +209,11 @@ export const runStartQuest: Quest<Task> = {
       do: () => changeMcd(11),
     },
     {
+      name: `Boxing Daycare Freescavenge`,
+      completed: () => get(`_daycareGymScavenges`) >= 1,
+      do: () => cliExecute(`daycare scavenge`),
+    },
+    {
       name: `Arrange Trainset`,
       prepare: () => use(1, $item`model train set`),
       completed: () =>

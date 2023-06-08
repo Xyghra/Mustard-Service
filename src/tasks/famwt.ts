@@ -28,6 +28,14 @@ export const famwtQuest: Quest<Task> = {
       do: () => cliExecute(`pool 1`),
     },
     {
+      name: `Hatter Buff`,
+      completed: () =>
+        !have($item`"DRINK ME" potion`) ||
+        have($effect`You Can Really Taste the Dormouse`) ||
+        !have($item`sombrero-mounted sparkler`),
+      do: () => cliExecute(`hatter sombrero-mounted sparkler`),
+    },
+    {
       name: `Familiar Weight Test`,
       completed: () => CommunityService.FamiliarWeight.isDone(),
       do: (): void => {

@@ -15,6 +15,7 @@ import {
   myHp,
   myLevel,
   myMaxhp,
+  myPrimestat,
   print,
   restoreHp,
   retrieveItem,
@@ -82,6 +83,7 @@ const levellingEffects = [
   $effect`Seal Clubbing Frenzy`,
   $effect`Saucemastery`,
   $effect`Patience of the Tortoise`,
+  $effect`Disco State of Mind`,
 
   //Bigger stat buffs
   $effect`Disco Fever`,
@@ -100,6 +102,7 @@ const levellingEffects = [
   $effect`Stevedave's Shanty of Superiority`,
   $effect`Ur-Kel's Aria of Annoyance`,
   $effect`Fat Leon's Phat Loot Lyric`,
+  $effect`Aloysius' Antiphon of Aptitude`,
 
   //ML and Bonus Stats
   $effect`Carol of the Thrills`,
@@ -165,10 +168,16 @@ export const levellingQuest: Quest<Task> = {
     {
       name: `Drink Pilsners`,
       ready: () => myLevel() >= 11 && availableAmount($item`astral pilsner`) >= 4,
-      prepare: () => ensureEffect($effect`Ode to Booze`, 4),
+      prepare: (): void => {
+        uneffect($effect`Fat Leon's Phat Loot Lyric`);
+        ensureEffect($effect`Ode to Booze`, 4);
+      },
       completed: () => availableAmount($item`astral pilsner`) < 4,
       do: () => drink(4, $item`astral pilsner`),
-      post: () => uneffect($effect`Ode to Booze`),
+      post: (): void => {
+        uneffect($effect`Ode to Booze`);
+        ensureEffect($effect`Fat Leon's Phat Loot Lyric`);
+      },
     },
     {
       name: `June Cleave`,
@@ -248,8 +257,15 @@ export const levellingQuest: Quest<Task> = {
       post: () => equip($item`Catherine Wheel`),
     },
     {
+      name: `Boxing Daycare Buff`,
+      completed: () =>
+        [$effect`Muddled`, $effect`Ten out of Ten`, $effect`Uncucumbered`].some((ef) => have(ef)) ||
+        get(`_daycareSpa`),
+      do: () => cliExecute(`daycare ${myPrimestat()}`),
+    },
+    {
       name: `Wish for A Contender`,
-      completed: () => have($effect`A Contender`) || get(`_genieWishesUsed`) >= 2,
+      completed: () => have($effect`A Contender`) || get(`_genieWishesUsed`) >= 2 || true,
       do: () => cliExecute(`genie effect A Contender`),
     },
     {
@@ -408,11 +424,6 @@ export const levellingQuest: Quest<Task> = {
       do: () => withChoice(1497, 1, () => use(1, $item`closed-circuit pay phone`)),
     },
     {
-      name: `Get Non-Com hat (it sort of helps here)`,
-      completed: () => have($item`porkpie-mounted popper`),
-      do: () => retrieveItem(1, $item`porkpie-mounted popper`),
-    },
-    {
       name: `Payphone Freefights (extingo)`,
       ready: () => have($effect`Shadow Affinity`),
       completed: () =>
@@ -421,7 +432,7 @@ export const levellingQuest: Quest<Task> = {
         get(`_fireExtinguisherCharge`) <= 10,
       do: $location`Shadow Rift (The Misspelled Cemetary)`,
       outfit: {
-        hat: $item`porkpie-mounted popper`,
+        hat: $item`sombrero-mounted sparkler`,
         weapon: $item`industrial fire extinguisher`,
       },
       combat: new CombatStrategy().macro(
