@@ -12,6 +12,7 @@ import {
   myHash,
   nowToInt,
   retrieveItem,
+  reverseNumberology,
   runChoice,
   takeStorage,
   use,
@@ -72,7 +73,8 @@ export const runStartQuest: Quest<Task> = {
     },
     {
       name: `Numberology Attempt`,
-      ready: () => get(`_universeCalculated`) === 0,
+      ready: () =>
+        get(`_universeCalculated`) === 0 && Object.keys(reverseNumberology()).includes(`69`),
       completed: () => get(`_universeCalculated`) >= 1,
       do: () => cliExecute(`numberology 69`),
       limit: { tries: 1 },

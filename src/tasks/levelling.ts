@@ -261,7 +261,7 @@ export const levellingQuest: Quest<Task> = {
       completed: () =>
         [$effect`Muddled`, $effect`Ten out of Ten`, $effect`Uncucumbered`].some((ef) => have(ef)) ||
         get(`_daycareSpa`),
-      do: () => cliExecute(`daycare ${myPrimestat()}`),
+      do: () => cliExecute(`daycare ${myPrimestat().toString().toLowerCase()}`),
     },
     {
       name: `Wish for A Contender`,
@@ -585,6 +585,7 @@ export const levellingQuest: Quest<Task> = {
       do: $location`The Neverending Party`,
       choices: { 1322: 2, 1324: 5, 1326: 2 },
       outfit: {
+        weapon: have($item`fish hatchet`) ? $item`fish hatchet` : $item`June cleaver`,
         acc2: $item`Cincho de Mayo`,
       },
       combat: new CombatStrategy().macro(

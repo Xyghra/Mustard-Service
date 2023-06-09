@@ -10,6 +10,7 @@ import {
   equippedItem,
   myAdventures,
   retrieveItem,
+  reverseNumberology,
   use,
   visitUrl,
 } from "kolmafia";
@@ -146,13 +147,6 @@ export const skeletonsQuest: Quest<Task> = {
     },
     {
       name: `Guild Unlock`,
-      prepare: () =>
-        [
-          $effect`Musk of the Moose`,
-          $effect`Carlweather's Cantata of Confrontation`,
-          $effect`Empathy`,
-          $effect`Blood Bond`,
-        ].forEach((ef) => ensureEffect(ef)),
       completed: () => get(guildQuest) === `step1` || get(guildQuest) === `finished`,
       do: guildZone,
       outfit: {
@@ -161,6 +155,12 @@ export const skeletonsQuest: Quest<Task> = {
         famequip: $item`tiny stillsuit`,
       },
       combat: new CombatStrategy().macro(Macro.runaway().abort()),
+      effects: [
+        $effect`Musk of the Moose`,
+        $effect`Carlweather's Cantata of Confrontation`,
+        $effect`Empathy`,
+        $effect`Blood Bond`,
+      ],
     },
     {
       name: `Cemetary Unlock`,
@@ -178,7 +178,8 @@ export const skeletonsQuest: Quest<Task> = {
     },
     {
       name: `Numberology Attempt DEUX`,
-      completed: () => get(`_universeCalculated`) > 0,
+      completed: () =>
+        get(`_universeCalculated`) > 0 || !Object.keys(reverseNumberology()).includes(`69`),
       do: () => cliExecute(`numberology 69`),
     },
     {
