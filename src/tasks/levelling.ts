@@ -25,6 +25,7 @@ import {
   visitUrl,
 } from "kolmafia";
 import {
+  $class,
   $effect,
   $familiar,
   $item,
@@ -344,7 +345,16 @@ export const levellingQuest: Quest<Task> = {
       },
       outfit: {
         offhand: $item`latte lovers member's mug`,
+        modifier: `mp`,
       },
+      effects: [
+        $effect`Big`,
+        $effect`Song of Bravado`,
+        $effect`Stevedave's Shanty of Superiority`,
+        myClass() !== $class`Sauceror`
+          ? $effect`[1457]Blood Sugar Sauce Magic`
+          : $effect`[1458]Blood Sugar Sauce Magic`,
+      ],
       combat: new CombatStrategy().macro(
         Macro.trySkill($skill`Gulp Latte`)
           .trySkill($skill`Throw Latte on Opponent`)
@@ -364,13 +374,35 @@ export const levellingQuest: Quest<Task> = {
         Latte.fill(`pumpkin`, `cinnamon`, `vanilla`);
       },
       outfit: {
+        hat: $item`wad of used tape`,
+        back: $item`Catherine Wheel`,
+        shirt: $item`Jurassic Parka`,
+        weapon: $item`June cleaver`,
+        pants: $item`designer sweatpants`,
+        acc1: $item`backup camera`,
+        acc2: $item`your cowboy boots`,
+        acc3: $item`combat lover's locket`,
+        familiar: $familiar`Melodramedary`,
+        famequip: $item`tiny stillsuit`,
         offhand: $item`latte lovers member's mug`,
+        modes: {
+          parka: `spikolodon`,
+          umbrella: `broken`,
+          backupcamera: `ml`,
+        },
       },
       combat: new CombatStrategy().macro(
         Macro.trySkill($skill`Gulp Latte`)
           .trySkill($skill`Throw Latte on Opponent`)
           .abort()
       ),
+    },
+    {
+      name: `Remove Bloodsugar`,
+      completed: () =>
+        !have($effect`[1457]Blood Sugar Sauce Magic`) &&
+        !have($effect`[1458]Blood Sugar Sauce Magic`),
+      do: () => useSkill(1, $skill`Blood Sugar Sauce Magic`),
     },
     {
       name: `Flapper Mapper`,
