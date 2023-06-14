@@ -158,11 +158,22 @@ export const levellingQuest: Quest<Task> = {
       },
     },
     {
-      name: `Swap Sombrero`,
+      name: `Swap Shortcook`,
       ready: () =>
         have($effect`Spit Upon`) &&
         (myFamiliar() !== $familiar`Machine Elf` ||
           ![1, 2, 3, 4].includes(get(`_machineTunnelsAdv`))),
+      completed: () =>
+        myFamiliar() === $familiar`Shorter-Order Cook` || have($item`short stack of pancakes`),
+      do: () => useFamiliar($familiar`Shorter-Order Cook`),
+    },
+    {
+      name: `Swap Sombrero`,
+      ready: () =>
+        have($effect`Spit Upon`) &&
+        (myFamiliar() !== $familiar`Machine Elf` ||
+          ![1, 2, 3, 4].includes(get(`_machineTunnelsAdv`))) &&
+        have($item`short stack of pancakes`),
       completed: () => myFamiliar() === $familiar`Hovering Sombrero`,
       do: () => useFamiliar($familiar`Hovering Sombrero`),
     },
@@ -207,13 +218,14 @@ export const levellingQuest: Quest<Task> = {
       prepare: (): void => {
         curOffhand = equippedItem($slot`off-hand`);
       },
-      ready: () => getKramcoWandererChance() === 1 && get(`_latteRefillsUsed`) >= 3,
+      ready: () =>
+        getKramcoWandererChance() === 1 &&
+        get(`_latteRefillsUsed`) >= 3 &&
+        get(`_neverendingPartyFreeTurns`) >= 1,
       completed: () => getKramcoWandererChance() < 1,
-      do: () => $location`The Sleazy Back Alley`,
+      do: () => $location`The Neverending Party`,
       outfit: {
         offhand: $item`Kramco Sausage-o-Matic™`,
-        familiar: $familiar`Melodramedary`,
-        famequip: $item`tiny stillsuit`,
       },
       combat: new CombatStrategy().macro(Macro.attack().repeat()),
       post: () => equip($slot`off-hand`, curOffhand),
@@ -418,7 +430,10 @@ export const levellingQuest: Quest<Task> = {
         famequip: $item`tiny stillsuit`,
       },
       combat: new CombatStrategy().macro(
-        Macro.trySkill($skill`Feel Nostalgic`)
+        Macro.externalIf(
+          get(`lastCopyableMonster`) === $monster`sausage goblin`,
+          Macro.trySkill($skill`Feel Nostalgic`)
+        )
           .trySkill($skill`Feel Envy`)
           .trySkill($skill`Lunging Thrust-Smack`)
           .attack()
@@ -574,7 +589,11 @@ export const levellingQuest: Quest<Task> = {
         famequip: $item`tiny stillsuit`,
       },
       combat: new CombatStrategy().macro(
-        Macro.trySkill($skill`%fn, spit on me!`)
+        Macro.externalIf(
+          get(`lastCopyableMonster`) === $monster`Witchess Bishop`,
+          Macro.trySkill($skill`Feel Nostalgic`)
+        )
+          .trySkill($skill`%fn, spit on me!`)
           .attack()
           .repeat()
       ),
@@ -590,7 +609,11 @@ export const levellingQuest: Quest<Task> = {
       do: $location`The Neverending Party`,
       choices: { 1322: 2, 1324: 5, 1326: 2 },
       combat: new CombatStrategy().macro(
-        Macro.trySkill($skill`Bowl Sideways`)
+        Macro.externalIf(
+          get(`lastCopyableMonster`) === $monster`sausage goblin`,
+          Macro.trySkill($skill`Feel Nostalgic`)
+        )
+          .trySkill($skill`Bowl Sideways`)
           .trySkill($skill`%fn, spit on me!`)
           .trySkillRepeat($skill`Lunging Thrust-Smack`)
       ),

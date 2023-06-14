@@ -22,6 +22,11 @@ export const famwtQuest: Quest<Task> = {
       do: () => cliExecute(`witchess`),
     },
     {
+      name: `Pancakes`,
+      completed: () => have($effect`Shortly Stacked`) || !have($item`short stack of pancakes`),
+      do: () => use(1, $item`short stack of pancakes`),
+    },
+    {
       name: `Pool Buff`,
       prepare: () => Clan.join(`Bonus Adventures from Hell`),
       completed: () => have($effect`Billiards Belligerence`) || get(`_poolGames`) >= 3,
