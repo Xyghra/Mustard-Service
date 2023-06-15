@@ -430,11 +430,7 @@ export const levellingQuest: Quest<Task> = {
         famequip: $item`tiny stillsuit`,
       },
       combat: new CombatStrategy().macro(
-        Macro.externalIf(
-          get(`lastCopyableMonster`) === $monster`sausage goblin`,
-          Macro.trySkill($skill`Feel Nostalgic`)
-        )
-          .trySkill($skill`Feel Envy`)
+        Macro.trySkill($skill`Feel Envy`)
           .trySkill($skill`Lunging Thrust-Smack`)
           .attack()
           .repeat()
@@ -579,6 +575,9 @@ export const levellingQuest: Quest<Task> = {
           .attack()
           .repeat()
       ),
+      outfit: {
+        famequip: $item`tiny stillsuit`,
+      },
     },
     {
       name: `Deep Machine Fights`,
@@ -588,12 +587,12 @@ export const levellingQuest: Quest<Task> = {
         familiar: $familiar`Machine Elf`,
         famequip: $item`tiny stillsuit`,
       },
-      combat: new CombatStrategy().macro(
-        Macro.externalIf(
-          get(`lastCopyableMonster`) === $monster`Witchess Bishop`,
-          Macro.trySkill($skill`Feel Nostalgic`)
-        )
-          .trySkill($skill`%fn, spit on me!`)
+      combat: new CombatStrategy().macro(() =>
+        Macro.trySkill($skill`%fn, spit on me!`)
+          .externalIf(
+            get(`lastCopyableMonster`) === $monster`Witchess Bishop`,
+            Macro.trySkill($skill`Feel Nostalgic`)
+          )
           .attack()
           .repeat()
       ),
@@ -608,15 +607,18 @@ export const levellingQuest: Quest<Task> = {
       completed: () => get(`_neverendingPartyFreeTurns`) >= 10,
       do: $location`The Neverending Party`,
       choices: { 1322: 2, 1324: 5, 1326: 2 },
-      combat: new CombatStrategy().macro(
-        Macro.externalIf(
-          get(`lastCopyableMonster`) === $monster`sausage goblin`,
-          Macro.trySkill($skill`Feel Nostalgic`)
-        )
-          .trySkill($skill`Bowl Sideways`)
+      combat: new CombatStrategy().macro(() =>
+        Macro.trySkill($skill`Bowl Sideways`)
           .trySkill($skill`%fn, spit on me!`)
+          .externalIf(
+            get(`lastCopyableMonster`) === $monster`sausage goblin`,
+            Macro.trySkill($skill`Feel Nostalgic`)
+          )
           .trySkillRepeat($skill`Lunging Thrust-Smack`)
       ),
+      outfit: {
+        famequip: $item`tiny stillsuit`,
+      },
     },
     {
       name: `Witchess Witch`,
@@ -626,6 +628,9 @@ export const levellingQuest: Quest<Task> = {
       combat: new CombatStrategy().macro(
         Macro.trySkill($skill`%fn, spit on me!`).trySkillRepeat($skill`Lunging Thrust-Smack`)
       ),
+      outfit: {
+        famequip: $item`tiny stillsuit`,
+      },
     },
     {
       name: `Witchess Queen`,
@@ -633,6 +638,9 @@ export const levellingQuest: Quest<Task> = {
       completed: () => have($item`very pointy crown`),
       do: () => Witchess.fightPiece($monster`Witchess Queen`),
       combat: new CombatStrategy().macro(Macro.attack().repeat()),
+      outfit: {
+        famequip: $item`tiny stillsuit`,
+      },
     },
     {
       name: `Shattering Punches`,
@@ -642,6 +650,7 @@ export const levellingQuest: Quest<Task> = {
       outfit: {
         weapon: have($item`fish hatchet`) ? $item`fish hatchet` : $item`June cleaver`,
         acc2: $item`Cincho de Mayo`,
+        famequip: $item`tiny stillsuit`,
       },
       combat: new CombatStrategy().macro(
         Macro.trySkill($skill`%fn, spit on me!`)
@@ -658,6 +667,7 @@ export const levellingQuest: Quest<Task> = {
       do: $location`The Neverending Party`,
       choices: { 1322: 2, 1324: 5, 1326: 2 },
       outfit: {
+        famequip: $item`tiny stillsuit`,
         acc2: $item`Lil' Doctor™ bag`,
       },
       combat: new CombatStrategy().macro(

@@ -150,6 +150,7 @@ export const skeletonsQuest: Quest<Task> = {
       completed: () => get(guildQuest) === `step1` || get(guildQuest) === `finished`,
       do: guildZone,
       outfit: {
+        offhand: $item`latte lovers member's mug`,
         hat: $item`sombrero-mounted sparkler`,
         familiar: $familiar`Pair of Stomping Boots`,
         famequip: $item`tiny stillsuit`,
