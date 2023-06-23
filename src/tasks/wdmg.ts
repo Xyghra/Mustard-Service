@@ -11,6 +11,7 @@ import {
   visitUrl,
 } from "kolmafia";
 import {
+  $class,
   $effect,
   $familiar,
   $item,
@@ -116,6 +117,9 @@ export const wdmgQuest: Quest<Task> = {
         $effect`Carol of the Bulls`,
         $effect`Tenacity of the Snapper`,
         $effect`Jackasses' Symphony of Destruction`,
+        myClass() === $class`Turtle Tamer`
+          ? $effect`Blessing of the War Snapper`
+          : $effect`Disdain of the War Snapper`,
       ],
       limit: { tries: 1 },
     },

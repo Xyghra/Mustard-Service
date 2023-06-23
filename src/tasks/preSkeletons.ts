@@ -131,6 +131,9 @@ export const runStartQuest: Quest<Task> = {
           retrieveItem(i)
         ),
       outfit: {
+        back: have($item`unwrapped knock-off retro superhero cape`)
+          ? $item`unwrapped knock-off retro superhero cape`
+          : undefined,
         pants: $item`designer sweatpants`,
       },
     },

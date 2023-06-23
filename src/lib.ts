@@ -17,3 +17,11 @@ export const { guildQuest, guildURL, guildZone } = byStat({
     guildZone: $location`The Sleazy Back Alley`,
   },
 });
+
+export function retroMainstat(): `vampire` | `heck` | `robot` {
+  return byStat({
+    Muscle: `vampire`,
+    Mysticality: `heck`,
+    Moxie: `robot`,
+  });
+}

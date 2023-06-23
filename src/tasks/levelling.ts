@@ -48,13 +48,16 @@ import {
   Witchess,
   withChoice,
 } from "libram";
+import { retroMainstat } from "../lib";
 
 let curOffhand = $item`unbreakable umbrella`;
 let curWeapon = $item`June cleaver`;
 
 const levellingOutfit = {
   hat: $item`wad of used tape`,
-  back: $item`Catherine Wheel`,
+  back: have($item`unwrapped knock-off retro superhero cape`)
+    ? $item`unwrapped knock-off retro superhero cape`
+    : $item`Catherine Wheel`,
   shirt: $item`Jurassic Parka`,
   weapon: $item`June cleaver`,
   offhand: $item`unbreakable umbrella`,
@@ -85,6 +88,15 @@ const levellingEffects = [
   $effect`Saucemastery`,
   $effect`Patience of the Tortoise`,
   $effect`Disco State of Mind`,
+  $effect`Pasta Oneness`,
+
+  //Tiny buffs
+  $effect`Reptilian Fortitude`,
+  myClass() === $class`Turtle Tamer`
+    ? $effect`Blessing of the War Snapper`
+    : $effect`Disdain of the War Snapper`,
+  $effect`Blubbered Up`,
+  $effect`Tenacity of the Snapper`,
 
   //Bigger stat buffs
   $effect`Disco Fever`,
@@ -114,8 +126,12 @@ const levellingEffects = [
   $effect`Ghostly Shell`,
   $effect`Astral Shell`,
   $effect`Jalapeño Saucesphere`,
+  $effect`Spiky Shell`,
   $effect`Elemental Saucesphere`,
   $effect`Scarysauce`,
+  myClass() === $class`Pastamancer`
+    ? $effect`Shield of the Pastalord`
+    : $effect`Flimsy Shield of the Pastalord`,
 
   //Elemental Weapon Damage
   $effect`Your Fifteen Minutes`,
@@ -126,6 +142,7 @@ const levellingEffects = [
   $effect`Intimidating Mien`,
 
   //Familiar!
+  $effect`Curiosity of Br'er Tarrypin`,
   $effect`Empathy`,
   $effect`Leash of Linguini`,
   $effect`Blood Bond`,
@@ -265,9 +282,9 @@ export const levellingQuest: Quest<Task> = {
     },
     {
       name: `Get Catherine Wheel`,
-      completed: () => have($item`Catherine Wheel`),
+      completed: () =>
+        have($item`Catherine Wheel`) || have($item`unwrapped knock-off retro superhero cape`),
       do: () => retrieveItem(1, $item`Catherine Wheel`),
-      post: () => equip($item`Catherine Wheel`),
     },
     {
       name: `Boxing Daycare Buff`,
@@ -387,7 +404,9 @@ export const levellingQuest: Quest<Task> = {
       },
       outfit: {
         hat: $item`wad of used tape`,
-        back: $item`Catherine Wheel`,
+        back: have($item`unwrapped knock-off retro superhero cape`)
+          ? $item`unwrapped knock-off retro superhero cape`
+          : $item`Catherine Wheel`,
         shirt: $item`Jurassic Parka`,
         weapon: $item`June cleaver`,
         pants: $item`designer sweatpants`,
@@ -397,11 +416,18 @@ export const levellingQuest: Quest<Task> = {
         familiar: $familiar`Melodramedary`,
         famequip: $item`tiny stillsuit`,
         offhand: $item`latte lovers member's mug`,
-        modes: {
-          parka: `spikolodon`,
-          umbrella: `broken`,
-          backupcamera: `ml`,
-        },
+        modes: have($item`unwrapped knock-off retro superhero cape`)
+          ? {
+              parka: `spikolodon`,
+              umbrella: `broken`,
+              backupcamera: `ml`,
+              retrocape: [retroMainstat(), `thrill`],
+            }
+          : {
+              parka: `spikolodon`,
+              umbrella: `broken`,
+              backupcamera: `ml`,
+            },
       },
       combat: new CombatStrategy().macro(
         Macro.trySkill($skill`Gulp Latte`)
