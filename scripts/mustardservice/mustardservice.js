@@ -9274,18 +9274,28 @@ var noncombatQuest = {
       1500: 2
     }
   }, {
-    name: "Silent Running",
-    prepare: () => Clan.join("Bonus Adventures from Hell"),
-    completed: () => have($effect(noncombat_templateObject4 || (noncombat_templateObject4 = noncombat_taggedTemplateLiteral(["Silent Running"])))) || property_get("_olympicSwimmingPool"),
-    do: () => (0,external_kolmafia_namespaceObject.cliExecute)("swim noncombat")
-  }, {
     name: "Squeaky Rose",
-    completed: () => !have(template_string_$item(noncombat_templateObject5 || (noncombat_templateObject5 = noncombat_taggedTemplateLiteral(["squeaky toy rose"])))) || have($effect(noncombat_templateObject6 || (noncombat_templateObject6 = noncombat_taggedTemplateLiteral(["A Rose by Any Other Material"])))),
-    do: () => (0,external_kolmafia_namespaceObject.use)(1, template_string_$item(noncombat_templateObject7 || (noncombat_templateObject7 = noncombat_taggedTemplateLiteral(["squeaky toy rose"]))))
+    completed: () => !have(template_string_$item(noncombat_templateObject4 || (noncombat_templateObject4 = noncombat_taggedTemplateLiteral(["squeaky toy rose"])))) || have($effect(noncombat_templateObject5 || (noncombat_templateObject5 = noncombat_taggedTemplateLiteral(["A Rose by Any Other Material"])))),
+    do: () => (0,external_kolmafia_namespaceObject.use)(1, template_string_$item(noncombat_templateObject6 || (noncombat_templateObject6 = noncombat_taggedTemplateLiteral(["squeaky toy rose"]))))
   }, {
     name: "Shady Shades",
-    completed: () => !have(template_string_$item(noncombat_templateObject8 || (noncombat_templateObject8 = noncombat_taggedTemplateLiteral(["shady shades"])))) || have($effect(noncombat_templateObject9 || (noncombat_templateObject9 = noncombat_taggedTemplateLiteral(["Throwing Some Shade"])))),
-    do: () => (0,external_kolmafia_namespaceObject.use)(1, template_string_$item(noncombat_templateObject10 || (noncombat_templateObject10 = noncombat_taggedTemplateLiteral(["shady shades"]))))
+    completed: () => !have(template_string_$item(noncombat_templateObject7 || (noncombat_templateObject7 = noncombat_taggedTemplateLiteral(["shady shades"])))) || have($effect(noncombat_templateObject8 || (noncombat_templateObject8 = noncombat_taggedTemplateLiteral(["Throwing Some Shade"])))),
+    do: () => (0,external_kolmafia_namespaceObject.use)(1, template_string_$item(noncombat_templateObject9 || (noncombat_templateObject9 = noncombat_taggedTemplateLiteral(["shady shades"])))),
+    outfit: {
+      offhand: template_string_$item(noncombat_templateObject10 || (noncombat_templateObject10 = noncombat_taggedTemplateLiteral(["unbreakable umbrella"]))),
+      modifier: "-60 combat rate 13 familiar weight",
+      familiar: template_string_$familiar(noncombat_templateObject11 || (noncombat_templateObject11 = noncombat_taggedTemplateLiteral(["Disgeist"]))),
+      famequip: template_string_$item(noncombat_templateObject12 || (noncombat_templateObject12 = noncombat_taggedTemplateLiteral(["tiny stillsuit"]))),
+      modes: {
+        umbrella: "cocoon"
+      }
+    },
+    effects: [$effect(noncombat_templateObject13 || (noncombat_templateObject13 = noncombat_taggedTemplateLiteral(["Empathy"]))), $effect(noncombat_templateObject14 || (noncombat_templateObject14 = noncombat_taggedTemplateLiteral(["Blood Bond"]))), $effect(noncombat_templateObject15 || (noncombat_templateObject15 = noncombat_taggedTemplateLiteral(["Leash of Linguini"]))), $effect(noncombat_templateObject16 || (noncombat_templateObject16 = noncombat_taggedTemplateLiteral(["The Sonata of Sneakiness"]))), $effect(noncombat_templateObject17 || (noncombat_templateObject17 = noncombat_taggedTemplateLiteral(["Smooth Movements"]))), $effect(noncombat_templateObject18 || (noncombat_templateObject18 = noncombat_taggedTemplateLiteral(["Feeling Lonely"])))]
+  }, {
+    name: "Silent Running",
+    prepare: () => Clan.join("Bonus Adventures from Hell"),
+    completed: () => have($effect(noncombat_templateObject19 || (noncombat_templateObject19 = noncombat_taggedTemplateLiteral(["Silent Running"])))) || property_get("_olympicSwimmingPool") || CommunityService.Noncombat.actualCost() === 1,
+    do: () => (0,external_kolmafia_namespaceObject.cliExecute)("swim noncombat")
   }, {
     name: "Noncombat Test",
     completed: () => CommunityService.Noncombat.isDone(),
@@ -9297,16 +9307,6 @@ var noncombatQuest = {
       (0,external_kolmafia_namespaceObject.print)("Took: [".concat(testTurns, "]"), "blue");
       CommunityService.Noncombat.run(() => _set("_mustardServiceTests", "".concat(property_get("_mustardServiceTests"), ",").concat(testTurns, " [Expected: ").concat(predictedTestTurns, "]")), 1);
     },
-    outfit: {
-      offhand: template_string_$item(noncombat_templateObject11 || (noncombat_templateObject11 = noncombat_taggedTemplateLiteral(["unbreakable umbrella"]))),
-      modifier: "-60 combat rate 13 familiar weight",
-      familiar: template_string_$familiar(noncombat_templateObject12 || (noncombat_templateObject12 = noncombat_taggedTemplateLiteral(["Disgeist"]))),
-      famequip: template_string_$item(noncombat_templateObject13 || (noncombat_templateObject13 = noncombat_taggedTemplateLiteral(["tiny stillsuit"]))),
-      modes: {
-        umbrella: "cocoon"
-      }
-    },
-    effects: [$effect(noncombat_templateObject14 || (noncombat_templateObject14 = noncombat_taggedTemplateLiteral(["Empathy"]))), $effect(noncombat_templateObject15 || (noncombat_templateObject15 = noncombat_taggedTemplateLiteral(["Blood Bond"]))), $effect(noncombat_templateObject16 || (noncombat_templateObject16 = noncombat_taggedTemplateLiteral(["Leash of Linguini"]))), $effect(noncombat_templateObject17 || (noncombat_templateObject17 = noncombat_taggedTemplateLiteral(["The Sonata of Sneakiness"]))), $effect(noncombat_templateObject18 || (noncombat_templateObject18 = noncombat_taggedTemplateLiteral(["Smooth Movements"]))), $effect(noncombat_templateObject19 || (noncombat_templateObject19 = noncombat_taggedTemplateLiteral(["Feeling Lonely"])))],
     limit: {
       tries: 1
     }
