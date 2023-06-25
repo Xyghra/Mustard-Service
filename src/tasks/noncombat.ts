@@ -23,12 +23,7 @@ export const noncombatQuest: Quest<Task> = {
       do: () => $location`Shadow Rift`,
       choices: { 1500: 2 },
     },
-    {
-      name: `Silent Running`,
-      prepare: () => Clan.join(`Bonus Adventures from Hell`),
-      completed: () => have($effect`Silent Running`) || get(`_olympicSwimmingPool`),
-      do: () => cliExecute(`swim noncombat`),
-    },
+
     {
       name: `Squeaky Rose`,
       completed: () =>
@@ -39,6 +34,32 @@ export const noncombatQuest: Quest<Task> = {
       name: `Shady Shades`,
       completed: () => !have($item`shady shades`) || have($effect`Throwing Some Shade`),
       do: () => use(1, $item`shady shades`),
+      outfit: {
+        offhand: $item`unbreakable umbrella`,
+        modifier: `-60 combat rate 13 familiar weight`,
+        familiar: $familiar`Disgeist`,
+        famequip: $item`tiny stillsuit`,
+        modes: {
+          umbrella: `cocoon`,
+        },
+      },
+      effects: [
+        $effect`Empathy`,
+        $effect`Blood Bond`,
+        $effect`Leash of Linguini`,
+        $effect`The Sonata of Sneakiness`,
+        $effect`Smooth Movements`,
+        $effect`Feeling Lonely`,
+      ],
+    },
+    {
+      name: `Silent Running`,
+      prepare: () => Clan.join(`Bonus Adventures from Hell`),
+      completed: () =>
+        have($effect`Silent Running`) ||
+        get(`_olympicSwimmingPool`) ||
+        CommunityService.Noncombat.actualCost() === 1,
+      do: () => cliExecute(`swim noncombat`),
     },
     {
       name: `Noncombat Test`,
@@ -59,23 +80,7 @@ export const noncombatQuest: Quest<Task> = {
           1
         );
       },
-      outfit: {
-        offhand: $item`unbreakable umbrella`,
-        modifier: `-60 combat rate 13 familiar weight`,
-        familiar: $familiar`Disgeist`,
-        famequip: $item`tiny stillsuit`,
-        modes: {
-          umbrella: `cocoon`,
-        },
-      },
-      effects: [
-        $effect`Empathy`,
-        $effect`Blood Bond`,
-        $effect`Leash of Linguini`,
-        $effect`The Sonata of Sneakiness`,
-        $effect`Smooth Movements`,
-        $effect`Feeling Lonely`,
-      ],
+
       limit: { tries: 1 },
     },
   ],
