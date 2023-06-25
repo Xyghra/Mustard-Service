@@ -571,6 +571,7 @@ export const levellingQuest: Quest<Task> = {
       do: $location`The X-32-F Combat Training Snowman`,
       outfit: {
         shirt: $item`makeshift garbage shirt`,
+        offhand: $item`unbreakable umbrella`,
         familiar: $familiar`Melodramedary`,
         famequip: $item`tiny stillsuit`,
       },
@@ -610,6 +611,7 @@ export const levellingQuest: Quest<Task> = {
       completed: () => get(`_machineTunnelsAdv`) >= 5,
       do: () => $location`The Deep Machine Tunnels`,
       outfit: {
+        offhand: $item`unbreakable umbrella`,
         familiar: $familiar`Machine Elf`,
         famequip: $item`tiny stillsuit`,
       },
@@ -643,7 +645,9 @@ export const levellingQuest: Quest<Task> = {
           .trySkillRepeat($skill`Lunging Thrust-Smack`)
       ),
       outfit: {
+        offhand: $item`unbreakable umbrella`,
         famequip: $item`tiny stillsuit`,
+        modes: { umbrella: `broken` },
       },
     },
     {
