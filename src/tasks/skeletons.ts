@@ -109,12 +109,17 @@ export const skeletonsQuest: Quest<Task> = {
         CombatLoversLocket.reminisce($monster`red skeleton`);
       },
       combat: new CombatStrategy().macro(Macro.trySkill($skill`Feel Hatred`).abort()),
-      post: () => cliExecute(`umbrella ml; backupcamera ml; parka dilophosaur`),
+      outfit: {
+        modes: {
+          umbrella: `broken`,
+          backupcamera: `ml`,
+          parka: `dilophosaur`,
+        },
+      },
     },
     {
       name: `Novelty Tropical Skeleton`,
-      ready: () =>
-        get(`lastCopyableMonster`) === $monster`red skeleton` && get(`parkaMode`) === `dilophosaur`,
+      ready: () => get(`lastCopyableMonster`) === $monster`red skeleton`,
       completed: () => have($effect`Everything Looks Yellow`) && have($item`cherry`),
       do: (): void => {
         Cartography.mapMonster($location`The Skeleton Store`, $monster`novelty tropical skeleton`);
@@ -126,9 +131,12 @@ export const skeletonsQuest: Quest<Task> = {
           .abort()
       ),
       outfit: {
+        offhand: $item`latte lovers member's mug`,
         shirt: $item`Jurassic Parka`,
+        modes: {
+          parka: `dilophosaur`,
+        },
       },
-      post: () => cliExecute(`parka ml`),
     },
     {
       name: `Red May Day`,
@@ -154,6 +162,9 @@ export const skeletonsQuest: Quest<Task> = {
         hat: $item`sombrero-mounted sparkler`,
         familiar: $familiar`Pair of Stomping Boots`,
         famequip: $item`tiny stillsuit`,
+        modes: {
+          parka: `spikolodon`,
+        },
       },
       combat: new CombatStrategy().macro(Macro.runaway().abort()),
       effects: [

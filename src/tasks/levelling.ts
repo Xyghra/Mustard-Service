@@ -46,7 +46,6 @@ import {
   Macro,
   uneffect,
   Witchess,
-  withChoice,
 } from "libram";
 import { retroMainstat } from "../lib";
 
@@ -97,6 +96,7 @@ const levellingEffects = [
     : $effect`Disdain of the War Snapper`,
   $effect`Blubbered Up`,
   $effect`Tenacity of the Snapper`,
+  $effect`Employee of the Month`,
 
   //Bigger stat buffs
   $effect`Disco Fever`,
@@ -490,7 +490,8 @@ export const levellingQuest: Quest<Task> = {
     {
       name: `Get Payphone Quest`,
       completed: () => get(`_shadowAffinityToday`),
-      do: () => withChoice(1497, 1, () => use(1, $item`closed-circuit pay phone`)),
+      do: () => use(1, $item`closed-circuit pay phone`),
+      choices: { 1497: 1 },
     },
     {
       name: `Payphone Freefights (extingo)`,

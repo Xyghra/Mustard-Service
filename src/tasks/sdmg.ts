@@ -79,6 +79,7 @@ export const sdmgQuest: Quest<Task> = {
         $effect`Song of Sauce`,
         $effect`Carol of the Hells`,
         $effect`Jackasses' Symphony of Destruction`,
+        $effect`Arched Eyebrow of the Archmage`,
       ],
       limit: { tries: 1 },
     },
