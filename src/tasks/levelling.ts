@@ -16,7 +16,6 @@ import {
   myLevel,
   myMaxhp,
   myPrimestat,
-  print,
   restoreHp,
   retrieveItem,
   use,
@@ -96,7 +95,6 @@ const levellingEffects = [
     : $effect`Disdain of the War Snapper`,
   $effect`Blubbered Up`,
   $effect`Tenacity of the Snapper`,
-  $effect`Employee of the Month`,
 
   //Bigger stat buffs
   $effect`Disco Fever`,
@@ -153,8 +151,6 @@ const levellingEffects = [
   $effect`Singer's Faithful Ocelot`,
   $effect`Bendin' Hell`,
 ];
-
-print(`${levellingEffects}`);
 
 export const levellingQuest: Quest<Task> = {
   name: `Levelling`,
@@ -394,6 +390,7 @@ export const levellingQuest: Quest<Task> = {
       name: `Buff the heck up oomfie!`,
       completed: () => have($effect`Bendin' Hell`) || get(`_speakeasyFreeFights`) === 3,
       do: () => levellingEffects.forEach((ef) => ensureEffect(ef)),
+      post: () => useSkill(1, $skill`Managerial Manipulation`),
     },
     {
       name: `Latte for Later`,
