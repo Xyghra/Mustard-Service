@@ -370,6 +370,7 @@ export const levellingQuest: Quest<Task> = {
       },
       outfit: {
         offhand: $item`latte lovers member's mug`,
+        famequip: $item`tiny stillsuit`,
         modifier: `mp`,
       },
       effects: [
@@ -390,7 +391,6 @@ export const levellingQuest: Quest<Task> = {
       name: `Buff the heck up oomfie!`,
       completed: () => have($effect`Bendin' Hell`) || get(`_speakeasyFreeFights`) === 3,
       do: () => levellingEffects.forEach((ef) => ensureEffect(ef)),
-      post: () => useSkill(1, $skill`Managerial Manipulation`),
     },
     {
       name: `Latte for Later`,
@@ -451,6 +451,10 @@ export const levellingQuest: Quest<Task> = {
         offhand: $item`unbreakable umbrella`,
         familiar: $familiar`Nanorhino`,
         famequip: $item`tiny stillsuit`,
+        modes: {
+          umbrella: `broken`,
+          retrocape: [retroMainstat(), `thrill`],
+        },
       },
       combat: new CombatStrategy().macro(
         Macro.trySkill($skill`Feel Envy`)
@@ -499,8 +503,10 @@ export const levellingQuest: Quest<Task> = {
         get(`_fireExtinguisherCharge`) <= 10,
       do: $location`Shadow Rift (The Misspelled Cemetary)`,
       outfit: {
+        offhand: $item`unbreakable umbrella`,
         hat: $item`sombrero-mounted sparkler`,
         weapon: $item`industrial fire extinguisher`,
+        modes: { umbrella: `broken` },
       },
       combat: new CombatStrategy().macro(
         Macro.if_(
@@ -526,7 +532,9 @@ export const levellingQuest: Quest<Task> = {
         get(`encountersUntilSRChoice`) === 0 || have($item`Rufus's shadow lodestone`),
       do: $location`Shadow Rift (The Misspelled Cemetary)`,
       outfit: {
+        offhand: $item`unbreakable umbrella`,
         weapon: $item`June cleaver`,
+        modes: { umbrella: `broken` },
       },
       combat: new CombatStrategy().macro(Macro.attack().repeat()),
     },
@@ -540,6 +548,8 @@ export const levellingQuest: Quest<Task> = {
         weapon: $item`June cleaver`,
         familiar: $familiar`Machine Elf`,
         famequip: $item`tiny stillsuit`,
+        offhand: $item`unbreakable umbrella`,
+        modes: { umbrella: `broken` },
       },
       combat: new CombatStrategy().macro(
         Macro.if_(
@@ -572,6 +582,7 @@ export const levellingQuest: Quest<Task> = {
         offhand: $item`unbreakable umbrella`,
         familiar: $familiar`Melodramedary`,
         famequip: $item`tiny stillsuit`,
+        modes: { umbrella: `broken` },
       },
       combat: new CombatStrategy().macro(
         Macro.trySkill($skill`%fn, spit on me!`)
@@ -612,6 +623,7 @@ export const levellingQuest: Quest<Task> = {
         offhand: $item`unbreakable umbrella`,
         familiar: $familiar`Machine Elf`,
         famequip: $item`tiny stillsuit`,
+        modes: { umbrella: `broken` },
       },
       combat: new CombatStrategy().macro(() =>
         Macro.trySkill($skill`%fn, spit on me!`)
