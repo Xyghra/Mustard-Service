@@ -8532,10 +8532,12 @@ var levellingQuest = {
     completed: () => (0,external_kolmafia_namespaceObject.myFamiliar)() === template_string_$familiar(_templateObject75 || (_templateObject75 = levelling_taggedTemplateLiteral(["Shorter-Order Cook"]))) || have(template_string_$item(_templateObject76 || (_templateObject76 = levelling_taggedTemplateLiteral(["short stack of pancakes"])))),
     do: () => (0,external_kolmafia_namespaceObject.useFamiliar)(template_string_$familiar(_templateObject77 || (_templateObject77 = levelling_taggedTemplateLiteral(["Shorter-Order Cook"]))))
   }, {
-    name: "Swap Sombrero",
+    name: "Swap Eagle",
     ready: () => have($effect(_templateObject78 || (_templateObject78 = levelling_taggedTemplateLiteral(["Spit Upon"])))) && ((0,external_kolmafia_namespaceObject.myFamiliar)() !== template_string_$familiar(_templateObject79 || (_templateObject79 = levelling_taggedTemplateLiteral(["Machine Elf"]))) || ![1, 2, 3, 4].includes(property_get("_machineTunnelsAdv"))) && have(template_string_$item(_templateObject80 || (_templateObject80 = levelling_taggedTemplateLiteral(["short stack of pancakes"])))),
-    completed: () => (0,external_kolmafia_namespaceObject.myFamiliar)() === template_string_$familiar(_templateObject81 || (_templateObject81 = levelling_taggedTemplateLiteral(["Hovering Sombrero"]))),
-    do: () => (0,external_kolmafia_namespaceObject.useFamiliar)(template_string_$familiar(_templateObject82 || (_templateObject82 = levelling_taggedTemplateLiteral(["Hovering Sombrero"]))))
+    // eslint-disable-next-line libram/verify-constants
+    completed: () => (0,external_kolmafia_namespaceObject.myFamiliar)() === template_string_$familiar(_templateObject81 || (_templateObject81 = levelling_taggedTemplateLiteral(["Patriotic Eagle"]))),
+    // eslint-disable-next-line libram/verify-constants
+    do: () => (0,external_kolmafia_namespaceObject.useFamiliar)(template_string_$familiar(_templateObject82 || (_templateObject82 = levelling_taggedTemplateLiteral(["Patriotic Eagle"]))))
   }, {
     name: "Drink Pilsners",
     ready: () => (0,external_kolmafia_namespaceObject.myLevel)() >= 11 && (0,external_kolmafia_namespaceObject.availableAmount)(template_string_$item(_templateObject83 || (_templateObject83 = levelling_taggedTemplateLiteral(["astral pilsner"])))) >= 4,
