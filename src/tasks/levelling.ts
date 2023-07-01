@@ -181,14 +181,16 @@ export const levellingQuest: Quest<Task> = {
       do: () => useFamiliar($familiar`Shorter-Order Cook`),
     },
     {
-      name: `Swap Sombrero`,
+      name: `Swap Eagle`,
       ready: () =>
         have($effect`Spit Upon`) &&
         (myFamiliar() !== $familiar`Machine Elf` ||
           ![1, 2, 3, 4].includes(get(`_machineTunnelsAdv`))) &&
         have($item`short stack of pancakes`),
-      completed: () => myFamiliar() === $familiar`Hovering Sombrero`,
-      do: () => useFamiliar($familiar`Hovering Sombrero`),
+      // eslint-disable-next-line libram/verify-constants
+      completed: () => myFamiliar() === $familiar`Patriotic Eagle`,
+      // eslint-disable-next-line libram/verify-constants
+      do: () => useFamiliar($familiar`Patriotic Eagle`),
     },
     {
       name: `Drink Pilsners`,
