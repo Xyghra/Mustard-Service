@@ -142,6 +142,7 @@ export const moxQuest: Quest<Task> = {
         $effect`Blubbered Up`,
         $effect`Mariachi Mood`,
         $effect`Disco State of Mind`,
+        $effect`The Moxious Madrigal`,
       ],
       limit: { tries: 1 },
     },

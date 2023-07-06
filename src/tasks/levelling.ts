@@ -187,9 +187,7 @@ export const levellingQuest: Quest<Task> = {
         (myFamiliar() !== $familiar`Machine Elf` ||
           ![1, 2, 3, 4].includes(get(`_machineTunnelsAdv`))) &&
         have($item`short stack of pancakes`),
-      // eslint-disable-next-line libram/verify-constants
       completed: () => myFamiliar() === $familiar`Patriotic Eagle`,
-      // eslint-disable-next-line libram/verify-constants
       do: () => useFamiliar($familiar`Patriotic Eagle`),
     },
     {
@@ -242,7 +240,11 @@ export const levellingQuest: Quest<Task> = {
       outfit: {
         offhand: $item`Kramco Sausage-o-Matic™`,
       },
-      combat: new CombatStrategy().macro(Macro.attack().repeat()),
+      combat: new CombatStrategy().macro(
+        Macro.trySkill($skill`Sing Along`)
+          .attack()
+          .repeat()
+      ),
       post: () => equip($slot`off-hand`, curOffhand),
     },
     {
@@ -470,7 +472,11 @@ export const levellingQuest: Quest<Task> = {
       completed: () => get(`_speakeasyFreeFights`) === 3,
       do: $location`An Unusually Quiet Barroom Brawl`,
       outfit: levellingOutfit,
-      combat: new CombatStrategy().macro(Macro.attack().repeat()),
+      combat: new CombatStrategy().macro(
+        Macro.trySkill($skill`Sing Along`)
+          .attack()
+          .repeat()
+      ),
     },
     {
       name: `Pick up a club!`,
@@ -488,7 +494,11 @@ export const levellingQuest: Quest<Task> = {
       outfit: {
         weapon: $item`seal-clubbing club`,
       },
-      combat: new CombatStrategy().macro(Macro.attack().repeat()),
+      combat: new CombatStrategy().macro(
+        Macro.trySkill($skill`Sing Along`)
+          .attack()
+          .repeat()
+      ),
     },
     {
       name: `Get Payphone Quest`,
@@ -523,6 +533,7 @@ export const levellingQuest: Quest<Task> = {
             .trySkill($skill`Fire Extinguisher: Polar Vortex`)
             .trySkill($skill`Fire Extinguisher: Polar Vortex`)
         )
+          .trySkill($skill`Sing Along`)
           .attack()
           .repeat()
       ),
@@ -538,7 +549,11 @@ export const levellingQuest: Quest<Task> = {
         weapon: $item`June cleaver`,
         modes: { umbrella: `broken` },
       },
-      combat: new CombatStrategy().macro(Macro.attack().repeat()),
+      combat: new CombatStrategy().macro(
+        Macro.trySkill($skill`Sing Along`)
+          .attack()
+          .repeat()
+      ),
     },
     {
       name: `Payphone Freefights (bossa)`,
@@ -588,6 +603,7 @@ export const levellingQuest: Quest<Task> = {
       },
       combat: new CombatStrategy().macro(
         Macro.trySkill($skill`%fn, spit on me!`)
+          .trySkill($skill`Sing Along`)
           .attack()
           .repeat()
       ),
@@ -610,6 +626,7 @@ export const levellingQuest: Quest<Task> = {
       do: () => Witchess.fightPiece($monster`Witchess Bishop`),
       combat: new CombatStrategy().macro(
         Macro.trySkill($skill`%fn, spit on me!`)
+          .trySkill($skill`Sing Along`)
           .attack()
           .repeat()
       ),
@@ -633,6 +650,7 @@ export const levellingQuest: Quest<Task> = {
             get(`lastCopyableMonster`) === $monster`Witchess Bishop`,
             Macro.trySkill($skill`Feel Nostalgic`)
           )
+          .trySkill($skill`Sing Along`)
           .attack()
           .repeat()
       ),
@@ -654,6 +672,7 @@ export const levellingQuest: Quest<Task> = {
             get(`lastCopyableMonster`) === $monster`sausage goblin`,
             Macro.trySkill($skill`Feel Nostalgic`)
           )
+          .trySkill($skill`Sing Along`)
           .trySkillRepeat($skill`Lunging Thrust-Smack`)
       ),
       outfit: {
@@ -668,7 +687,9 @@ export const levellingQuest: Quest<Task> = {
       completed: () => have($item`battle broom`),
       do: () => Witchess.fightPiece($monster`Witchess Witch`),
       combat: new CombatStrategy().macro(
-        Macro.trySkill($skill`%fn, spit on me!`).trySkillRepeat($skill`Lunging Thrust-Smack`)
+        Macro.trySkill($skill`%fn, spit on me!`)
+          .trySkill($skill`Sing Along`)
+          .trySkillRepeat($skill`Lunging Thrust-Smack`)
       ),
       outfit: {
         famequip: $item`tiny stillsuit`,
@@ -679,7 +700,11 @@ export const levellingQuest: Quest<Task> = {
       prepare: () => restoreHp(myMaxhp()),
       completed: () => have($item`very pointy crown`),
       do: () => Witchess.fightPiece($monster`Witchess Queen`),
-      combat: new CombatStrategy().macro(Macro.attack().repeat()),
+      combat: new CombatStrategy().macro(
+        Macro.trySkill($skill`Sing Along`)
+          .attack()
+          .repeat()
+      ),
       outfit: {
         famequip: $item`tiny stillsuit`,
       },
@@ -699,6 +724,7 @@ export const levellingQuest: Quest<Task> = {
           .trySkill($skill`Bowl Sideways`)
           .trySkill($skill`Feel Pride`)
           .trySkill($skill`Cincho: Confetti Extravaganza`)
+          .trySkill($skill`Sing Along`)
           .trySkill($skill`Shattering Punch`)
           .abort()
       ),
@@ -715,6 +741,7 @@ export const levellingQuest: Quest<Task> = {
       combat: new CombatStrategy().macro(
         Macro.trySkill($skill`%fn, spit on me!`)
           .trySkill($skill`Bowl Sideways`)
+          .trySkill($skill`Sing Along`)
           .trySkill($skill`Chest X-Ray`)
           .abort()
       ),
@@ -727,6 +754,7 @@ export const levellingQuest: Quest<Task> = {
       combat: new CombatStrategy().macro(
         Macro.trySkill($skill`%fn, spit on me!`)
           .trySkill($skill`Bowl Sideways`)
+          .trySkill($skill`Sing Along`)
           .trySkill($skill`Gingerbread Mob Hit`)
           .abort()
       ),
