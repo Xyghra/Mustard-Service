@@ -8567,8 +8567,8 @@ var levellingQuest = {
   }, {
     name: "Restore HP",
     ready: () => (0,external_kolmafia_namespaceObject.myHp)() <= (0,external_kolmafia_namespaceObject.myMaxhp)() / 2,
-    completed: () => (0,external_kolmafia_namespaceObject.myHp)() - (0,external_kolmafia_namespaceObject.myMaxhp)() / 2 > 10,
-    do: () => (0,external_kolmafia_namespaceObject.restoreHp)(clamp(1000, (0,external_kolmafia_namespaceObject.myMaxhp)() / 2 + 20, (0,external_kolmafia_namespaceObject.myMaxhp)()))
+    completed: () => (0,external_kolmafia_namespaceObject.myHp)() > (0,external_kolmafia_namespaceObject.myMaxhp)() / 2,
+    do: () => (0,external_kolmafia_namespaceObject.restoreHp)(clamp(1000, (0,external_kolmafia_namespaceObject.myMaxhp)() / 2 + 10, (0,external_kolmafia_namespaceObject.myMaxhp)()))
   }, {
     name: "Kramco Goblingo",
     prepare: () => {
