@@ -223,8 +223,8 @@ export const levellingQuest: Quest<Task> = {
     {
       name: `Restore HP`,
       ready: () => myHp() <= myMaxhp() / 2,
-      completed: () => myHp() > myMaxhp() / 2,
-      do: () => restoreHp(clamp(1000, myMaxhp() / 2, myMaxhp())),
+      completed: () => myHp() - myMaxhp() / 2 > 10,
+      do: () => restoreHp(clamp(1000, myMaxhp() / 2 + 20, myMaxhp())),
     },
     {
       name: `Kramco Goblingo`,
