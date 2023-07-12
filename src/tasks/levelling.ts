@@ -52,7 +52,7 @@ let curOffhand = $item`unbreakable umbrella`;
 let curWeapon = $item`June cleaver`;
 
 const levellingOutfit = {
-  hat: $item`wad of used tape`,
+  hat: $item`Daylight Shavings Helmet`,
   back: have($item`unwrapped knock-off retro superhero cape`)
     ? $item`unwrapped knock-off retro superhero cape`
     : $item`Catherine Wheel`,
@@ -404,7 +404,7 @@ export const levellingQuest: Quest<Task> = {
         Latte.fill(`pumpkin`, `cinnamon`, `vanilla`);
       },
       outfit: {
-        hat: $item`wad of used tape`,
+        hat: $item`Daylight Shavings Helmet`,
         back: have($item`unwrapped knock-off retro superhero cape`)
           ? $item`unwrapped knock-off retro superhero cape`
           : $item`Catherine Wheel`,
@@ -516,7 +516,7 @@ export const levellingQuest: Quest<Task> = {
       do: $location`Shadow Rift (The Misspelled Cemetary)`,
       outfit: {
         offhand: $item`unbreakable umbrella`,
-        hat: $item`sombrero-mounted sparkler`,
+        hat: $item`Daylight Shavings Helmet`,
         weapon: $item`industrial fire extinguisher`,
         modes: { umbrella: `broken` },
       },
