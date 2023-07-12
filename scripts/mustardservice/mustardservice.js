@@ -8476,7 +8476,7 @@ function levelling_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strin
 var curOffhand = template_string_$item(levelling_templateObject || (levelling_templateObject = levelling_taggedTemplateLiteral(["unbreakable umbrella"])));
 var levelling_curWeapon = template_string_$item(levelling_templateObject2 || (levelling_templateObject2 = levelling_taggedTemplateLiteral(["June cleaver"])));
 var levellingOutfit = {
-  hat: template_string_$item(levelling_templateObject3 || (levelling_templateObject3 = levelling_taggedTemplateLiteral(["wad of used tape"]))),
+  hat: template_string_$item(levelling_templateObject3 || (levelling_templateObject3 = levelling_taggedTemplateLiteral(["Daylight Shavings Helmet"]))),
   back: have(template_string_$item(levelling_templateObject4 || (levelling_templateObject4 = levelling_taggedTemplateLiteral(["unwrapped knock-off retro superhero cape"])))) ? template_string_$item(levelling_templateObject5 || (levelling_templateObject5 = levelling_taggedTemplateLiteral(["unwrapped knock-off retro superhero cape"]))) : template_string_$item(levelling_templateObject6 || (levelling_templateObject6 = levelling_taggedTemplateLiteral(["Catherine Wheel"]))),
   shirt: template_string_$item(levelling_templateObject7 || (levelling_templateObject7 = levelling_taggedTemplateLiteral(["Jurassic Parka"]))),
   weapon: template_string_$item(levelling_templateObject8 || (levelling_templateObject8 = levelling_taggedTemplateLiteral(["June cleaver"]))),
@@ -8695,7 +8695,7 @@ var levellingQuest = {
       fill("pumpkin", "cinnamon", "vanilla");
     },
     outfit: {
-      hat: template_string_$item(_templateObject152 || (_templateObject152 = levelling_taggedTemplateLiteral(["wad of used tape"]))),
+      hat: template_string_$item(_templateObject152 || (_templateObject152 = levelling_taggedTemplateLiteral(["Daylight Shavings Helmet"]))),
       back: have(template_string_$item(_templateObject153 || (_templateObject153 = levelling_taggedTemplateLiteral(["unwrapped knock-off retro superhero cape"])))) ? template_string_$item(_templateObject154 || (_templateObject154 = levelling_taggedTemplateLiteral(["unwrapped knock-off retro superhero cape"]))) : template_string_$item(_templateObject155 || (_templateObject155 = levelling_taggedTemplateLiteral(["Catherine Wheel"]))),
       shirt: template_string_$item(_templateObject156 || (_templateObject156 = levelling_taggedTemplateLiteral(["Jurassic Parka"]))),
       weapon: template_string_$item(_templateObject157 || (_templateObject157 = levelling_taggedTemplateLiteral(["June cleaver"]))),
@@ -8772,7 +8772,7 @@ var levellingQuest = {
     do: $location(_templateObject190 || (_templateObject190 = levelling_taggedTemplateLiteral(["Shadow Rift (The Misspelled Cemetary)"]))),
     outfit: {
       offhand: template_string_$item(_templateObject191 || (_templateObject191 = levelling_taggedTemplateLiteral(["unbreakable umbrella"]))),
-      hat: template_string_$item(_templateObject192 || (_templateObject192 = levelling_taggedTemplateLiteral(["sombrero-mounted sparkler"]))),
+      hat: template_string_$item(_templateObject192 || (_templateObject192 = levelling_taggedTemplateLiteral(["Daylight Shavings Helmet"]))),
       weapon: template_string_$item(_templateObject193 || (_templateObject193 = levelling_taggedTemplateLiteral(["industrial fire extinguisher"]))),
       modes: {
         umbrella: "broken"
