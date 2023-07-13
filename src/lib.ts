@@ -1,4 +1,5 @@
-import { $location, byStat } from "libram";
+import { Familiar } from "kolmafia";
+import { $effect, $familiar, $item, $location, byStat, have } from "libram";
 
 export const { guildQuest, guildURL, guildZone } = byStat({
   Muscle: {
@@ -24,4 +25,12 @@ export function retroMainstat(): `vampire` | `heck` | `robot` {
     Mysticality: `heck`,
     Moxie: `robot`,
   });
+}
+
+export function familiarChoice(): Familiar {
+  if (!have($effect`Spit Upon`)) {
+    return $familiar`Melodramedary`;
+  } else if (!have($item`short stack of pancakes`)) {
+    return $familiar`Shorter-Order Cook`;
+  } else return $familiar`Patriotic Eagle`;
 }

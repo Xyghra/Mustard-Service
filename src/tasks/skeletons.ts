@@ -6,8 +6,6 @@ import {
   canAdventure,
   cliExecute,
   drink,
-  equip,
-  equippedItem,
   myAdventures,
   retrieveItem,
   reverseNumberology,
@@ -21,7 +19,6 @@ import {
   $location,
   $monster,
   $skill,
-  $slot,
   Cartography,
   CombatLoversLocket,
   CommunityService,
@@ -30,29 +27,17 @@ import {
   getKramcoWandererChance,
   have,
   Macro,
-  set,
   uneffect,
 } from "libram";
-import { guildQuest, guildZone } from "../lib";
-
-let curWeapon = $item`June cleaver`;
+import { familiarChoice, guildQuest, guildZone } from "../lib";
 
 export const skeletonsQuest: Quest<Task> = {
   name: `Skeletons to Wire Coiling`,
   completed: () => CommunityService.CoilWire.isDone(),
   tasks: [
     {
-      name: `Open Zones`,
-      completed: () => get(`_mustardServiceDiner`) === `true`,
-      do: (): void => {
-        adv1($location`Uncle Gator's Country Fun-Time Liquid Waste Sluice`, -1, `abort;`);
-        set(`_mustardServiceDiner`, `true`);
-      },
-    },
-    {
       name: `June Cleave`,
       ready: () => get(`_juneCleaverFightsLeft`) === 0,
-      prepare: () => (curWeapon = equippedItem($slot`weapon`)),
       completed: () => get(`_juneCleaverFightsLeft`) > 0,
       do: () => adv1($location`The Sleazy Back Alley`, -1, "abort;"),
       outfit: {
@@ -62,32 +47,19 @@ export const skeletonsQuest: Quest<Task> = {
         if (have($effect`Beaten Up`)) {
           uneffect($effect`Beaten Up`);
         }
-        equip($slot`weapon`, curWeapon);
       },
-    },
-    {
-      name: `Fold the able`,
-      completed: () =>
-        (have($item`wad of used tape`) &&
-          get(`parkaMode`) === `kachungasaur` &&
-          get(`backupCameraMode`) === `init`) ||
-        getKramcoWandererChance() < 1,
-      do: () =>
-        cliExecute(`fold wad of used tape; parka kachungasaur; umbrella dr; backupcamera init`),
     },
     {
       name: `Pre-Coil Kramco`,
       completed: () => getKramcoWandererChance() < 1,
-      do: (): void => {
-        adv1(guildZone, -1, `attack; repeat;`);
-      },
+      do: () => guildZone,
       post: (): void => {
         if (have($effect`Beaten Up`) && !have($item`magical sausage casing`)) {
           abort(`Died on first sosig attempt?`);
         }
       },
       outfit: {
-        hat: $item`wad of used tape`,
+        hat: $item`Daylight Shavings Helmet`,
         shirt: $item`Jurassic Parka`,
         weapon: $item`June cleaver`,
         offhand: $item`Kramco Sausage-o-Matic™`,
@@ -95,9 +67,14 @@ export const skeletonsQuest: Quest<Task> = {
         acc1: $item`backup camera`,
         acc2: $item`your cowboy boots`,
         acc3: $item`combat lover's locket`,
-        familiar: $familiar`Melodramedary`,
+        familiar: familiarChoice(),
         famequip: $item`tiny stillsuit`,
+        modes: {
+          parka: `kachungasaur`,
+          backupcamera: `init`,
+        },
       },
+      combat: new CombatStrategy().macro(Macro.attack().repeat()),
     },
     {
       name: `Red Skeleton`,
@@ -109,13 +86,6 @@ export const skeletonsQuest: Quest<Task> = {
         CombatLoversLocket.reminisce($monster`red skeleton`);
       },
       combat: new CombatStrategy().macro(Macro.trySkill($skill`Feel Hatred`).abort()),
-      outfit: {
-        modes: {
-          umbrella: `broken`,
-          backupcamera: `ml`,
-          parka: `dilophosaur`,
-        },
-      },
     },
     {
       name: `Novelty Tropical Skeleton`,
@@ -133,8 +103,10 @@ export const skeletonsQuest: Quest<Task> = {
       outfit: {
         offhand: $item`latte lovers member's mug`,
         shirt: $item`Jurassic Parka`,
+        acc1: $item`backup camera`,
         modes: {
           parka: `dilophosaur`,
+          backupcamera: `ml`,
         },
       },
     },
@@ -175,17 +147,13 @@ export const skeletonsQuest: Quest<Task> = {
       ],
     },
     {
-      name: `Cemetary Unlock`,
+      name: `Cemetery Unlock`,
       completed: () => canAdventure($location`The Unquiet Garves`),
       do: (): void => {
         visitUrl(`guild.php?guild=f`);
         visitUrl(`guild.php?place=challenge`);
         visitUrl(`guild.php?place=scg`);
         visitUrl(`guild.php?place=scg`);
-      },
-      outfit: {
-        familiar: $familiar`Melodramedary`,
-        famequip: $item`tiny stillsuit`,
       },
     },
     {

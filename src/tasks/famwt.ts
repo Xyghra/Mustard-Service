@@ -35,6 +35,7 @@ export const famwtQuest: Quest<Task> = {
     {
       name: `Hatter Buff`,
       completed: () =>
+        true ||
         !have($item`"DRINK ME" potion`) ||
         have($effect`You Can Really Taste the Dormouse`) ||
         !have($item`sombrero-mounted sparkler`),

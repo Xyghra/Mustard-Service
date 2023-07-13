@@ -5,10 +5,9 @@ import {
   canadiaAvailable,
   changeMcd,
   cliExecute,
+  create,
   currentMcd,
-  equip,
   getWorkshed,
-  myFamiliar,
   myHash,
   nowToInt,
   retrieveItem,
@@ -16,27 +15,12 @@ import {
   runChoice,
   takeStorage,
   use,
-  useFamiliar,
   visitUrl,
 } from "kolmafia";
-import {
-  $familiar,
-  $item,
-  $location,
-  $slot,
-  AutumnAton,
-  Clan,
-  get,
-  have,
-  set,
-  SongBoom,
-  TrainSet,
-  withChoice,
-} from "libram";
-import { guildQuest, guildURL } from "../lib";
+import { $item, $location, AutumnAton, Clan, get, have, set, SongBoom, TrainSet } from "libram";
+import { familiarChoice, guildQuest, guildURL } from "../lib";
 
 const floundryItem = $item`fish hatchet`;
-const famRoute = $familiar`Melodramedary`;
 
 export const runStartQuest: Quest<Task> = {
   name: `Post-Ascension to Pre-Skeletons`,
@@ -47,7 +31,6 @@ export const runStartQuest: Quest<Task> = {
       name: `Fall Guy!`,
       completed: () => !AutumnAton.available(),
       do: (): void => {
-        AutumnAton.upgrade();
         AutumnAton.sendTo($location`The Sleazy Back Alley`);
       },
     },
@@ -67,7 +50,6 @@ export const runStartQuest: Quest<Task> = {
       name: `Setting Properties`,
       completed: () => get(`_mustardServiceTime`) !== ``,
       do: (): void => {
-        set(`_mustardServiceDiner`, `false`);
         set(`_mustardServiceTime`, `${nowToInt()}`);
       },
     },
@@ -131,9 +113,6 @@ export const runStartQuest: Quest<Task> = {
           retrieveItem(i)
         ),
       outfit: {
-        back: have($item`unwrapped knock-off retro superhero cape`)
-          ? $item`unwrapped knock-off retro superhero cape`
-          : undefined,
         pants: $item`designer sweatpants`,
       },
     },
@@ -154,8 +133,8 @@ export const runStartQuest: Quest<Task> = {
       name: `Clip-Art Summons`,
       completed: () => get(`_clipartSummons`) >= 3,
       do: (): void => {
-        retrieveItem(2, $item`borrowed time`);
-        retrieveItem(1, $item`box of Familiar Jacks`);
+        create(2, $item`borrowed time`);
+        create(1, $item`box of Familiar Jacks`);
       },
     },
     {
@@ -164,18 +143,13 @@ export const runStartQuest: Quest<Task> = {
       do: () => use(1, $item`borrowed time`),
     },
     {
-      name: `Equip Familiar`,
-      completed: () => myFamiliar() !== $familiar.none,
-      do: (): void => {
-        useFamiliar(famRoute);
-        equip($slot`familiar`, $item`tiny stillsuit`);
-      },
-    },
-    {
       name: `Mummery`,
       completed: () => get(`_mummeryUses`) !== ``,
-      do: (): void => {
-        withChoice(1071, 3, () => use(1, $item`mumming trunk`));
+      do: () => use(1, $item`mumming trunk`),
+      choices: { 1071: 3 },
+      outfit: {
+        familiar: familiarChoice(),
+        famequip: $item`tiny stillsuit`,
       },
     },
     {

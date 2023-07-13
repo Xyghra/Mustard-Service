@@ -35,6 +35,7 @@ export const noncombatQuest: Quest<Task> = {
       completed: () => !have($item`shady shades`) || have($effect`Throwing Some Shade`),
       do: () => use(1, $item`shady shades`),
       outfit: {
+        hat: have($item`very pointy crown`) ? $item`very pointy crown` : undefined,
         offhand: $item`unbreakable umbrella`,
         modifier: `-60 combat rate 13 familiar weight`,
         familiar: $familiar`Disgeist`,

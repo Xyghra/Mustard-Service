@@ -3,14 +3,10 @@ import {
   abort,
   adv1,
   availableAmount,
-  Class,
   cliExecute,
   drink,
   eat,
-  equip,
-  equippedItem,
   myClass,
-  myFamiliar,
   myHash,
   myHp,
   myLevel,
@@ -19,7 +15,6 @@ import {
   restoreHp,
   retrieveItem,
   use,
-  useFamiliar,
   useSkill,
   visitUrl,
 } from "kolmafia";
@@ -31,7 +26,6 @@ import {
   $location,
   $monster,
   $skill,
-  $slot,
   $stat,
   AutumnAton,
   byStat,
@@ -46,26 +40,7 @@ import {
   uneffect,
   Witchess,
 } from "libram";
-import { retroMainstat } from "../lib";
-
-let curOffhand = $item`unbreakable umbrella`;
-let curWeapon = $item`June cleaver`;
-
-const levellingOutfit = {
-  hat: $item`Daylight Shavings Helmet`,
-  back: have($item`unwrapped knock-off retro superhero cape`)
-    ? $item`unwrapped knock-off retro superhero cape`
-    : $item`Catherine Wheel`,
-  shirt: $item`Jurassic Parka`,
-  weapon: $item`June cleaver`,
-  offhand: $item`unbreakable umbrella`,
-  pants: $item`designer sweatpants`,
-  acc1: $item`backup camera`,
-  acc2: $item`your cowboy boots`,
-  acc3: $item`combat lover's locket`,
-  familiar: $familiar`Melodramedary`,
-  famequip: $item`tiny stillsuit`,
-};
+import { familiarChoice, retroMainstat } from "../lib";
 
 const facialExpression = byStat({
   Muscle: $effect`Quiet Determination`,
@@ -166,29 +141,8 @@ export const levellingQuest: Quest<Task> = {
       ready: () => get(`_shadowAffinityToday`) && get(`shadowRiftIngress`) !== ``,
       completed: () => !AutumnAton.available(),
       do: (): void => {
-        AutumnAton.upgrade();
         AutumnAton.sendTo($location`Shadow Rift`);
       },
-    },
-    {
-      name: `Swap Shortcook`,
-      ready: () =>
-        have($effect`Spit Upon`) &&
-        (myFamiliar() !== $familiar`Machine Elf` ||
-          ![1, 2, 3, 4].includes(get(`_machineTunnelsAdv`))),
-      completed: () =>
-        myFamiliar() === $familiar`Shorter-Order Cook` || have($item`short stack of pancakes`),
-      do: () => useFamiliar($familiar`Shorter-Order Cook`),
-    },
-    {
-      name: `Swap Eagle`,
-      ready: () =>
-        have($effect`Spit Upon`) &&
-        (myFamiliar() !== $familiar`Machine Elf` ||
-          ![1, 2, 3, 4].includes(get(`_machineTunnelsAdv`))) &&
-        have($item`short stack of pancakes`),
-      completed: () => myFamiliar() === $familiar`Patriotic Eagle`,
-      do: () => useFamiliar($familiar`Patriotic Eagle`),
     },
     {
       name: `Drink Pilsners`,
@@ -207,7 +161,6 @@ export const levellingQuest: Quest<Task> = {
     {
       name: `June Cleave`,
       ready: () => get(`_juneCleaverFightsLeft`) === 0,
-      prepare: () => (curWeapon = equippedItem($slot`weapon`)),
       completed: () => get(`_juneCleaverFightsLeft`) > 0,
       do: () => adv1($location`The Sleazy Back Alley`, -1, "abort;"),
       outfit: {
@@ -217,7 +170,35 @@ export const levellingQuest: Quest<Task> = {
         if (have($effect`Beaten Up`)) {
           uneffect($effect`Beaten Up`);
         }
-        equip($slot`weapon`, curWeapon);
+      },
+      choices: {
+        1468: () =>
+          myClass().primestat === $stat`Muscle`
+            ? 2
+            : myClass().primestat === $stat`Moxie`
+            ? 1
+            : get(`_juneCleaverSkips`) < 5
+            ? 4
+            : 2,
+        1473: () =>
+          myClass().primestat === $stat`Muscle` ? 1 : get(`_juneCleaverSkips`) < 5 ? 4 : 1,
+        1469: 3,
+        1474: () =>
+          myClass().primestat === $stat`Muscle`
+            ? 3
+            : myClass().primestat === $stat`Mysticality`
+            ? 1
+            : get(`_juneCleaverSkips`) < 5
+            ? 4
+            : 3,
+        1475: () =>
+          myClass().primestat === $stat`Muscle` ? 2 : get(`_juneCleaverSkips`) < 5 ? 4 : 2,
+        1471: 1,
+        1467: 3,
+        1472: () =>
+          myClass().primestat === $stat`Moxie` ? 3 : get(`_juneCleaverSkips`) < 5 ? 4 : 1,
+        1470: () =>
+          myClass().primestat === $stat`Muscle` ? 3 : get(`_juneCleaverSkips`) < 5 ? 4 : 2,
       },
     },
     {
@@ -228,9 +209,6 @@ export const levellingQuest: Quest<Task> = {
     },
     {
       name: `Kramco Goblingo`,
-      prepare: (): void => {
-        curOffhand = equippedItem($slot`off-hand`);
-      },
       ready: () =>
         getKramcoWandererChance() === 1 &&
         get(`_latteRefillsUsed`) >= 3 &&
@@ -245,7 +223,6 @@ export const levellingQuest: Quest<Task> = {
           .attack()
           .repeat()
       ),
-      post: () => equip($slot`off-hand`, curOffhand),
     },
     {
       name: `April Shower`,
@@ -295,7 +272,7 @@ export const levellingQuest: Quest<Task> = {
     },
     {
       name: `Wish for A Contender`,
-      completed: () => have($effect`A Contender`) || get(`_genieWishesUsed`) >= 2 || true,
+      completed: () => true || have($effect`A Contender`) || get(`_genieWishesUsed`) >= 2,
       do: () => cliExecute(`genie effect A Contender`),
     },
     {
@@ -374,6 +351,7 @@ export const levellingQuest: Quest<Task> = {
       },
       outfit: {
         offhand: $item`latte lovers member's mug`,
+        familiar: familiarChoice(),
         famequip: $item`tiny stillsuit`,
         modifier: `mp`,
       },
@@ -410,23 +388,21 @@ export const levellingQuest: Quest<Task> = {
           : $item`Catherine Wheel`,
         shirt: $item`Jurassic Parka`,
         weapon: $item`June cleaver`,
+        offhand: $item`latte lovers member's mug`,
         pants: $item`designer sweatpants`,
         acc1: $item`backup camera`,
         acc2: $item`your cowboy boots`,
         acc3: $item`combat lover's locket`,
-        familiar: $familiar`Melodramedary`,
+        familiar: familiarChoice(),
         famequip: $item`tiny stillsuit`,
-        offhand: $item`latte lovers member's mug`,
         modes: have($item`unwrapped knock-off retro superhero cape`)
           ? {
               parka: `spikolodon`,
-              umbrella: `broken`,
               backupcamera: `ml`,
               retrocape: [retroMainstat(), `thrill`],
             }
           : {
               parka: `spikolodon`,
-              umbrella: `broken`,
               backupcamera: `ml`,
             },
       },
@@ -445,7 +421,7 @@ export const levellingQuest: Quest<Task> = {
     },
     {
       name: `Flapper Mapper`,
-      completed: () => get(`_monstersMapped`) >= 2,
+      completed: () => get(`_monstersMapped`) >= 2 || have($item`imported taffy`),
       do: () =>
         Cartography.mapMonster(
           $location`An Unusually Quiet Barroom Brawl`,
@@ -457,7 +433,6 @@ export const levellingQuest: Quest<Task> = {
         famequip: $item`tiny stillsuit`,
         modes: {
           umbrella: `broken`,
-          retrocape: [retroMainstat(), `thrill`],
         },
       },
       combat: new CombatStrategy().macro(
@@ -471,7 +446,21 @@ export const levellingQuest: Quest<Task> = {
       name: `Oliver's Place`,
       completed: () => get(`_speakeasyFreeFights`) === 3,
       do: $location`An Unusually Quiet Barroom Brawl`,
-      outfit: levellingOutfit,
+      outfit: {
+        hat: $item`Daylight Shavings Helmet`,
+        back: have($item`unwrapped knock-off retro superhero cape`)
+          ? $item`unwrapped knock-off retro superhero cape`
+          : $item`Catherine Wheel`,
+        shirt: $item`Jurassic Parka`,
+        weapon: $item`June cleaver`,
+        offhand: $item`unbreakable umbrella`,
+        pants: $item`designer sweatpants`,
+        acc1: $item`backup camera`,
+        acc2: $item`your cowboy boots`,
+        acc3: $item`combat lover's locket`,
+        familiar: familiarChoice(),
+        famequip: $item`tiny stillsuit`,
+      },
       combat: new CombatStrategy().macro(
         Macro.trySkill($skill`Sing Along`)
           .attack()
@@ -485,7 +474,7 @@ export const levellingQuest: Quest<Task> = {
     },
     {
       name: `Seal Fights`,
-      completed: () => myClass() !== Class.get(`Seal Clubber`) || get(`_sealsSummoned`) >= 5,
+      completed: () => myClass() !== $class`Seal Clubber` || get(`_sealsSummoned`) >= 5,
       do: (): void => {
         retrieveItem(1, $item`figurine of an ancient seal`);
         retrieveItem(3, $item`seal-blubber candle`);
@@ -493,6 +482,8 @@ export const levellingQuest: Quest<Task> = {
       },
       outfit: {
         weapon: $item`seal-clubbing club`,
+        familiar: familiarChoice(),
+        famequip: $item`tiny stillsuit`,
       },
       combat: new CombatStrategy().macro(
         Macro.trySkill($skill`Sing Along`)
@@ -518,11 +509,13 @@ export const levellingQuest: Quest<Task> = {
         offhand: $item`unbreakable umbrella`,
         hat: $item`Daylight Shavings Helmet`,
         weapon: $item`industrial fire extinguisher`,
+        familiar: familiarChoice(),
+        famequip: $item`tiny stillsuit`,
         modes: { umbrella: `broken` },
       },
       combat: new CombatStrategy().macro(
         Macro.if_(
-          $monster`shadow slab`,
+          $monster`shadow tree`,
           Macro.trySkill($skill`Fire Extinguisher: Polar Vortex`)
             .trySkill($skill`Fire Extinguisher: Polar Vortex`)
             .trySkill($skill`Fire Extinguisher: Polar Vortex`)
@@ -547,6 +540,8 @@ export const levellingQuest: Quest<Task> = {
       outfit: {
         offhand: $item`unbreakable umbrella`,
         weapon: $item`June cleaver`,
+        familiar: familiarChoice(),
+        famequip: $item`tiny stillsuit`,
         modes: { umbrella: `broken` },
       },
       combat: new CombatStrategy().macro(
@@ -597,7 +592,7 @@ export const levellingQuest: Quest<Task> = {
       outfit: {
         shirt: $item`makeshift garbage shirt`,
         offhand: $item`unbreakable umbrella`,
-        familiar: $familiar`Melodramedary`,
+        familiar: familiarChoice(),
         famequip: $item`tiny stillsuit`,
         modes: { umbrella: `broken` },
       },
@@ -631,6 +626,7 @@ export const levellingQuest: Quest<Task> = {
           .repeat()
       ),
       outfit: {
+        familiar: familiarChoice(),
         famequip: $item`tiny stillsuit`,
       },
     },
@@ -645,20 +641,14 @@ export const levellingQuest: Quest<Task> = {
         modes: { umbrella: `broken` },
       },
       combat: new CombatStrategy().macro(() =>
-        Macro.trySkill($skill`%fn, spit on me!`)
-          .externalIf(
-            get(`lastCopyableMonster`) === $monster`Witchess Bishop`,
-            Macro.trySkill($skill`Feel Nostalgic`)
-          )
+        Macro.externalIf(
+          get(`lastCopyableMonster`) === $monster`Witchess Bishop`,
+          Macro.trySkill($skill`Feel Nostalgic`)
+        )
           .trySkill($skill`Sing Along`)
           .attack()
           .repeat()
       ),
-    },
-    {
-      name: `Awful Bad things have happened, need more spit`,
-      completed: () => have($effect`Spit Upon`) || myFamiliar() === $familiar`Melodramedary`,
-      do: () => useFamiliar($familiar`Melodramedary`),
     },
     {
       name: `Neverending Free Fights`,
@@ -677,6 +667,7 @@ export const levellingQuest: Quest<Task> = {
       ),
       outfit: {
         offhand: $item`unbreakable umbrella`,
+        familiar: familiarChoice(),
         famequip: $item`tiny stillsuit`,
         modes: { umbrella: `broken` },
       },
@@ -692,6 +683,7 @@ export const levellingQuest: Quest<Task> = {
           .trySkillRepeat($skill`Lunging Thrust-Smack`)
       ),
       outfit: {
+        familiar: familiarChoice(),
         famequip: $item`tiny stillsuit`,
       },
     },
@@ -706,6 +698,7 @@ export const levellingQuest: Quest<Task> = {
           .repeat()
       ),
       outfit: {
+        familiar: familiarChoice(),
         famequip: $item`tiny stillsuit`,
       },
     },
@@ -715,9 +708,23 @@ export const levellingQuest: Quest<Task> = {
       do: $location`The Neverending Party`,
       choices: { 1322: 2, 1324: 5, 1326: 2 },
       outfit: {
+        hat: $item`Daylight Shavings Helmet`,
+        back: have($item`unwrapped knock-off retro superhero cape`)
+          ? $item`unwrapped knock-off retro superhero cape`
+          : $item`Catherine Wheel`,
+        shirt: $item`makeshift garbage shirt`,
         weapon: have($item`fish hatchet`) ? $item`fish hatchet` : $item`June cleaver`,
+        offhand: $item`unbreakable umbrella`,
+        pants: $item`designer sweatpants`,
+        acc1: $item`backup camera`,
         acc2: $item`Cincho de Mayo`,
+        acc3: $item`combat lover's locket`,
+        familiar: familiarChoice(),
         famequip: $item`tiny stillsuit`,
+        modes: {
+          umbrella: `broken`,
+          backupcamera: `ml`,
+        },
       },
       combat: new CombatStrategy().macro(
         Macro.trySkill($skill`%fn, spit on me!`)
@@ -735,8 +742,11 @@ export const levellingQuest: Quest<Task> = {
       do: $location`The Neverending Party`,
       choices: { 1322: 2, 1324: 5, 1326: 2 },
       outfit: {
+        familiar: familiarChoice(),
         famequip: $item`tiny stillsuit`,
+        acc1: $item`backup camera`,
         acc2: $item`Lil' Doctor™ bag`,
+        acc3: $item`combat lover's locket`,
       },
       combat: new CombatStrategy().macro(
         Macro.trySkill($skill`%fn, spit on me!`)
