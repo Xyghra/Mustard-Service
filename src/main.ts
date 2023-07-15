@@ -1,4 +1,4 @@
-import { Engine, getTasks, Task } from "grimoire-kolmafia";
+import { Args, Engine, getTasks, Task } from "grimoire-kolmafia";
 import { runStartQuest } from "./tasks/preSkeletons";
 import { skeletonsQuest } from "./tasks/skeletons";
 import { CoilQuest } from "./tasks/coil";
@@ -10,38 +10,44 @@ import { sdmgQuest } from "./tasks/sdmg";
 import { famwtQuest } from "./tasks/famwt";
 import { noncombatQuest } from "./tasks/noncombat";
 import { boozeQuest } from "./tasks/booze";
-import { finaleQuest } from "./tasks/finale";
+import { finaleQuest, postFinaleQuest } from "./tasks/finale";
 import { get } from "libram";
 import { setAutoAttack } from "kolmafia";
+import { args } from "./lib";
 
-export function main(): void {
-  const tasks: Task[] = getTasks([
-    runStartQuest,
-    skeletonsQuest,
-    CoilQuest,
-    levellingQuest,
-    muscleQuest,
-    mystQuest,
-    moxQuest,
-    hotresQuest,
-    wdmgQuest,
-    sdmgQuest,
-    hpQuest,
-    famwtQuest,
-    noncombatQuest,
-    boozeQuest,
-    finaleQuest,
-  ]);
-  const engine = new Engine(tasks);
-  setAutoAttack(0);
+export function main(argument = ``): void {
+  Args.fill(args, argument);
 
-  while (!finished()) {
-    const task = engine.getNextTask();
-    if (task === undefined) throw "Unable to find available task, but the run is not complete";
-    engine.execute(task);
+  if (args.run) {
+    const tasks: Task[] = getTasks([
+      runStartQuest,
+      skeletonsQuest,
+      CoilQuest,
+      levellingQuest,
+      muscleQuest,
+      mystQuest,
+      moxQuest,
+      hotresQuest,
+      wdmgQuest,
+      sdmgQuest,
+      hpQuest,
+      famwtQuest,
+      noncombatQuest,
+      boozeQuest,
+      finaleQuest,
+    ]);
+
+    const engine = new Engine(tasks);
+    setAutoAttack(0);
+
+    while (!get(`kingLiberated`, false)) {
+      const task = engine.getNextTask();
+      if (task === undefined) throw "Unable to find available task, but the run is not complete";
+      engine.execute(task);
+    }
+
+    if (get(`kingLiberated`, false)) {
+      new Engine(getTasks([postFinaleQuest])).run();
+    }
   }
-}
-
-function finished(): boolean {
-  return get(`kingLiberated`) && get(`_smithsnessSummons`) === 3;
 }

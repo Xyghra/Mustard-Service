@@ -1,4 +1,4 @@
-import { Modes, OutfitSpec } from "grimoire-kolmafia";
+import { Args, Modes, OutfitSpec } from "grimoire-kolmafia";
 import { Familiar, Item } from "kolmafia";
 import { $effect, $familiar, $item, $location, byStat, have } from "libram";
 
@@ -83,3 +83,16 @@ export function oomfieOutfit(options?: {
     };
   }
 }
+
+export const args = Args.create(`Mustard Service`, `Community Service Script by Moon Moon`, {
+  run: Args.flag({
+    setting: ``,
+    help: `Run Community Service`,
+    default: true,
+  }),
+  fam: Args.flag({
+    setting: ``,
+    help: `Do a 100% run with currently equipped familiar`,
+    default: false,
+  }),
+});

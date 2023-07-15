@@ -1,5 +1,5 @@
 import { Quest, Task } from "grimoire-kolmafia";
-import { cliExecute, myAscensions, nowToInt, print } from "kolmafia";
+import { cliExecute, myAscensions, myName, nowToInt, print } from "kolmafia";
 import { $effect, CommunityService, get, have, set, uneffect } from "libram";
 
 export const finaleQuest: Quest<Task> = {
@@ -11,6 +11,12 @@ export const finaleQuest: Quest<Task> = {
       do: () => CommunityService.donate(),
       limit: { tries: 1 },
     },
+  ],
+};
+
+export const postFinaleQuest: Quest<Task> = {
+  name: `Post-Finale!`,
+  tasks: [
     {
       name: `Printing Details!`,
       completed: () => get(`_mustardServiceTime`) === "",
@@ -60,7 +66,7 @@ export const finaleQuest: Quest<Task> = {
     },
     {
       name: `Prismbreak Moment`,
-      completed: () => get(`_smithsnessSummons`) === 3,
+      completed: () => myName() !== `Moon Moon` || get(`_gwa_breakfast`, false),
       do: () => cliExecute(`gwa prism; gwa breakfast`),
     },
   ],
