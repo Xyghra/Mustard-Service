@@ -29,7 +29,7 @@ import {
   Macro,
   uneffect,
 } from "libram";
-import { familiarChoice, guildQuest, guildZone } from "../lib";
+import { guildQuest, guildZone, oomfieOutfit } from "../lib";
 
 export const skeletonsQuest: Quest<Task> = {
   name: `Skeletons to Wire Coiling`,
@@ -58,7 +58,16 @@ export const skeletonsQuest: Quest<Task> = {
           abort(`Died on first sosig attempt?`);
         }
       },
-      outfit: {
+      outfit: () =>
+        oomfieOutfit({
+          offhandOverride: $item`Kramco Sausage-o-Matic™`,
+          modesOverride: {
+            parka: `kachungasaur`,
+            backupcamera: `init`,
+          },
+        }),
+      /*
+      {
         hat: $item`Daylight Shavings Helmet`,
         shirt: $item`Jurassic Parka`,
         weapon: $item`June cleaver`,
@@ -73,7 +82,7 @@ export const skeletonsQuest: Quest<Task> = {
           parka: `kachungasaur`,
           backupcamera: `init`,
         },
-      },
+      },*/
       combat: new CombatStrategy().macro(Macro.attack().repeat()),
     },
     {

@@ -18,7 +18,7 @@ import {
   visitUrl,
 } from "kolmafia";
 import { $item, $location, AutumnAton, Clan, get, have, set, SongBoom, TrainSet } from "libram";
-import { familiarChoice, guildQuest, guildURL } from "../lib";
+import { guildQuest, guildURL, oomfieOutfit } from "../lib";
 
 const floundryItem = $item`fish hatchet`;
 
@@ -147,10 +147,7 @@ export const runStartQuest: Quest<Task> = {
       completed: () => get(`_mummeryUses`) !== ``,
       do: () => use(1, $item`mumming trunk`),
       choices: { 1071: 3 },
-      outfit: {
-        familiar: familiarChoice(),
-        famequip: $item`tiny stillsuit`,
-      },
+      outfit: () => oomfieOutfit(),
     },
     {
       name: `SongBoom™`,
