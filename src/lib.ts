@@ -88,7 +88,7 @@ export const args = Args.create(`Mustard Service`, `Community Service Script by 
   run: Args.flag({
     setting: ``,
     help: `Run Community Service`,
-    default: true,
+    default: false,
   }),
   fam: Args.flag({
     setting: ``,

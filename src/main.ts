@@ -18,6 +18,11 @@ import { args } from "./lib";
 export function main(argument = ``): void {
   Args.fill(args, argument);
 
+  if (args.help || argument === ``) {
+    Args.showHelp(args);
+    return;
+  }
+
   if (args.run) {
     const tasks: Task[] = getTasks([
       runStartQuest,
