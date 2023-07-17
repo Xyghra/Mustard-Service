@@ -7049,7 +7049,7 @@ var args = Args.create("Mustard Service", "Community Service Script by Moon Moon
   run: Args.flag({
     setting: "",
     help: "Run Community Service",
-    default: true
+    default: false
   }),
   fam: Args.flag({
     setting: "",
@@ -9632,6 +9632,10 @@ var postFinaleQuest = {
 function main() {
   var argument = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
   Args.fill(args, argument);
+  if (args.help || argument === "") {
+    Args.showHelp(args);
+    return;
+  }
   if (args.run) {
     var tasks = getTasks([runStartQuest, skeletonsQuest, CoilQuest, levellingQuest, muscleQuest, mystQuest, moxQuest, hotresQuest, wdmgQuest, sdmgQuest, hpQuest, famwtQuest, noncombatQuest, boozeQuest, finaleQuest]);
     var engine = new Engine(tasks);
