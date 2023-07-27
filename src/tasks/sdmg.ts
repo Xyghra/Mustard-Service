@@ -11,9 +11,9 @@ import {
   get,
   have,
   Macro,
-  set,
 } from "libram";
 import { printModtrace } from "libram/dist/modifier";
+import { args, logTest } from "../lib";
 
 export const sdmgQuest: Quest<Task> = {
   name: `Spell Damage Test`,
@@ -38,7 +38,11 @@ export const sdmgQuest: Quest<Task> = {
     {
       name: `Inner Elf`,
       prepare: (): Clan => Clan.join(`Beldungeon`),
-      completed: (): boolean => have($effect`Inner Elf`) || get(`_snokebombUsed`) >= 3,
+      completed: () =>
+        args.fam ||
+        !have($familiar`Machine Elf`) ||
+        have($effect`Inner Elf`) ||
+        get(`_snokebombUsed`) >= 3,
       do: $location`The Slime Tube`,
       outfit: {
         familiar: $familiar`Machine Elf`,
@@ -64,12 +68,8 @@ export const sdmgQuest: Quest<Task> = {
         print(`Took: [${testTurns}]`, `blue`);
 
         CommunityService.SpellDamage.run(
-          () =>
-            set(
-              `_mustardServiceTests`,
-              `${get(`_mustardServiceTests`)},${testTurns} [Expected: ${predictedTestTurns}]`
-            ),
-          35
+          () => logTest(CommunityService.SpellDamage, testTurns, predictedTestTurns),
+          37
         );
       },
       outfit: {

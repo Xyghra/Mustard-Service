@@ -11,9 +11,9 @@ import {
   get,
   have,
   Macro,
-  set,
 } from "libram";
 import { printModtrace } from "libram/dist/modifier";
+import { logTest, oomfieOutfit } from "../lib";
 
 export const hotresQuest: Quest<Task> = {
   name: `Hot Resistance Test`,
@@ -23,10 +23,10 @@ export const hotresQuest: Quest<Task> = {
       name: `Foam Suit`,
       completed: () => have($effect`Fireproof Foam Suit`) || get(`_fireExtinguisherCharge`) <= 0,
       do: () => CombatLoversLocket.reminisce($monster`ungulith`),
-      outfit: {
-        weapon: $item`Fourth of May Cosplay Saber`,
-        offhand: $item`industrial fire extinguisher`,
-      },
+      outfit: oomfieOutfit({
+        weaponOverride: $item`Fourth of May Cosplay Saber`,
+        offhandOverride: $item`industrial fire extinguisher`,
+      }),
       choices: { 1387: 3 },
       combat: new CombatStrategy().macro(
         Macro.trySkill($skill`Fire Extinguisher: Foam Yourself`)
@@ -48,11 +48,7 @@ export const hotresQuest: Quest<Task> = {
         print(`Took: [${testTurns}]`, `blue`);
 
         CommunityService.HotRes.run(
-          () =>
-            set(
-              `_mustardServiceTests`,
-              `${get(`_mustardServiceTests`)},${testTurns} [Expected: ${predictedTestTurns}]`
-            ),
+          () => logTest(CommunityService.HotRes, testTurns, predictedTestTurns),
           1
         );
       },

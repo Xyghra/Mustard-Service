@@ -1,7 +1,8 @@
 import { Quest, Task } from "grimoire-kolmafia";
 import { cliExecute, print, use } from "kolmafia";
-import { $effect, $familiar, $item, Clan, CommunityService, get, have, set } from "libram";
+import { $effect, $familiar, $item, Clan, CommunityService, get, have } from "libram";
 import { printModtrace } from "libram/dist/modifier";
+import { logTest } from "../lib";
 
 export const famwtQuest: Quest<Task> = {
   name: `Familiar Weight Test`,
@@ -52,11 +53,7 @@ export const famwtQuest: Quest<Task> = {
         print(`Took: [${testTurns}]`, `blue`);
 
         CommunityService.FamiliarWeight.run(
-          () =>
-            set(
-              `_mustardServiceTests`,
-              `${get(`_mustardServiceTests`)},${testTurns} [Expected: ${predictedTestTurns}]`
-            ),
+          () => logTest(CommunityService.FamiliarWeight, testTurns, predictedTestTurns),
           42
         );
       },

@@ -1,5 +1,6 @@
 import { Quest, Task } from "grimoire-kolmafia";
-import { CommunityService, set } from "libram";
+import { CommunityService } from "libram";
+import { logTest } from "../lib";
 
 export const CoilQuest: Quest<Task> = {
   name: `Coil Wire`,
@@ -8,7 +9,7 @@ export const CoilQuest: Quest<Task> = {
     {
       name: `Coil that wire!`,
       completed: () => CommunityService.CoilWire.isDone(),
-      do: () => CommunityService.CoilWire.run(() => set(`_mustardServiceTests`, `60`), 60),
+      do: () => CommunityService.CoilWire.run(() => logTest(CommunityService.HP, 60, 60), 60),
       limit: { tries: 1 },
     },
   ],

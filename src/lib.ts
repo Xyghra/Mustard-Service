@@ -1,6 +1,22 @@
-import { Args, Modes, OutfitSpec } from "grimoire-kolmafia";
-import { Familiar, Item } from "kolmafia";
-import { $effect, $familiar, $item, $location, byStat, have } from "libram";
+import { Args, Modes, OutfitSpec, Task } from "grimoire-kolmafia";
+import { abort, Familiar, Item, print } from "kolmafia";
+import {
+  $effect,
+  $familiar,
+  $item,
+  $location,
+  byStat,
+  CommunityService,
+  get,
+  have,
+  set,
+} from "libram";
+
+export const loss: Task = {
+  name: `Lost Combat!`,
+  completed: () => get(`_lastCombatLost`) === false,
+  do: () => abort(`Lost your most recent combat!`),
+};
 
 export const { guildQuest, guildURL, guildZone } = byStat({
   Muscle: {
@@ -29,7 +45,9 @@ export function retroMainstat(): `vampire` | `heck` | `robot` {
 }
 
 function familiarChoice(): Familiar {
-  if (!have($effect`Spit Upon`)) {
+  if (args.fam) {
+    return args.familiar;
+  } else if (!have($effect`Spit Upon`)) {
     return $familiar`Melodramedary`;
   } else if (!have($item`short stack of pancakes`)) {
     return $familiar`Shorter-Order Cook`;
@@ -51,6 +69,15 @@ export function oomfieOutfit(options?: {
   modesOverride?: Modes | undefined;
   modifier?: string | undefined;
 }): OutfitSpec {
+  let famOverride: Familiar | undefined = undefined;
+  if (args.fam) {
+    if (args.familiar === $familiar.none) {
+      abort(`Something has gone wrong with args.familiar (${args.familiar})`);
+    } else {
+      famOverride = args.familiar;
+    }
+  }
+
   if (options?.modifier) {
     return {
       hat: options?.hatOverride ?? undefined,
@@ -62,7 +89,7 @@ export function oomfieOutfit(options?: {
       acc1: options?.acc1Override ?? undefined,
       acc2: options?.acc2Override ?? undefined,
       acc3: options?.acc3Override ?? undefined,
-      familiar: options?.familiarOverride ?? familiarChoice(),
+      familiar: famOverride ?? options?.familiarOverride ?? familiarChoice(),
       famequip: options?.famequipOverride ?? $item`tiny stillsuit`,
       modes: options?.modesOverride ?? undefined,
     };
@@ -77,10 +104,43 @@ export function oomfieOutfit(options?: {
       acc1: options?.acc1Override ?? $item`backup camera`,
       acc2: options?.acc2Override ?? $item`your cowboy boots`,
       acc3: options?.acc3Override ?? $item`combat lover's locket`,
-      familiar: options?.familiarOverride ?? familiarChoice(),
+      familiar: famOverride ?? options?.familiarOverride ?? familiarChoice(),
       famequip: options?.famequipOverride ?? $item`tiny stillsuit`,
       modes: options?.modesOverride ?? undefined,
     };
+  }
+}
+
+export function logTest(test: CommunityService, turns: number, turnsPredicted: number): void {
+  const prefix = `_ms_`;
+  set(`${prefix}${test.id}`, turns);
+  set(`${prefix}${test.id}p`, turnsPredicted);
+}
+
+export function printLoggedTests(): void {
+  const prefix = `_ms_`;
+  const allTests = [
+    CommunityService.BoozeDrop,
+    CommunityService.CoilWire,
+    CommunityService.FamiliarWeight,
+    CommunityService.HP,
+    CommunityService.HotRes,
+    CommunityService.Moxie,
+    CommunityService.Muscle,
+    CommunityService.Mysticality,
+    CommunityService.Noncombat,
+    CommunityService.SpellDamage,
+    CommunityService.WeaponDamage,
+  ];
+
+  for (const test of allTests) {
+    print(
+      `${test.statName}: ${get(`${prefix}${test.id}`, 0)} [Predicted ${get(
+        `${prefix}${test.id}p`,
+        0
+      )}]`,
+      `teal`
+    );
   }
 }
 
@@ -94,5 +154,10 @@ export const args = Args.create(`Mustard Service`, `Community Service Script by 
     setting: ``,
     help: `Do a 100% run with currently equipped familiar`,
     default: false,
+  }),
+  familiar: Args.familiar({
+    setting: ``,
+    hidden: true,
+    default: $familiar.none,
   }),
 });

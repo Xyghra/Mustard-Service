@@ -1,17 +1,8 @@
 import { Quest, Task } from "grimoire-kolmafia";
 import { cliExecute, print, use } from "kolmafia";
-import {
-  $effect,
-  $familiar,
-  $item,
-  $location,
-  Clan,
-  CommunityService,
-  get,
-  have,
-  set,
-} from "libram";
+import { $effect, $familiar, $item, $location, Clan, CommunityService, get, have } from "libram";
 import { printModtrace } from "libram/dist/modifier";
+import { logTest, oomfieOutfit } from "../lib";
 
 export const noncombatQuest: Quest<Task> = {
   name: `Noncombat Test`,
@@ -21,9 +12,9 @@ export const noncombatQuest: Quest<Task> = {
       name: `Shadow Waters`,
       completed: () => have($effect`Shadow Waters`) || !have($item`Rufus's shadow lodestone`),
       do: () => $location`Shadow Rift`,
+      outfit: oomfieOutfit(),
       choices: { 1500: 2 },
     },
-
     {
       name: `Squeaky Rose`,
       completed: () =>
@@ -73,11 +64,7 @@ export const noncombatQuest: Quest<Task> = {
         print(`Took: [${testTurns}]`, `blue`);
 
         CommunityService.Noncombat.run(
-          () =>
-            set(
-              `_mustardServiceTests`,
-              `${get(`_mustardServiceTests`)},${testTurns} [Expected: ${predictedTestTurns}]`
-            ),
+          () => logTest(CommunityService.Noncombat, testTurns, predictedTestTurns),
           1
         );
       },

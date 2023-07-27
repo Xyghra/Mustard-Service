@@ -11,8 +11,8 @@ import { famwtQuest } from "./tasks/famwt";
 import { noncombatQuest } from "./tasks/noncombat";
 import { boozeQuest } from "./tasks/booze";
 import { finaleQuest, postFinaleQuest } from "./tasks/finale";
-import { get } from "libram";
-import { setAutoAttack } from "kolmafia";
+import { $familiar, get } from "libram";
+import { abort, myFamiliar, setAutoAttack } from "kolmafia";
 import { args } from "./lib";
 
 export function main(argument = ``): void {
@@ -21,6 +21,14 @@ export function main(argument = ``): void {
   if (args.help || argument === ``) {
     Args.showHelp(args);
     return;
+  }
+
+  if (args.fam) {
+    if (myFamiliar() === $familiar.none) {
+      abort(`Please choose a familiar before running a 100% run`);
+    } else {
+      args.familiar = myFamiliar();
+    }
   }
 
   if (args.run) {

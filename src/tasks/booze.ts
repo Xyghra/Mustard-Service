@@ -9,9 +9,9 @@ import {
   DeckOfEveryCard,
   get,
   have,
-  set,
 } from "libram";
 import { printModtrace } from "libram/dist/modifier";
+import { logTest, oomfieOutfit } from "../lib";
 
 export const boozeQuest: Quest<Task> = {
   name: `Item and Booze Drop Test`,
@@ -27,6 +27,7 @@ export const boozeQuest: Quest<Task> = {
       prepare: () => use(1, $item`11-leaf clover`),
       completed: () => have($effect`One Very Clear Eye`) || have($item`cyclops eyedrops`),
       do: $location`The Limerick Dungeon`,
+      outfit: oomfieOutfit(),
       limit: { tries: 1 },
     },
     {
@@ -71,11 +72,7 @@ export const boozeQuest: Quest<Task> = {
         print(`Took: [${testTurns}]`, `blue`);
 
         CommunityService.BoozeDrop.run(
-          () =>
-            set(
-              `_mustardServiceTests`,
-              `${get(`_mustardServiceTests`)},${testTurns} [Expected: ${predictedTestTurns}]`
-            ),
+          () => logTest(CommunityService.BoozeDrop, testTurns, predictedTestTurns),
           1
         );
       },

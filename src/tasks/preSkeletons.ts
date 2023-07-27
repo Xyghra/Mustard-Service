@@ -9,6 +9,7 @@ import {
   currentMcd,
   getWorkshed,
   myHash,
+  myMeat,
   nowToInt,
   retrieveItem,
   reverseNumberology,
@@ -18,7 +19,7 @@ import {
   visitUrl,
 } from "kolmafia";
 import { $item, $location, AutumnAton, Clan, get, have, set, SongBoom, TrainSet } from "libram";
-import { guildQuest, guildURL, oomfieOutfit } from "../lib";
+import { guildQuest, guildURL, loss, oomfieOutfit } from "../lib";
 
 const floundryItem = $item`fish hatchet`;
 
@@ -27,6 +28,7 @@ export const runStartQuest: Quest<Task> = {
   completed: () =>
     get(guildQuest) === `started` || get(guildQuest) === `step1` || get(guildQuest) === `finished`,
   tasks: [
+    loss,
     {
       name: `Fall Guy!`,
       completed: () => !AutumnAton.available(),
@@ -91,18 +93,27 @@ export const runStartQuest: Quest<Task> = {
       do: () => visitUrl(`council.php`),
     },
     {
-      name: `Sell Gems`,
+      name: `Open Letter`,
       prepare: () => visitUrl(`tutorial.php?action=toot`),
       completed: () =>
-        [$item`letter from King Ralph XI`, $item`baconstone`, $item`hamethyst`].every(
-          (i) => !have(i)
-        ) && get(`questM05Toot`) === `finished`,
-      do: (): void => {
-        use(1, $item`letter from King Ralph XI`);
-        use(1, $item`pork elf goodies sack`);
-        [$item`baconstone`, $item`hamethyst`].forEach((i) => autosell(availableAmount(i), i));
-        autosell(availableAmount($item`porquoise`) - 2, $item`porquoise`);
-      },
+        !have($item`letter from King Ralph XI`) && get(`questM05Toot`) === `finished`,
+      do: () => use(1, $item`letter from King Ralph XI`),
+    },
+    {
+      name: `Get that bag oomfie!!!`,
+      completed: () => !have($item`pork elf goodies sack`),
+      do: () => use(1, $item`pork elf goodies sack`),
+    },
+    {
+      name: `Sell Non-porquoise`,
+      completed: () => [$item`baconstone`, $item`hamethyst`].every((I) => !have(I)),
+      do: () =>
+        [$item`baconstone`, $item`hamethyst`].forEach((I) => autosell(availableAmount(I), I)),
+    },
+    {
+      name: `Sell Porquoise`,
+      completed: () => !have($item`porquoise`) || myMeat() >= 250,
+      do: () => autosell(1, $item`porquoise`),
     },
     {
       name: `Acquire Buff Tools`,
@@ -155,9 +166,12 @@ export const runStartQuest: Quest<Task> = {
       do: () => SongBoom.setSong(`Total Eclipse of Your Meat`),
     },
     {
-      name: `Configure Saber`,
+      name: `Saber Familiar`,
       completed: () => get(`_saberMod`) !== 0,
-      do: () => cliExecute(`saber familiar`),
+      do: (): void => {
+        visitUrl(`main.php?action=may4`);
+        runChoice(4);
+      },
     },
     {
       name: `Create Ebonee Epee`,
@@ -185,9 +199,14 @@ export const runStartQuest: Quest<Task> = {
       do: () => changeMcd(11),
     },
     {
-      name: `Boxing Daycare Freescavenge`,
+      name: `Boxing Daycare Free Scavenge`,
       completed: () => get(`_daycareGymScavenges`) >= 1,
-      do: () => cliExecute(`daycare scavenge`),
+      do: (): void => {
+        visitUrl(`place.php?whichplace=town_wrong&action=townwrong_boxingdaycare`);
+        runChoice(3);
+        runChoice(2);
+      },
+      choices: { 1334: 2, 1336: 1 },
     },
     {
       name: `Arrange Trainset`,

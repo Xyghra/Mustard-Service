@@ -1,6 +1,7 @@
 import { Quest, Task } from "grimoire-kolmafia";
 import { cliExecute, myAscensions, myName, nowToInt, print } from "kolmafia";
 import { $effect, CommunityService, get, have, set, uneffect } from "libram";
+import { printLoggedTests } from "../lib";
 
 export const finaleQuest: Quest<Task> = {
   name: `Finale!`,
@@ -22,24 +23,7 @@ export const postFinaleQuest: Quest<Task> = {
       completed: () => get(`_mustardServiceTime`) === "",
       do: (): void => {
         const currentTime = nowToInt();
-        const baseString = get(`csServicesPerformed`)
-          .replace(`Feed The Children`, `Muscle: `)
-          .replace(`Build Playground Mazes`, `Mysticality: `)
-          .replace(`Feed Conspirators`, `Moxie: `)
-          .replace(`Donate Blood`, `HP: `)
-          .replace(`Reduce Gazelle Population`, `Weapon Damage: `)
-          .replace(`Make Sausage`, `Spell Damage: `)
-          .replace(`Breed More Collies`, `Familiar Weight: `)
-          .replace(`Be a Living Statue`, `Noncombat: `)
-          .replace(`Make Margaritas`, `Item and Booze Drop: `)
-          .replace(`Clean Steam Tunnels`, `Hot Resistance: `);
-
-        print(`(none): [${get(`_mustardServiceTests`).split(`,`)[0]}]`, `blue`);
-        for (let i = 1; i <= 10; i++) {
-          const testName = baseString.split(`,`)[i];
-          const testDetails = get(`_mustardServiceTests`).split(`,`)[i];
-          print(`${testName}[${testDetails}]`);
-        }
+        printLoggedTests();
 
         print(
           `Took: ${Math.floor(

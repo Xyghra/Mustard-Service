@@ -7,6 +7,8 @@ import {
   cliExecute,
   drink,
   myAdventures,
+  myMaxhp,
+  restoreHp,
   retrieveItem,
   reverseNumberology,
   use,
@@ -29,12 +31,13 @@ import {
   Macro,
   uneffect,
 } from "libram";
-import { guildQuest, guildZone, oomfieOutfit } from "../lib";
+import { args, guildQuest, guildZone, loss, oomfieOutfit } from "../lib";
 
 export const skeletonsQuest: Quest<Task> = {
   name: `Skeletons to Wire Coiling`,
   completed: () => CommunityService.CoilWire.isDone(),
   tasks: [
+    loss,
     {
       name: `June Cleave`,
       ready: () => get(`_juneCleaverFightsLeft`) === 0,
@@ -66,23 +69,6 @@ export const skeletonsQuest: Quest<Task> = {
             backupcamera: `init`,
           },
         }),
-      /*
-      {
-        hat: $item`Daylight Shavings Helmet`,
-        shirt: $item`Jurassic Parka`,
-        weapon: $item`June cleaver`,
-        offhand: $item`Kramco Sausage-o-Matic™`,
-        pants: $item`designer sweatpants`,
-        acc1: $item`backup camera`,
-        acc2: $item`your cowboy boots`,
-        acc3: $item`combat lover's locket`,
-        familiar: familiarChoice(),
-        famequip: $item`tiny stillsuit`,
-        modes: {
-          parka: `kachungasaur`,
-          backupcamera: `init`,
-        },
-      },*/
       combat: new CombatStrategy().macro(Macro.attack().repeat()),
     },
     {
@@ -99,6 +85,7 @@ export const skeletonsQuest: Quest<Task> = {
     {
       name: `Novelty Tropical Skeleton`,
       ready: () => get(`lastCopyableMonster`) === $monster`red skeleton`,
+      prepare: () => restoreHp(myMaxhp()),
       completed: () => have($effect`Everything Looks Yellow`) && have($item`cherry`),
       do: (): void => {
         Cartography.mapMonster($location`The Skeleton Store`, $monster`novelty tropical skeleton`);
@@ -136,7 +123,7 @@ export const skeletonsQuest: Quest<Task> = {
     },
     {
       name: `Guild Unlock`,
-      completed: () => get(guildQuest) === `step1` || get(guildQuest) === `finished`,
+      completed: () => get(guildQuest) === `step1` || get(guildQuest) === `finished` || args.fam,
       do: guildZone,
       outfit: {
         offhand: $item`latte lovers member's mug`,
@@ -154,6 +141,29 @@ export const skeletonsQuest: Quest<Task> = {
         $effect`Empathy`,
         $effect`Blood Bond`,
       ],
+    },
+    {
+      name: `Guild Unlock (100% Familiar)`,
+      completed: () => get(guildQuest) === `step1` || get(guildQuest) === `finished`,
+      do: () => guildZone,
+      effects: [
+        $effect`Musk of the Moose`,
+        $effect`Carlweather's Cantata of Confrontation`,
+        $effect`Empathy`,
+        $effect`Blood Bond`,
+      ],
+      outfit: () => ({
+        offhand: $item`latte lovers member's mug`,
+        hat: $item`sombrero-mounted sparkler`,
+        acc1: get(`_reflexHammerUsed`) >= 3 ? $item`backup camera` : $item`Lil' Doctor™ bag`,
+        familiar: args.familiar,
+        famequip: $item`tiny stillsuit`,
+      }),
+      combat: new CombatStrategy().macro(() =>
+        Macro.externalIf(get(`_reflexHammerUsed`) < 3, Macro.trySkill($skill`Reflex Hammer`))
+          .trySkill($skill`Feel Hatred`)
+          .abort()
+      ),
     },
     {
       name: `Cemetery Unlock`,

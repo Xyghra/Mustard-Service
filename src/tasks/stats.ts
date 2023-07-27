@@ -1,7 +1,8 @@
 import { Quest, Task } from "grimoire-kolmafia";
 import { print } from "kolmafia";
-import { $effect, CommunityService, get, set, TrainSet, uneffect } from "libram";
+import { $effect, CommunityService, get, TrainSet, uneffect } from "libram";
 import { printModtrace } from "libram/dist/modifier";
+import { logTest } from "../lib";
 
 export const muscleQuest: Quest<Task> = {
   name: `Muscle Test`,
@@ -40,11 +41,7 @@ export const muscleQuest: Quest<Task> = {
         print(`Took: [${testTurns}]`, `blue`);
 
         CommunityService.Muscle.run(
-          () =>
-            set(
-              `_mustardServiceTests`,
-              `${get(`_mustardServiceTests`)},${testTurns} [Expected: ${predictedTestTurns}]`
-            ),
+          () => logTest(CommunityService.Muscle, testTurns, predictedTestTurns),
           1
         );
       },
@@ -82,11 +79,7 @@ export const mystQuest: Quest<Task> = {
         print(`Took: [${testTurns}]`, `blue`);
 
         CommunityService.Mysticality.run(
-          () =>
-            set(
-              `_mustardServiceTests`,
-              `${get(`_mustardServiceTests`)},${testTurns} [Expected: ${predictedTestTurns}]`
-            ),
+          () => logTest(CommunityService.Mysticality, testTurns, predictedTestTurns),
           1
         );
       },
@@ -123,11 +116,7 @@ export const moxQuest: Quest<Task> = {
         print(`Took: [${testTurns}]`, `blue`);
 
         CommunityService.Moxie.run(
-          () =>
-            set(
-              `_mustardServiceTests`,
-              `${get(`_mustardServiceTests`)},${testTurns} [Expected: ${predictedTestTurns}]`
-            ),
+          () => logTest(CommunityService.Moxie, testTurns, predictedTestTurns),
           1
         );
       },
@@ -165,11 +154,7 @@ export const hpQuest: Quest<Task> = {
         print(`Took: [${testTurns}]`, `blue`);
 
         CommunityService.HP.run(
-          () =>
-            set(
-              `_mustardServiceTests`,
-              `${get(`_mustardServiceTests`)},${testTurns} [Expected: ${predictedTestTurns}]`
-            ),
+          () => logTest(CommunityService.HP, testTurns, predictedTestTurns),
           1
         );
       },

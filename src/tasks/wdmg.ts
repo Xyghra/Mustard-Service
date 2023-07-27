@@ -19,12 +19,14 @@ import {
   $skill,
   Clan,
   CommunityService,
+  CursedMonkeyPaw,
   get,
   have,
   Macro,
-  set,
+  SongBoom,
 } from "libram";
 import { printModtrace } from "libram/dist/modifier";
+import { args, logTest } from "../lib";
 
 export const wdmgQuest: Quest<Task> = {
   name: `Weapon Damage Test`,
@@ -37,9 +39,19 @@ export const wdmgQuest: Quest<Task> = {
       do: () => cliExecute(`pool 1`),
     },
     {
+      name: `Boombox`,
+      completed: () =>
+        get(`_boomBoxSongsLeft`) <= 2 || SongBoom.song() === `These Fists Were Made for Punchin'`,
+      do: () => SongBoom.setSong(`These Fists Were Made for Punchin'`),
+    },
+    {
       name: `Inner Elf`,
       prepare: (): Clan => Clan.join(`Beldungeon`),
-      completed: (): boolean => have($effect`Inner Elf`) || get(`_snokebombUsed`) >= 3,
+      completed: () =>
+        args.fam ||
+        !have($familiar`Machine Elf`) ||
+        have($effect`Inner Elf`) ||
+        get(`_snokebombUsed`) >= 3,
       do: $location`The Slime Tube`,
       outfit: {
         weapon: $item.none,
@@ -82,6 +94,11 @@ export const wdmgQuest: Quest<Task> = {
       do: () => use(1, $item`red eye`),
     },
     {
+      name: `100% Familiar wish for Pyramid Power`,
+      completed: () => !args.fam || get(`_genieWishesUsed`) >= 3 || have($effect`Pyramid Power`),
+      do: () => CursedMonkeyPaw.wishFor($effect`Pyramid Power`),
+    },
+    {
       name: `Weapon Damage Test`,
       completed: () => CommunityService.WeaponDamage.isDone(),
       do: (): void => {
@@ -90,7 +107,7 @@ export const wdmgQuest: Quest<Task> = {
         printModtrace(`weapon damage`);
         printModtrace(`weapon damage percent`);
 
-        if (testTurns > 1) {
+        if (!args.fam && testTurns > 1) {
           print(`This is annoying, how sad! Manual or fix`);
         }
 
@@ -98,12 +115,8 @@ export const wdmgQuest: Quest<Task> = {
         print(`Took: [${testTurns}]`, `blue`);
 
         CommunityService.WeaponDamage.run(
-          () =>
-            set(
-              `_mustardServiceTests`,
-              `${get(`_mustardServiceTests`)},${testTurns} [Expected: ${predictedTestTurns}]`
-            ),
-          1
+          () => logTest(CommunityService.WeaponDamage, testTurns, predictedTestTurns),
+          args.fam ? 11 : 1
         );
       },
       outfit: {
