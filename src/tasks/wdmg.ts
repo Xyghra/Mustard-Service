@@ -120,7 +120,7 @@ export const wdmgQuest: Quest<Task> = {
         );
       },
       outfit: {
-        modifier: `weapon dmg`,
+        modifier: `weapon dmg, switch left-hand man`,
       },
       effects: [
         $effect`Bow-Legged Swagger`,

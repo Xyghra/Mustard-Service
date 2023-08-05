@@ -38,14 +38,13 @@ export const runStartQuest: Quest<Task> = {
     },
     {
       name: `Pull Pulls`,
-      completed: () => get(`_roninStoragePulls`).split(`,`).length === 5,
+      completed: () => get(`_roninStoragePulls`).split(`,`).length === 4,
       do: () =>
         [
           $item`Calzone of Legend`,
           $item`Pizza of Legend`,
           $item`Stick-Knife of Loathing`,
           $item`wasabi marble soda`,
-          $item`tobiko marble soda`,
         ].forEach((i) => takeStorage(1, i)),
     },
     {
@@ -76,7 +75,7 @@ export const runStartQuest: Quest<Task> = {
       completed: () => get(`_sitCourseCompleted`),
       do: (): void => {
         visitUrl(`inv_use.php?pwd=${myHash()}&which=3&whichitem=11116`);
-        runChoice(2);
+        runChoice(1);
       },
     },
     {
@@ -142,9 +141,9 @@ export const runStartQuest: Quest<Task> = {
     },
     {
       name: `Clip-Art Summons`,
-      completed: () => get(`_clipartSummons`) >= 3,
+      completed: () => get(`_clipartSummons`) >= 2,
       do: (): void => {
-        create(2, $item`borrowed time`);
+        create(1, $item`borrowed time`);
         create(1, $item`box of Familiar Jacks`);
       },
     },

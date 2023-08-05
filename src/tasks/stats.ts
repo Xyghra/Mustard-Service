@@ -46,7 +46,7 @@ export const muscleQuest: Quest<Task> = {
         );
       },
       outfit: {
-        modifier: `Muscle`,
+        modifier: `Muscle, switch left-hand man`,
       },
       effects: [
         $effect`Big`,
@@ -83,7 +83,9 @@ export const mystQuest: Quest<Task> = {
           1
         );
       },
-      outfit: { modifier: `Mysticality` },
+      outfit: {
+        modifier: `Mysticality, switch left-hand man`,
+      },
       post: () => uneffect($effect`The Magical Mojomuscular Melody`),
       effects: [
         $effect`Big`,
@@ -120,7 +122,9 @@ export const moxQuest: Quest<Task> = {
           1
         );
       },
-      outfit: { modifier: `Moxie` },
+      outfit: {
+        modifier: `Moxie, switch left-hand man`,
+      },
       effects: [
         $effect`Big`,
         $effect`Butt-Rock Hair`,
@@ -158,7 +162,9 @@ export const hpQuest: Quest<Task> = {
           1
         );
       },
-      outfit: { modifier: `HP` },
+      outfit: {
+        modifier: `HP, switch left-hand man`,
+      },
       effects: [
         $effect`Big`,
         $effect`Go Get 'Em, Tiger!`,

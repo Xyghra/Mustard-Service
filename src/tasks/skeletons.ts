@@ -146,12 +146,7 @@ export const skeletonsQuest: Quest<Task> = {
       name: `Guild Unlock (100% Familiar)`,
       completed: () => get(guildQuest) === `step1` || get(guildQuest) === `finished`,
       do: () => guildZone,
-      effects: [
-        $effect`Musk of the Moose`,
-        $effect`Carlweather's Cantata of Confrontation`,
-        $effect`Empathy`,
-        $effect`Blood Bond`,
-      ],
+      effects: [$effect`Musk of the Moose`, $effect`Carlweather's Cantata of Confrontation`],
       outfit: () => ({
         offhand: $item`latte lovers member's mug`,
         hat: $item`sombrero-mounted sparkler`,

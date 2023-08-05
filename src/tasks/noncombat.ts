@@ -20,21 +20,19 @@ export const noncombatQuest: Quest<Task> = {
       completed: () =>
         !have($item`squeaky toy rose`) || have($effect`A Rose by Any Other Material`),
       do: () => use(1, $item`squeaky toy rose`),
+      outfit: () => ({
+        familiar: $familiar`Disgeist`,
+      }),
     },
     {
       name: `Shady Shades`,
       completed: () => !have($item`shady shades`) || have($effect`Throwing Some Shade`),
       do: () => use(1, $item`shady shades`),
-      outfit: {
+      outfit: () => ({
         hat: $item`very pointy crown`,
         offhand: $item`unbreakable umbrella`,
-        modifier: `-60 combat rate 13 familiar weight`,
-        familiar: $familiar`Disgeist`,
-        famequip: $item`tiny stillsuit`,
-        modes: {
-          umbrella: `cocoon`,
-        },
-      },
+        modifier: `-60 combat rate, +switch left-hand man, +switch disgeist`,
+      }),
       effects: [
         $effect`Empathy`,
         $effect`Blood Bond`,

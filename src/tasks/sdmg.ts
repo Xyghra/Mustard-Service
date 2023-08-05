@@ -1,11 +1,12 @@
 import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
-import { cliExecute, print, retrieveItem, use, useSkill } from "kolmafia";
+import { cliExecute, myBasestat, print, retrieveItem, takeStorage, use, useSkill } from "kolmafia";
 import {
   $effect,
   $familiar,
   $item,
   $location,
   $skill,
+  $stat,
   Clan,
   CommunityService,
   get,
@@ -26,13 +27,25 @@ export const sdmgQuest: Quest<Task> = {
       limit: { tries: 1 },
     },
     {
+      name: `Pull!`,
+      completed: () =>
+        have($item`Staff of Simmering Hatred`) ||
+        have($item`tobiko marble soda`) ||
+        have($effect`Pisces in the Skyces`) ||
+        get(`_roninStoragePulls`).split(`,`).length === 5,
+      do: () =>
+        myBasestat($stat`Mysticality`) >= 125
+          ? takeStorage(1, $item`Staff of Simmering Hatred`)
+          : takeStorage(1, $item`tobiko marble soda`),
+    },
+    {
       name: `Tobiko Marble Soda`,
       completed: () => have($effect`Pisces in the Skyces`) || !have($item`tobiko marble soda`),
       do: () => use(1, $item`tobiko marble soda`),
     },
     {
       name: `Obsidian Nutcracker`,
-      completed: () => have($item`obsidian nutcracker`),
+      completed: () => have($item`Staff of Simmering Hatred`) || have($item`obsidian nutcracker`),
       do: () => retrieveItem(1, $item`obsidian nutcracker`),
     },
     {
@@ -73,7 +86,7 @@ export const sdmgQuest: Quest<Task> = {
         );
       },
       outfit: {
-        modifier: `spell damage`,
+        modifier: `spell damage, switch left-hand man`,
       },
       effects: [
         $effect`Song of Sauce`,

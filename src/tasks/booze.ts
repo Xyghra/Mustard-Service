@@ -77,7 +77,7 @@ export const boozeQuest: Quest<Task> = {
         );
       },
       outfit: {
-        modifier: `15 Item Drop, 30 Booze Drop, -100 Gear Drop, -equip broken champagne bottle`,
+        modifier: `15 Item Drop, 30 Booze Drop, -100 Gear Drop, -equip broken champagne bottle, switch left-hand man`,
       },
       effects: [
         $effect`Fat Leon's Phat Loot Lyric`,

@@ -5,12 +5,31 @@ import {
   $familiar,
   $item,
   $location,
+  $skill,
   byStat,
   CommunityService,
   get,
   have,
+  Macro,
   set,
 } from "libram";
+
+export class customMacro extends Macro {
+  polarpocket(pockets: number): customMacro {
+    let test = this.trySkill($skill`Fire Extinguisher: Polar Vortex`);
+
+    while (pockets > 1) {
+      test = test.trySkill($skill`Fire Extinguisher: Polar Vortex`);
+      pockets--;
+    }
+
+    return test;
+  }
+
+  static polarpocket(pockets: number): customMacro {
+    return new customMacro().polarpocket(pockets);
+  }
+}
 
 export const loss: Task = {
   name: `Lost Combat!`,

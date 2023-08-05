@@ -2,7 +2,6 @@ import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
 import { print, use } from "kolmafia";
 import {
   $effect,
-  $familiar,
   $item,
   $monster,
   $skill,
@@ -53,9 +52,7 @@ export const hotresQuest: Quest<Task> = {
         );
       },
       outfit: {
-        familiar: $familiar`Exotic Parrot`,
-        famequip: $item`tiny stillsuit`,
-        modifier: `hot resistance`,
+        modifier: `hot resistance, switch left-hand man, switch exotic parrot`,
       },
       effects: [
         $effect`Elemental Saucesphere`,

@@ -34,6 +34,12 @@ export const famwtQuest: Quest<Task> = {
       do: () => cliExecute(`pool 1`),
     },
     {
+      name: `♥ Rocks`,
+      ready: () => have($item`lump of loyal latite`),
+      completed: () => have($effect`Loyal as a Rock`),
+      do: () => use(1, $item`lump of loyal latite`),
+    },
+    {
       name: `Hatter Buff`,
       completed: () =>
         true ||
@@ -58,9 +64,7 @@ export const famwtQuest: Quest<Task> = {
         );
       },
       outfit: {
-        modifier: `familiar weight`,
-        familiar: $familiar`Mini-Trainbot`,
-        famequip: $item`overloaded Yule battery`,
+        modifier: `familiar weight, switch left-hand man, switch Mini-Trainbot`,
       },
       limit: { tries: 1 },
       effects: [$effect`Empathy`, $effect`Blood Bond`, $effect`Leash of Linguini`],

@@ -43,7 +43,7 @@ import {
   uneffect,
   Witchess,
 } from "libram";
-import { args, loss, oomfieOutfit, retroMainstat } from "../lib";
+import { args, customMacro, loss, oomfieOutfit, retroMainstat } from "../lib";
 
 function shadowRiftChoice(): Location {
   /*
@@ -62,7 +62,7 @@ function shadowRiftPocketTarget(): Monster {
   } else {
     return $monster`shadow tree`;
   }*/
-  return $monster`shadow tree`;
+  return $monster`shadow slab`;
 }
 
 const facialExpression = byStat({
@@ -246,6 +246,18 @@ export const levellingQuest: Quest<Task> = {
       ),
     },
     {
+      name: `Angry Agate`,
+      ready: () => have($item`angry agate`),
+      completed: () => have($effect`Misplaced Rage`),
+      do: () => use(1, $item`angry agate`),
+    },
+    {
+      name: `Filled Mosquito`,
+      ready: () => have($item`filled mosquito`),
+      completed: () => have($effect`Wisdom of Others`),
+      do: () => use(1, $item`filled mosquito`),
+    },
+    {
       name: `April Shower`,
       completed: () => have(showerEffect) || get(`_aprilShower`),
       do: () => ensureEffect(showerEffect),
@@ -391,11 +403,13 @@ export const levellingQuest: Quest<Task> = {
     },
     {
       name: `Buff the heck up oomfie!`,
-      completed: () => have($effect`Bendin' Hell`) || get(`_speakeasyFreeFights`) === 3,
+      //completed: () => have($effect`Bendin' Hell`) || get(`_speakeasyFreeFights`) === 3,
+      completed: () => levellingEffects.every((ef) => have(ef)),
       do: () => levellingEffects.forEach((ef) => ensureEffect(ef)),
     },
     {
       name: `Latte for Later`,
+      ready: () => !get(`_latteBanishUsed`),
       completed: () => myMp() >= 1000 || get(`_latteRefillsUsed`) >= 2,
       do: (): void => {
         adv1($location`Uncle Gator's Country Fun-Time Liquid Waste Sluice`, -1);
@@ -512,18 +526,11 @@ export const levellingQuest: Quest<Task> = {
           },
         }),
       combat: new CombatStrategy().macro(() =>
-        Macro.if_(
-          shadowRiftPocketTarget(),
-          Macro.trySkill($skill`Fire Extinguisher: Polar Vortex`)
-            .trySkill($skill`Fire Extinguisher: Polar Vortex`)
-            .trySkill($skill`Fire Extinguisher: Polar Vortex`)
-            .trySkill($skill`Fire Extinguisher: Polar Vortex`)
-            .trySkill($skill`Fire Extinguisher: Polar Vortex`)
-            .trySkill($skill`Fire Extinguisher: Polar Vortex`)
-            .trySkill($skill`Fire Extinguisher: Polar Vortex`)
-            .trySkill($skill`Fire Extinguisher: Polar Vortex`)
-            .trySkill($skill`Fire Extinguisher: Polar Vortex`)
-        )
+        customMacro
+          .if_(
+            shadowRiftPocketTarget(),
+            customMacro.polarpocket(9).trySkill($skill`Perpetrate Mild Evil`)
+          )
           .trySkill($skill`Sing Along`)
           .attack()
           .repeat()
@@ -538,6 +545,7 @@ export const levellingQuest: Quest<Task> = {
       outfit: () => oomfieOutfit(),
       combat: new CombatStrategy().macro(
         Macro.trySkill($skill`Sing Along`)
+          .if_(shadowRiftPocketTarget(), Macro.trySkill($skill`Perpetrate Mild Evil`))
           .attack()
           .repeat()
       ),
@@ -609,7 +617,8 @@ export const levellingQuest: Quest<Task> = {
     },
     {
       name: `Deep Machine Fights`,
-      completed: () => args.fam || get(`_machineTunnelsAdv`) >= 5,
+      completed: () =>
+        (args.fam && args.familiar !== $familiar`Machine Elf`) || get(`_machineTunnelsAdv`) >= 5,
       do: () => $location`The Deep Machine Tunnels`,
       outfit: {
         offhand: $item`unbreakable umbrella`,

@@ -9,7 +9,7 @@ export const CoilQuest: Quest<Task> = {
     {
       name: `Coil that wire!`,
       completed: () => CommunityService.CoilWire.isDone(),
-      do: () => CommunityService.CoilWire.run(() => logTest(CommunityService.HP, 60, 60), 60),
+      do: () => CommunityService.CoilWire.run(() => logTest(CommunityService.CoilWire, 60, 60), 60),
       limit: { tries: 1 },
     },
   ],
