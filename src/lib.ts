@@ -73,6 +73,10 @@ function familiarChoice(): Familiar {
   } else return $familiar`Patriotic Eagle`;
 }
 
+export function familiarAttacks(): boolean {
+  return args.familiar.elementalDamage || args.familiar.physicalDamage;
+}
+
 export function oomfieOutfit(options?: {
   hatOverride?: Item | undefined;
   backOverride?: Item | undefined;

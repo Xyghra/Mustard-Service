@@ -43,7 +43,7 @@ import {
   uneffect,
   Witchess,
 } from "libram";
-import { args, customMacro, loss, oomfieOutfit, retroMainstat } from "../lib";
+import { args, customMacro, familiarAttacks, loss, oomfieOutfit, retroMainstat } from "../lib";
 
 function shadowRiftChoice(): Location {
   /*
@@ -138,10 +138,10 @@ const levellingEffects = [
   $effect`Intimidating Mien`,
 
   //Familiar!
-  $effect`Curiosity of Br'er Tarrypin`,
-  $effect`Empathy`,
-  $effect`Leash of Linguini`,
-  $effect`Blood Bond`,
+  familiarAttacks() ? $effect`Big` : $effect`Curiosity of Br'er Tarrypin`,
+  familiarAttacks() ? $effect`Big` : $effect`Empathy`,
+  familiarAttacks() ? $effect`Big` : $effect`Leash of Linguini`,
+  familiarAttacks() ? $effect`Big` : $effect`Blood Bond`,
 
   //Misc
   $effect`Carol of the Bulls`,
