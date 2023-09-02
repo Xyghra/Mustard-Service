@@ -9,9 +9,9 @@ import {
   $stat,
   Clan,
   CommunityService,
+  Macro,
   get,
   have,
-  Macro,
 } from "libram";
 import { printModtrace } from "libram/dist/modifier";
 import { args, logTest } from "../lib";
@@ -61,7 +61,7 @@ export const sdmgQuest: Quest<Task> = {
         familiar: $familiar`Machine Elf`,
       },
       choices: { 326: 1 },
-      combat: new CombatStrategy().macro(Macro.trySkill($skill`Snokebomb`).abort()),
+      combat: new CombatStrategy().autoattack(Macro.trySkill($skill`Snokebomb`).abort()),
     },
     {
       name: `Spell Damage Poolbuff`,

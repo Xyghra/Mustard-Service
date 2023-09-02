@@ -22,15 +22,17 @@ import {
   $monster,
   $skill,
   Cartography,
+  Clan,
   CombatLoversLocket,
   CommunityService,
+  Macro,
   ensureEffect,
   get,
   getKramcoWandererChance,
   have,
-  Macro,
   uneffect,
 } from "libram";
+import { printModtrace } from "libram/dist/modifier";
 import { args, guildQuest, guildZone, loss, oomfieOutfit } from "../lib";
 
 export const skeletonsQuest: Quest<Task> = {
@@ -45,12 +47,18 @@ export const skeletonsQuest: Quest<Task> = {
       do: () => adv1($location`The Sleazy Back Alley`, -1, "abort;"),
       outfit: {
         weapon: $item`June cleaver`,
+        offhand: $item`familiar scrapbook`,
       },
       post: (): void => {
         if (have($effect`Beaten Up`)) {
           uneffect($effect`Beaten Up`);
         }
       },
+    },
+    {
+      name: `Obtain Red Rocket`,
+      completed: () => have($item`red rocket`) || have($effect`Everything Looks Red`),
+      do: () => retrieveItem(1, $item`red rocket`),
     },
     {
       name: `Pre-Coil Kramco`,
@@ -69,18 +77,21 @@ export const skeletonsQuest: Quest<Task> = {
             backupcamera: `init`,
           },
         }),
-      combat: new CombatStrategy().macro(Macro.attack().repeat()),
+      combat: new CombatStrategy().autoattack(
+        Macro.tryItem($item`red rocket`)
+          .attack()
+          .repeat()
+      ),
     },
     {
       name: `Red Skeleton`,
-      prepare: () => retrieveItem(1, $item`red rocket`),
       completed: () =>
         get(`lastCopyableMonster`) === $monster`red skeleton` ||
         get(`_locketMonstersFought`).includes(`1521`),
       do: (): void => {
         CombatLoversLocket.reminisce($monster`red skeleton`);
       },
-      combat: new CombatStrategy().macro(Macro.trySkill($skill`Feel Hatred`).abort()),
+      combat: new CombatStrategy().autoattack(Macro.trySkill($skill`Feel Hatred`).abort()),
     },
     {
       name: `Novelty Tropical Skeleton`,
@@ -90,21 +101,24 @@ export const skeletonsQuest: Quest<Task> = {
       do: (): void => {
         Cartography.mapMonster($location`The Skeleton Store`, $monster`novelty tropical skeleton`);
       },
-      combat: new CombatStrategy().macro(
-        Macro.tryItem($item`red rocket`)
-          .trySkill($skill`Feel Nostalgic`)
+      combat: new CombatStrategy().autoattack(
+        Macro.trySkill($skill`Feel Nostalgic`)
           .trySkill($skill`Spit jurassic acid`)
           .abort()
       ),
       outfit: {
-        offhand: $item`latte lovers member's mug`,
+        hat: $item.none,
+        offhand: $item`unbreakable umbrella`,
         shirt: $item`Jurassic Parka`,
         acc1: $item`backup camera`,
+        acc2: $item`your cowboy boots`,
         modes: {
+          umbrella: `broken`,
           parka: `dilophosaur`,
           backupcamera: `ml`,
         },
       },
+      post: () => printModtrace(`monster level`),
     },
     {
       name: `Red May Day`,
@@ -117,6 +131,13 @@ export const skeletonsQuest: Quest<Task> = {
       },
     },
     {
+      name: `Acquire Floundry Item`,
+      prepare: () => Clan.join(`Floundry`),
+      completed: () => get(`_floundryItemCreated`) || have($item`red shoe`),
+      do: () => retrieveItem(1, $item`codpiece`),
+      post: () => Clan.join(`Bonus Adventures from Hell`),
+    },
+    {
       name: `Purchase Fireworks Hat`,
       completed: () => have($item`sombrero-mounted sparkler`),
       do: () => retrieveItem(1, $item`sombrero-mounted sparkler`),
@@ -126,7 +147,7 @@ export const skeletonsQuest: Quest<Task> = {
       completed: () => get(guildQuest) === `step1` || get(guildQuest) === `finished` || args.fam,
       do: guildZone,
       outfit: {
-        offhand: $item`latte lovers member's mug`,
+        offhand: $item`familiar scrapbook`,
         hat: $item`sombrero-mounted sparkler`,
         familiar: $familiar`Pair of Stomping Boots`,
         famequip: $item`tiny stillsuit`,
@@ -134,7 +155,7 @@ export const skeletonsQuest: Quest<Task> = {
           parka: `spikolodon`,
         },
       },
-      combat: new CombatStrategy().macro(Macro.runaway().abort()),
+      combat: new CombatStrategy().autoattack(Macro.runaway().abort()),
       effects: [
         $effect`Musk of the Moose`,
         $effect`Carlweather's Cantata of Confrontation`,
@@ -148,13 +169,13 @@ export const skeletonsQuest: Quest<Task> = {
       do: () => guildZone,
       effects: [$effect`Musk of the Moose`, $effect`Carlweather's Cantata of Confrontation`],
       outfit: () => ({
-        offhand: $item`latte lovers member's mug`,
+        offhand: $item`familiar scrapbook`,
         hat: $item`sombrero-mounted sparkler`,
         acc1: get(`_reflexHammerUsed`) >= 3 ? $item`backup camera` : $item`Lil' Doctor™ bag`,
         familiar: args.familiar,
         famequip: $item`tiny stillsuit`,
       }),
-      combat: new CombatStrategy().macro(() =>
+      combat: new CombatStrategy().autoattack(() =>
         Macro.externalIf(get(`_reflexHammerUsed`) < 3, Macro.trySkill($skill`Reflex Hammer`))
           .trySkill($skill`Feel Hatred`)
           .abort()

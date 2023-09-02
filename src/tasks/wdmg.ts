@@ -20,10 +20,10 @@ import {
   Clan,
   CommunityService,
   CursedMonkeyPaw,
-  get,
-  have,
   Macro,
   SongBoom,
+  get,
+  have,
 } from "libram";
 import { printModtrace } from "libram/dist/modifier";
 import { args, logTest } from "../lib";
@@ -59,7 +59,7 @@ export const wdmgQuest: Quest<Task> = {
         familiar: $familiar`Machine Elf`,
       },
       choices: { 326: 1 },
-      combat: new CombatStrategy().macro(Macro.trySkill($skill`Snokebomb`).abort()),
+      combat: new CombatStrategy().autoattack(Macro.trySkill($skill`Snokebomb`).abort()),
     },
     {
       name: `Deep Dark Visions`,
@@ -120,7 +120,7 @@ export const wdmgQuest: Quest<Task> = {
         );
       },
       outfit: {
-        modifier: `weapon dmg, switch left-hand man`,
+        modifier: `weapon dmg, switch left-hand man -equip unbreakable umbrella`,
       },
       effects: [
         $effect`Bow-Legged Swagger`,

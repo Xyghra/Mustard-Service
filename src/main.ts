@@ -1,19 +1,19 @@
-import { Args, Engine, getTasks, Task } from "grimoire-kolmafia";
-import { runStartQuest } from "./tasks/preSkeletons";
-import { skeletonsQuest } from "./tasks/skeletons";
-import { CoilQuest } from "./tasks/coil";
-import { levellingQuest } from "./tasks/levelling";
-import { hpQuest, moxQuest, muscleQuest, mystQuest } from "./tasks/stats";
-import { hotresQuest } from "./tasks/hotres";
-import { wdmgQuest } from "./tasks/wdmg";
-import { sdmgQuest } from "./tasks/sdmg";
-import { famwtQuest } from "./tasks/famwt";
-import { noncombatQuest } from "./tasks/noncombat";
-import { boozeQuest } from "./tasks/booze";
-import { finaleQuest, postFinaleQuest } from "./tasks/finale";
-import { $familiar, get } from "libram";
+import { Args, Engine, Task, getTasks } from "grimoire-kolmafia";
 import { abort, myFamiliar, setAutoAttack } from "kolmafia";
+import { $familiar, get } from "libram";
 import { args } from "./lib";
+import { boozeQuest } from "./tasks/booze";
+import { CoilQuest } from "./tasks/coil";
+import { famwtQuest } from "./tasks/famwt";
+import { finaleQuest, postFinaleQuest } from "./tasks/finale";
+import { hotresQuest } from "./tasks/hotres";
+import { levellingQuest } from "./tasks/levelling";
+import { noncombatQuest } from "./tasks/noncombat";
+import { runStartQuest } from "./tasks/preSkeletons";
+import { sdmgQuest } from "./tasks/sdmg";
+import { skeletonsQuest } from "./tasks/skeletons";
+import { hpQuest, moxQuest, muscleQuest, mystQuest } from "./tasks/stats";
+import { wdmgQuest } from "./tasks/wdmg";
 
 export function main(argument = ``): void {
   Args.fill(args, argument);

@@ -1,6 +1,6 @@
 import { Quest, Task } from "grimoire-kolmafia";
-import { cliExecute, myAscensions, myName, nowToInt, print } from "kolmafia";
-import { $effect, CommunityService, get, have, set, uneffect } from "libram";
+import { cliExecute, nowToInt, print } from "kolmafia";
+import { CommunityService, get, set } from "libram";
 import { printLoggedTests } from "../lib";
 
 export const finaleQuest: Quest<Task> = {
@@ -11,6 +11,7 @@ export const finaleQuest: Quest<Task> = {
       completed: () => get(`kingLiberated`),
       do: () => CommunityService.donate(),
       limit: { tries: 1 },
+      post: () => cliExecute(`${get(`kingLiberatedScript`)}`),
     },
   ],
 };
@@ -36,22 +37,6 @@ export const postFinaleQuest: Quest<Task> = {
 
         set(`_mustardServiceTime`, ``);
       },
-    },
-    {
-      name: `Empty Storage`,
-      completed: () => get(`lastEmptiedStorage`) === myAscensions(),
-      do: () => cliExecute(`hagnk all`),
-      limit: { tries: 1 },
-    },
-    {
-      name: `Lose Loss`,
-      completed: () => !have($effect`Feeling Lost`),
-      do: () => uneffect($effect`Feeling Lost`),
-    },
-    {
-      name: `Prismbreak Moment`,
-      completed: () => myName() !== `Moon Moon` || get(`_gwa_breakfast`, false),
-      do: () => cliExecute(`gwa prism; gwa breakfast`),
     },
   ],
 };

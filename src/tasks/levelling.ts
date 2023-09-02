@@ -1,18 +1,21 @@
 import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
 import {
+  Location,
+  Monster,
   abort,
   adv1,
   availableAmount,
   cliExecute,
   drink,
   eat,
-  Location,
-  Monster,
+  itemAmount,
+  mpCost,
   myClass,
   myHash,
   myHp,
   myLevel,
   myMaxhp,
+  myMaxmp,
   myMp,
   myPrimestat,
   restoreHp,
@@ -31,17 +34,17 @@ import {
   $skill,
   $stat,
   AutumnAton,
-  byStat,
   Cartography,
+  Latte,
+  Macro,
+  Witchess,
+  byStat,
   clamp,
   ensureEffect,
   get,
   getKramcoWandererChance,
   have,
-  Latte,
-  Macro,
   uneffect,
-  Witchess,
 } from "libram";
 import { args, customMacro, familiarAttacks, loss, oomfieOutfit, retroMainstat } from "../lib";
 
@@ -239,7 +242,7 @@ export const levellingQuest: Quest<Task> = {
       outfit: {
         offhand: $item`Kramco Sausage-o-Matic™`,
       },
-      combat: new CombatStrategy().macro(
+      combat: new CombatStrategy().autoattack(
         Macro.trySkill($skill`Sing Along`)
           .attack()
           .repeat()
@@ -271,6 +274,9 @@ export const levellingQuest: Quest<Task> = {
       name: `Use 10% Bonus`,
       completed: () => !have($item`a ten-percent bonus`),
       do: () => use(1, $item`a ten-percent bonus`),
+      outfit: {
+        offhand: $item`familiar scrapbook`,
+      },
     },
     {
       name: `Eat Legend Dishes`,
@@ -279,6 +285,9 @@ export const levellingQuest: Quest<Task> = {
         (get(`pizzaOfLegendEaten`) && get(`calzoneOfLegendEaten`)) ||
         (!have($item`Pizza of Legend`) && !have($item`Calzone of Legend`)),
       do: () => [$item`Pizza of Legend`, $item`Calzone of Legend`].forEach((i) => eat(1, i)),
+      outfit: {
+        offhand: $item`familiar scrapbook`,
+      },
     },
     {
       name: `Lyle Buff`,
@@ -332,23 +341,9 @@ export const levellingQuest: Quest<Task> = {
       do: () => use(1, $item`wasabi marble soda`),
     },
     {
-      name: `Eat sosig`,
-      ready: () => availableAmount($item`magical sausage casing`) > 0,
-      completed: () => get(`_sausagesEaten`) > 0,
-      do: (): void => {
-        retrieveItem(1, $item`magical sausage`);
-        eat(1, $item`magical sausage`);
-      },
-    },
-    {
       name: `Summon Reagents`,
       completed: () => get(`reagentSummons`) > 0,
       do: () => useSkill(1, $skill`Advanced Saucecrafting`),
-    },
-    {
-      name: `Summon Limes`,
-      completed: () => get(`_preventScurvy`),
-      do: () => useSkill(1, $skill`Prevent Scurvy and Sobriety`),
     },
     {
       name: `Become Occultic`,
@@ -357,6 +352,11 @@ export const levellingQuest: Quest<Task> = {
         retrieveItem(1, $item`ointment of the occult`);
         ensureEffect($effect`Mystically Oiled`);
       },
+    },
+    {
+      name: `Summon Limes`,
+      completed: () => get(`_preventScurvy`),
+      do: () => useSkill(1, $skill`Prevent Scurvy and Sobriety`),
     },
     {
       name: `Become Phorceful`,
@@ -375,10 +375,24 @@ export const levellingQuest: Quest<Task> = {
       },
     },
     {
+      name: `Eat sosig`,
+      ready: () => availableAmount($item`magical sausage casing`) > 0,
+      completed: () => myMp() >= 850 || myMaxmp() - myMp() <= 999,
+      do: (): void => {
+        retrieveItem(1, $item`magical sausage`);
+        eat(1, $item`magical sausage`);
+      },
+      effects: [
+        myClass() !== $class`Sauceror`
+          ? $effect`[1457]Blood Sugar Sauce Magic`
+          : $effect`[1458]Blood Sugar Sauce Magic`,
+      ],
+    },
+    {
       name: `Latte to Full MP`,
       prepare: () => restoreHp(clamp(1000, myMaxhp() / 2, myMaxhp())),
       completed: () =>
-        myMp() >= 1000 || get(`_latteRefillsUsed`) >= 2 || have($effect`Bendin' Hell`),
+        myMp() >= 850 || get(`_latteRefillsUsed`) >= 2 || have($effect`Bendin' Hell`),
       do: (): void => {
         adv1($location`Uncle Gator's Country Fun-Time Liquid Waste Sluice`, -1);
         if (get(`_latteDrinkUsed`)) {
@@ -395,7 +409,7 @@ export const levellingQuest: Quest<Task> = {
           ? $effect`[1457]Blood Sugar Sauce Magic`
           : $effect`[1458]Blood Sugar Sauce Magic`,
       ],
-      combat: new CombatStrategy().macro(
+      combat: new CombatStrategy().autoattack(
         Macro.trySkill($skill`Gulp Latte`)
           .trySkill($skill`Throw Latte on Opponent`)
           .abort()
@@ -410,7 +424,7 @@ export const levellingQuest: Quest<Task> = {
     {
       name: `Latte for Later`,
       ready: () => !get(`_latteBanishUsed`),
-      completed: () => myMp() >= 1000 || get(`_latteRefillsUsed`) >= 2,
+      completed: () => myMp() >= 200 || get(`_latteRefillsUsed`) >= 2,
       do: (): void => {
         adv1($location`Uncle Gator's Country Fun-Time Liquid Waste Sluice`, -1);
         //Latte.fill(`pumpkin`, `cinnamon`, `vanilla`);
@@ -424,11 +438,19 @@ export const levellingQuest: Quest<Task> = {
             retrocape: [retroMainstat(), "thrill"],
           },
         }),
-      combat: new CombatStrategy().macro(
+      combat: new CombatStrategy().autoattack(
         Macro.trySkill($skill`Gulp Latte`)
           .trySkill($skill`Throw Latte on Opponent`)
           .abort()
       ),
+    },
+    {
+      name: `Summon Love Songs`,
+      completed: () =>
+        !have($skill`Summon Love Song`) ||
+        itemAmount($item`love song of icy revenge`) >= 4 ||
+        mpCost($skill`Summon Love Song`) > myMp() + 100,
+      do: () => useSkill(1, $skill`Summon Love Song`),
     },
     {
       name: `Remove Bloodsugar`,
@@ -452,7 +474,7 @@ export const levellingQuest: Quest<Task> = {
             umbrella: `broken`,
           },
         }),
-      combat: new CombatStrategy().macro(
+      combat: new CombatStrategy().autoattack(
         Macro.trySkill($skill`Feel Envy`)
           .attack()
           .repeat()
@@ -463,10 +485,11 @@ export const levellingQuest: Quest<Task> = {
       completed: () =>
         get(`_speakeasyFreeFights`) >= 3 ||
         !have($familiar`Nanorhino`) ||
-        [$effect`Nanobrawny`, $effect`Nanobrainy`].some((ef) => have(ef)),
+        [$effect`Nanobrawny`, $effect`Nanobrainy`].some((ef) => have(ef)) ||
+        args.fam,
       do: () => $location`An Unusually Quiet Barroom Brawl`,
       outfit: () => oomfieOutfit({ familiarOverride: $familiar`Nanorhino` }),
-      combat: new CombatStrategy().macro(
+      combat: new CombatStrategy().autoattack(
         Macro.trySkill($skill`Sing Along`)
           .trySkill($skill`Lunging Thrust-Smack`)
           .attack()
@@ -478,7 +501,7 @@ export const levellingQuest: Quest<Task> = {
       completed: () => get(`_speakeasyFreeFights`) === 3,
       do: $location`An Unusually Quiet Barroom Brawl`,
       outfit: () => oomfieOutfit(),
-      combat: new CombatStrategy().macro(
+      combat: new CombatStrategy().autoattack(
         Macro.trySkill($skill`Sing Along`)
           .attack()
           .repeat()
@@ -498,7 +521,7 @@ export const levellingQuest: Quest<Task> = {
         use(1, $item`figurine of an ancient seal`);
       },
       outfit: () => oomfieOutfit({ weaponOverride: $item`seal-clubbing club` }),
-      combat: new CombatStrategy().macro(
+      combat: new CombatStrategy().autoattack(
         Macro.trySkill($skill`Sing Along`)
           .attack()
           .repeat()
@@ -525,7 +548,7 @@ export const levellingQuest: Quest<Task> = {
             umbrella: `broken`,
           },
         }),
-      combat: new CombatStrategy().macro(() =>
+      combat: new CombatStrategy().autoattack(() =>
         customMacro
           .if_(
             shadowRiftPocketTarget(),
@@ -543,7 +566,7 @@ export const levellingQuest: Quest<Task> = {
         get(`encountersUntilSRChoice`) === 0 || have($item`Rufus's shadow lodestone`),
       do: () => shadowRiftChoice(),
       outfit: () => oomfieOutfit(),
-      combat: new CombatStrategy().macro(
+      combat: new CombatStrategy().autoattack(
         Macro.trySkill($skill`Sing Along`)
           .if_(shadowRiftPocketTarget(), Macro.trySkill($skill`Perpetrate Mild Evil`))
           .attack()
@@ -557,7 +580,7 @@ export const levellingQuest: Quest<Task> = {
       completed: () => have($item`Rufus's shadow lodestone`) || get(`questRufus`) === `step1`,
       do: () => shadowRiftChoice(),
       outfit: () => oomfieOutfit({ familiarOverride: $familiar`Machine Elf` }),
-      combat: new CombatStrategy().macro(
+      combat: new CombatStrategy().autoattack(
         Macro.if_(
           $monster`shadow matrix`,
           Macro.trySkill($skill`Stuffed Mortar Shell`).trySkillRepeat($skill`Saucegeyser`)
@@ -584,7 +607,7 @@ export const levellingQuest: Quest<Task> = {
       completed: () => get(`_snojoFreeFights`) >= 10,
       do: $location`The X-32-F Combat Training Snowman`,
       outfit: () => oomfieOutfit({ shirtOverride: $item`makeshift garbage shirt` }),
-      combat: new CombatStrategy().macro(
+      combat: new CombatStrategy().autoattack(
         Macro.trySkill($skill`%fn, spit on me!`)
           .trySkill($skill`Sing Along`)
           .attack()
@@ -607,7 +630,7 @@ export const levellingQuest: Quest<Task> = {
       name: `Witchess Fights`,
       completed: () => get(`_witchessFights`) >= 3,
       do: () => Witchess.fightPiece($monster`Witchess Bishop`),
-      combat: new CombatStrategy().macro(
+      combat: new CombatStrategy().autoattack(
         Macro.trySkill($skill`%fn, spit on me!`)
           .trySkill($skill`Sing Along`)
           .attack()
@@ -626,7 +649,7 @@ export const levellingQuest: Quest<Task> = {
         famequip: $item`tiny stillsuit`,
         modes: { umbrella: `broken` },
       },
-      combat: new CombatStrategy().macro(() =>
+      combat: new CombatStrategy().autoattack(() =>
         Macro.externalIf(
           get(`lastCopyableMonster`) === $monster`Witchess Bishop`,
           Macro.trySkill($skill`Feel Nostalgic`)
@@ -643,7 +666,7 @@ export const levellingQuest: Quest<Task> = {
       completed: () => get(`_neverendingPartyFreeTurns`) >= 10,
       do: $location`The Neverending Party`,
       choices: { 1322: 2, 1324: 5, 1326: 2 },
-      combat: new CombatStrategy().macro(() =>
+      combat: new CombatStrategy().autoattack(() =>
         Macro.trySkill($skill`Bowl Sideways`)
           .trySkill($skill`%fn, spit on me!`)
           .externalIf(
@@ -651,6 +674,7 @@ export const levellingQuest: Quest<Task> = {
             Macro.trySkill($skill`Feel Nostalgic`)
           )
           .trySkill($skill`Sing Along`)
+          .trySkill($skill`Recall Facts: %phylum Circadian Rhythms`)
           .trySkillRepeat($skill`Lunging Thrust-Smack`)
       ),
       outfit: () => oomfieOutfit({ shirtOverride: $item`makeshift garbage shirt` }),
@@ -660,7 +684,7 @@ export const levellingQuest: Quest<Task> = {
       prepare: () => restoreHp(myMaxhp()),
       completed: () => have($item`battle broom`),
       do: () => Witchess.fightPiece($monster`Witchess Witch`),
-      combat: new CombatStrategy().macro(
+      combat: new CombatStrategy().autoattack(
         Macro.trySkill($skill`%fn, spit on me!`)
           .trySkill($skill`Sing Along`)
           .trySkillRepeat($skill`Lunging Thrust-Smack`)
@@ -672,7 +696,7 @@ export const levellingQuest: Quest<Task> = {
       prepare: () => restoreHp(myMaxhp()),
       completed: () => have($item`very pointy crown`),
       do: () => Witchess.fightPiece($monster`Witchess Queen`),
-      combat: new CombatStrategy().macro(
+      combat: new CombatStrategy().autoattack(
         Macro.trySkill($skill`Sing Along`)
           .attack()
           .repeat()
@@ -695,7 +719,7 @@ export const levellingQuest: Quest<Task> = {
           },
         }),
 
-      combat: new CombatStrategy().macro(
+      combat: new CombatStrategy().autoattack(
         Macro.trySkill($skill`%fn, spit on me!`)
           .trySkill($skill`Bowl Sideways`)
           .trySkill($skill`Feel Pride`)
@@ -713,7 +737,7 @@ export const levellingQuest: Quest<Task> = {
       outfit: {
         acc2: $item`Lil' Doctor™ bag`,
       },
-      combat: new CombatStrategy().macro(
+      combat: new CombatStrategy().autoattack(
         Macro.trySkill($skill`%fn, spit on me!`)
           .trySkill($skill`Bowl Sideways`)
           .trySkill($skill`Sing Along`)
@@ -726,7 +750,7 @@ export const levellingQuest: Quest<Task> = {
       completed: () => get(`_gingerbreadMobHitUsed`),
       do: $location`The Neverending Party`,
       choices: { 1322: 2, 1324: 5, 1326: 2 },
-      combat: new CombatStrategy().macro(
+      combat: new CombatStrategy().autoattack(
         Macro.trySkill($skill`%fn, spit on me!`)
           .trySkill($skill`Bowl Sideways`)
           .trySkill($skill`Sing Along`)

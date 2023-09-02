@@ -7,9 +7,9 @@ import {
   $skill,
   CombatLoversLocket,
   CommunityService,
+  Macro,
   get,
   have,
-  Macro,
 } from "libram";
 import { printModtrace } from "libram/dist/modifier";
 import { logTest, oomfieOutfit } from "../lib";
@@ -25,6 +25,11 @@ export const hotresQuest: Quest<Task> = {
       outfit: oomfieOutfit({
         weaponOverride: $item`Fourth of May Cosplay Saber`,
         offhandOverride: $item`industrial fire extinguisher`,
+        acc1Override: $item`backup camera`,
+        acc2Override: $item`your cowboy boots`,
+        modesOverride: {
+          backupcamera: `ml`,
+        },
       }),
       choices: { 1387: 3 },
       combat: new CombatStrategy().macro(

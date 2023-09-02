@@ -18,10 +18,8 @@ import {
   use,
   visitUrl,
 } from "kolmafia";
-import { $item, $location, AutumnAton, Clan, get, have, set, SongBoom, TrainSet } from "libram";
+import { $item, $location, AutumnAton, Clan, SongBoom, TrainSet, get, have, set } from "libram";
 import { guildQuest, guildURL, loss, oomfieOutfit } from "../lib";
-
-const floundryItem = $item`fish hatchet`;
 
 export const runStartQuest: Quest<Task> = {
   name: `Post-Ascension to Pre-Skeletons`,
@@ -62,14 +60,6 @@ export const runStartQuest: Quest<Task> = {
       do: () => cliExecute(`numberology 69`),
       limit: { tries: 1 },
     },
-    {
-      name: `Acquire Floundry Item`,
-      prepare: () => Clan.join(`Floundry`),
-      completed: () => get(`_floundryItemCreated`),
-      do: () => retrieveItem(1, floundryItem),
-      post: () => Clan.join(`Bonus Adventures from Hell`),
-    },
-
     {
       name: `Select S.I.T. Degree`,
       completed: () => get(`_sitCourseCompleted`),
@@ -204,6 +194,9 @@ export const runStartQuest: Quest<Task> = {
         visitUrl(`place.php?whichplace=town_wrong&action=townwrong_boxingdaycare`);
         runChoice(3);
         runChoice(2);
+      },
+      outfit: {
+        offhand: $item`familiar scrapbook`,
       },
       choices: { 1334: 2, 1336: 1 },
     },

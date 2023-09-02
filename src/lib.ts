@@ -1,16 +1,16 @@
 import { Args, Modes, OutfitSpec, Task } from "grimoire-kolmafia";
-import { abort, Familiar, Item, print } from "kolmafia";
+import { Familiar, Item, abort, print } from "kolmafia";
 import {
   $effect,
   $familiar,
   $item,
   $location,
   $skill,
-  byStat,
   CommunityService,
+  Macro,
+  byStat,
   get,
   have,
-  Macro,
   set,
 } from "libram";
 
@@ -93,11 +93,13 @@ export function oomfieOutfit(options?: {
   modifier?: string | undefined;
 }): OutfitSpec {
   let famOverride: Familiar | undefined = undefined;
+  let famequipOverride: Item | undefined = undefined;
   if (args.fam) {
     if (args.familiar === $familiar.none) {
       abort(`Something has gone wrong with args.familiar (${args.familiar})`);
     } else {
       famOverride = args.familiar;
+      famequipOverride = $item`tiny stillsuit`;
     }
   }
 
@@ -113,7 +115,7 @@ export function oomfieOutfit(options?: {
       acc2: options?.acc2Override ?? undefined,
       acc3: options?.acc3Override ?? undefined,
       familiar: famOverride ?? options?.familiarOverride ?? familiarChoice(),
-      famequip: options?.famequipOverride ?? $item`tiny stillsuit`,
+      famequip: famequipOverride ?? options?.famequipOverride ?? $item`tiny stillsuit`,
       modes: options?.modesOverride ?? undefined,
     };
   } else {
@@ -128,7 +130,7 @@ export function oomfieOutfit(options?: {
       acc2: options?.acc2Override ?? $item`your cowboy boots`,
       acc3: options?.acc3Override ?? $item`combat lover's locket`,
       familiar: famOverride ?? options?.familiarOverride ?? familiarChoice(),
-      famequip: options?.famequipOverride ?? $item`tiny stillsuit`,
+      famequip: famequipOverride ?? options?.famequipOverride ?? $item`tiny stillsuit`,
       modes: options?.modesOverride ?? undefined,
     };
   }

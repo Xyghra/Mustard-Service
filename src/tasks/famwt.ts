@@ -1,5 +1,5 @@
 import { Quest, Task } from "grimoire-kolmafia";
-import { cliExecute, print, use } from "kolmafia";
+import { cliExecute, haveEffect, itemAmount, print, use } from "kolmafia";
 import { $effect, $familiar, $item, Clan, CommunityService, get, have } from "libram";
 import { printModtrace } from "libram/dist/modifier";
 import { logTest } from "../lib";
@@ -32,6 +32,18 @@ export const famwtQuest: Quest<Task> = {
       prepare: () => Clan.join(`Bonus Adventures from Hell`),
       completed: () => have($effect`Billiards Belligerence`) || get(`_poolGames`) >= 3,
       do: () => cliExecute(`pool 1`),
+    },
+    {
+      name: `Love Song`,
+      completed: () => have($effect`Cold Hearted`) || !have($item`love song of icy revenge`),
+      do: () =>
+        use(
+          Math.min(
+            4 - Math.floor(haveEffect($effect`Cold Hearted`) / 5),
+            itemAmount($item`love song of icy revenge`)
+          ),
+          $item`love song of icy revenge`
+        ),
     },
     {
       name: `♥ Rocks`,

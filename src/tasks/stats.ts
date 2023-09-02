@@ -1,6 +1,6 @@
 import { Quest, Task } from "grimoire-kolmafia";
 import { print } from "kolmafia";
-import { $effect, CommunityService, get, TrainSet, uneffect } from "libram";
+import { $effect, CommunityService, TrainSet, get, uneffect } from "libram";
 import { printModtrace } from "libram/dist/modifier";
 import { logTest } from "../lib";
 
