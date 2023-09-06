@@ -49,6 +49,15 @@ export const sdmgQuest: Quest<Task> = {
       do: () => retrieveItem(1, $item`obsidian nutcracker`),
     },
     {
+      name: `Cargo Handsoap!`,
+      completed: () =>
+        get(`_cargoPocketEmptied`) ||
+        have($item`Yeg's Motel hand soap`) ||
+        have($effect`Sigils of Yeg`),
+      do: () => cliExecute(`cargo 177`),
+      post: () => use(1, $item`Yeg's Motel hand soap`),
+    },
+    {
       name: `Inner Elf`,
       prepare: (): Clan => Clan.join(`Beldungeon`),
       completed: () =>
@@ -82,7 +91,7 @@ export const sdmgQuest: Quest<Task> = {
 
         CommunityService.SpellDamage.run(
           () => logTest(CommunityService.SpellDamage, testTurns, predictedTestTurns),
-          37
+          34
         );
       },
       outfit: {

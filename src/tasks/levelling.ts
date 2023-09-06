@@ -474,8 +474,9 @@ export const levellingQuest: Quest<Task> = {
             umbrella: `broken`,
           },
         }),
-      combat: new CombatStrategy().autoattack(
-        Macro.trySkill($skill`Feel Envy`)
+      combat: new CombatStrategy().macro(
+        Macro.ifHolidayWanderer(Macro.attack().repeat())
+          .trySkill($skill`Feel Envy`)
           .attack()
           .repeat()
       ),

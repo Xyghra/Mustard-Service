@@ -11,7 +11,10 @@ export const finaleQuest: Quest<Task> = {
       completed: () => get(`kingLiberated`),
       do: () => CommunityService.donate(),
       limit: { tries: 1 },
-      post: () => cliExecute(`${get(`kingLiberatedScript`)}`),
+      post: (): void => {
+        set(`_mustardServiceTimeEnd`, nowToInt());
+        cliExecute(`${get(`kingLiberatedScript`)}`);
+      },
     },
   ],
 };
@@ -23,19 +26,21 @@ export const postFinaleQuest: Quest<Task> = {
       name: `Printing Details!`,
       completed: () => get(`_mustardServiceTime`) === "",
       do: (): void => {
-        const currentTime = nowToInt();
         printLoggedTests();
 
         print(
           `Took: ${Math.floor(
-            (currentTime - Number(get(`_mustardServiceTime`))) / 60000
+            (get(`_mustardServiceTimeEnd`, nowToInt()) - Number(get(`_mustardServiceTime`))) / 60000
           )} Minute(s), ${Math.floor(
-            ((currentTime - Number(get(`_mustardServiceTime`))) % 60000) / 1000
+            ((get(`_mustardServiceTimeEnd`, nowToInt()) - Number(get(`_mustardServiceTime`))) %
+              60000) /
+              1000
           )} Second(s)`,
           `green`
         );
 
         set(`_mustardServiceTime`, ``);
+        set(`_mustardServiceTimeEnd`, ``);
       },
     },
   ],

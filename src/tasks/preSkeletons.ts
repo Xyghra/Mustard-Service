@@ -105,16 +105,29 @@ export const runStartQuest: Quest<Task> = {
       do: () => autosell(1, $item`porquoise`),
     },
     {
-      name: `Acquire Buff Tools`,
+      name: `Chewing Gum`,
       completed: () =>
-        [$item`toy accordion`, $item`turtle totem`, $item`saucepan`].every((i) => have(i)),
-      do: () =>
-        [$item`toy accordion`, $item`turtle totem`, $item`saucepan`].forEach((i) =>
-          retrieveItem(i)
-        ),
+        have($item`chewing gum on a string`) ||
+        (have($item`turtle totem`) && have($item`saucepan`)),
+      do: () => retrieveItem(1, $item`chewing gum on a string`),
       outfit: {
         pants: $item`designer sweatpants`,
       },
+    },
+    {
+      name: `Acquire Turtle Totem`,
+      completed: () => have($item`turtle totem`) || myMeat() < 45,
+      do: () => use(1, $item`chewing gum on a string`),
+    },
+    {
+      name: `Acquire Saucepan`,
+      completed: () => have($item`saucepan`) || myMeat() < 45,
+      do: () => use(1, $item`chewing gum on a string`),
+    },
+    {
+      name: `Acquire Toy Accordion`,
+      completed: () => have($item`toy accordion`) || myMeat() < 150,
+      do: () => retrieveItem(1, $item`toy accordion`),
     },
     {
       name: `Open Astral Drinks`,

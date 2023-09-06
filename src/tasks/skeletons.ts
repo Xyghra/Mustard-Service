@@ -101,8 +101,13 @@ export const skeletonsQuest: Quest<Task> = {
       do: (): void => {
         Cartography.mapMonster($location`The Skeleton Store`, $monster`novelty tropical skeleton`);
       },
-      combat: new CombatStrategy().autoattack(
-        Macro.trySkill($skill`Feel Nostalgic`)
+      combat: new CombatStrategy().macro(
+        Macro.ifHolidayWanderer(
+          Macro.trySkill($skill`Bowl a Curveball`)
+            .trySkill($skill`Feel Hatred`)
+            .abort()
+        )
+          .trySkill($skill`Feel Nostalgic`)
           .trySkill($skill`Spit jurassic acid`)
           .abort()
       ),
