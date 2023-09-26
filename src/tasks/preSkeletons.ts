@@ -19,7 +19,7 @@ import {
   visitUrl,
 } from "kolmafia";
 import { $item, $location, AutumnAton, Clan, SongBoom, TrainSet, get, have, set } from "libram";
-import { guildQuest, guildURL, loss, oomfieOutfit } from "../lib";
+import { barrelItems, barrelSmashing, guildQuest, guildURL, loss, oomfieOutfit } from "../lib";
 
 export const runStartQuest: Quest<Task> = {
   name: `Post-Ascension to Pre-Skeletons`,
@@ -212,6 +212,12 @@ export const runStartQuest: Quest<Task> = {
         offhand: $item`familiar scrapbook`,
       },
       choices: { 1334: 2, 1336: 1 },
+    },
+    barrelSmashing,
+    {
+      name: `Sell Barrel Junk`,
+      completed: () => barrelItems.every((I) => !have(I)),
+      do: () => barrelItems.forEach((I) => autosell(I, availableAmount(I))),
     },
     {
       name: `Arrange Trainset`,

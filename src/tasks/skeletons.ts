@@ -103,7 +103,8 @@ export const skeletonsQuest: Quest<Task> = {
       },
       combat: new CombatStrategy().macro(
         Macro.ifHolidayWanderer(
-          Macro.trySkill($skill`Bowl a Curveball`)
+          Macro.trySkill($skill`CLEESH`)
+            .trySkill($skill`Bowl a Curveball`)
             .trySkill($skill`Feel Hatred`)
             .abort()
         )

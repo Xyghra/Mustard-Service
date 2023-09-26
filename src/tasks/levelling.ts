@@ -8,7 +8,6 @@ import {
   cliExecute,
   drink,
   eat,
-  itemAmount,
   mpCost,
   myClass,
   myHash,
@@ -46,7 +45,7 @@ import {
   have,
   uneffect,
 } from "libram";
-import { args, customMacro, familiarAttacks, loss, oomfieOutfit, retroMainstat } from "../lib";
+import { args, customMacro, familiarAttacks, loss, oomfieOutfit } from "../lib";
 
 function shadowRiftChoice(): Location {
   /*
@@ -229,19 +228,41 @@ export const levellingQuest: Quest<Task> = {
       },
     },
     {
+      name: `Bastille Battalion`,
+      completed: () => get(`_bastilleGames`) >= 1,
+      do: () => cliExecute(`bastille babar brutalist gesture`),
+    },
+    {
       name: `Restore HP`,
       ready: () => myHp() <= myMaxhp() / 2,
       completed: () => myHp() > myMaxhp() / 2,
       do: () => restoreHp(clamp(1000, myMaxhp() / 2 + 10, myMaxhp())),
     },
     {
+      name: `Eat sosig`,
+      ready: () => availableAmount($item`magical sausage casing`) > 0,
+      completed: () => myMp() >= 850 || myMaxmp() - myMp() <= 999,
+      do: (): void => {
+        retrieveItem(1, $item`magical sausage`);
+        eat(1, $item`magical sausage`);
+      },
+      effects: [
+        myClass() !== $class`Sauceror`
+          ? $effect`[1457]Blood Sugar Sauce Magic`
+          : $effect`[1458]Blood Sugar Sauce Magic`,
+      ],
+    },
+    {
       name: `Kramco Goblingo`,
       ready: () => getKramcoWandererChance() === 1 && get(`_neverendingPartyFreeTurns`) >= 1,
       completed: () => getKramcoWandererChance() < 1,
       do: () => $location`The Neverending Party`,
-      outfit: {
-        offhand: $item`Kramco Sausage-o-Matic™`,
-      },
+      outfit: () =>
+        oomfieOutfit({
+          offhandOverride: $item`Kramco Sausage-o-Matic™`,
+          shirtOverride: $item`makeshift garbage shirt`,
+          familiarOverride: $familiar`Ghost of Crimbo Carols`,
+        }),
       combat: new CombatStrategy().autoattack(
         Macro.trySkill($skill`Sing Along`)
           .attack()
@@ -318,8 +339,22 @@ export const levellingQuest: Quest<Task> = {
       do: () => cliExecute(`genie effect A Contender`),
     },
     {
+      name: `Check G-9 Status`,
+      completed: () => get(`_g9Effect`) !== 0,
+      do: () => visitUrl(`desc_item.php?whichitem=661049168`),
+    },
+    {
+      name: `Wish for G-9`,
+      ready: () => get(`_g9Effect`) > 200,
+      completed: () => have($effect`Experimental Effect G-9`) || get(`_genieWishesUsed`) >= 2,
+      do: () => cliExecute(`genie effect Experimental Effect G-9`),
+    },
+    {
       name: `Wish for New and Improved`,
-      completed: () => have($effect`New and Improved`) || get(`_genieWishesUsed`) >= 2,
+      completed: () =>
+        have($effect`Experimental Effect G-9`) ||
+        have($effect`New and Improved`) ||
+        get(`_genieWishesUsed`) >= 2,
       do: () => cliExecute(`genie effect New and Improved`),
     },
     {
@@ -350,8 +385,20 @@ export const levellingQuest: Quest<Task> = {
       completed: () => have($effect`Mystically Oiled`),
       do: (): void => {
         retrieveItem(1, $item`ointment of the occult`);
-        ensureEffect($effect`Mystically Oiled`);
+        use(1, $item`ointment of the occult`);
       },
+    },
+    {
+      name: `Red Letter`,
+      ready: () => have($item`red letter`),
+      completed: () => have($effect`Red Lettered`),
+      do: () => use(1, $item`red letter`),
+    },
+    {
+      name: `Pyrite Pride`,
+      ready: () => have($item`pebble of proud pyrite`),
+      completed: () => have($effect`Pyrite Pride`),
+      do: () => use(1, $item`pebble of proud pyrite`),
     },
     {
       name: `Summon Limes`,
@@ -363,7 +410,7 @@ export const levellingQuest: Quest<Task> = {
       completed: () => have($effect`Phorcefullness`),
       do: (): void => {
         retrieveItem(1, $item`philter of phorce`);
-        ensureEffect($effect`Phorcefullness`);
+        use(1, $item`philter of phorce`);
       },
     },
     {
@@ -375,24 +422,10 @@ export const levellingQuest: Quest<Task> = {
       },
     },
     {
-      name: `Eat sosig`,
-      ready: () => availableAmount($item`magical sausage casing`) > 0,
-      completed: () => myMp() >= 850 || myMaxmp() - myMp() <= 999,
-      do: (): void => {
-        retrieveItem(1, $item`magical sausage`);
-        eat(1, $item`magical sausage`);
-      },
-      effects: [
-        myClass() !== $class`Sauceror`
-          ? $effect`[1457]Blood Sugar Sauce Magic`
-          : $effect`[1458]Blood Sugar Sauce Magic`,
-      ],
-    },
-    {
       name: `Latte to Full MP`,
       prepare: () => restoreHp(clamp(1000, myMaxhp() / 2, myMaxhp())),
       completed: () =>
-        myMp() >= 850 || get(`_latteRefillsUsed`) >= 2 || have($effect`Bendin' Hell`),
+        myMp() >= 250 || get(`_latteRefillsUsed`) >= 2 || have($effect`Bendin' Hell`),
       do: (): void => {
         adv1($location`Uncle Gator's Country Fun-Time Liquid Waste Sluice`, -1);
         if (get(`_latteDrinkUsed`)) {
@@ -422,9 +455,20 @@ export const levellingQuest: Quest<Task> = {
       do: () => levellingEffects.forEach((ef) => ensureEffect(ef)),
     },
     {
+      name: `Refill Latte`,
+      completed: () => !get(`_latteBanishUsed`) || get(`_latteRefillsUsed`) >= 2,
+      do: () => Latte.fill(`cinnamon`, `pumpkin`, `vanilla`),
+    },
+    {
+      name: `Summon Love Songs`,
+      completed: () =>
+        !have($skill`Summon Love Song`) || mpCost($skill`Summon Love Song`) + 350 > myMp(),
+      do: () => useSkill(1, $skill`Summon Love Song`),
+    },
+    {
       name: `Latte for Later`,
-      ready: () => !get(`_latteBanishUsed`),
-      completed: () => myMp() >= 200 || get(`_latteRefillsUsed`) >= 2,
+      ready: () => myMaxmp() >= 6000,
+      completed: () => get(`_latteRefillsUsed`) >= 2,
       do: (): void => {
         adv1($location`Uncle Gator's Country Fun-Time Liquid Waste Sluice`, -1);
         //Latte.fill(`pumpkin`, `cinnamon`, `vanilla`);
@@ -432,25 +476,13 @@ export const levellingQuest: Quest<Task> = {
       outfit: () =>
         oomfieOutfit({
           offhandOverride: $item`latte lovers member's mug`,
-          modesOverride: {
-            parka: `spikolodon`,
-            backupcamera: `ml`,
-            retrocape: [retroMainstat(), "thrill"],
-          },
+          modifier: `mp`,
         }),
       combat: new CombatStrategy().autoattack(
         Macro.trySkill($skill`Gulp Latte`)
           .trySkill($skill`Throw Latte on Opponent`)
           .abort()
       ),
-    },
-    {
-      name: `Summon Love Songs`,
-      completed: () =>
-        !have($skill`Summon Love Song`) ||
-        itemAmount($item`love song of icy revenge`) >= 4 ||
-        mpCost($skill`Summon Love Song`) > myMp() + 100,
-      do: () => useSkill(1, $skill`Summon Love Song`),
     },
     {
       name: `Remove Bloodsugar`,
@@ -461,7 +493,7 @@ export const levellingQuest: Quest<Task> = {
     },
     {
       name: `Flapper Mapper`,
-      completed: () => get(`_monstersMapped`) >= 2 || have($item`imported taffy`),
+      completed: () => get(`_monstersMapped`) >= 3 || have($item`imported taffy`),
       do: () =>
         Cartography.mapMonster(
           $location`An Unusually Quiet Barroom Brawl`,
@@ -514,6 +546,43 @@ export const levellingQuest: Quest<Task> = {
       do: () => retrieveItem(1, $item`seal-clubbing club`),
     },
     {
+      name: `Seal Fights - Sweet and Red`,
+      completed: () =>
+        !have($skill`Just the Facts`) ||
+        myClass() !== $class`Seal Clubber` ||
+        get(`_sealsSummoned`) >= 5 ||
+        have($effect`Sweet and Red`),
+      do: (): void => {
+        retrieveItem(1, $item`figurine of a cute baby seal`);
+        retrieveItem(5, $item`seal-blubber candle`);
+        use(1, $item`figurine of a cute baby seal`);
+      },
+      outfit: () => oomfieOutfit({ weaponOverride: $item`seal-clubbing club` }),
+      combat: new CombatStrategy().autoattack(
+        Macro.trySkill($skill`Sing Along`)
+          .attack()
+          .repeat()
+      ),
+    },
+    {
+      name: `Seal Fights - Scrolls!`,
+      completed: () =>
+        !have($skill`Just the Facts`) ||
+        myClass() !== $class`Seal Clubber` ||
+        get(`_sealsSummoned`) >= 5,
+      do: (): void => {
+        retrieveItem(1, $item`figurine of a wretched-looking seal`);
+        retrieveItem(1, $item`seal-blubber candle`);
+        use(1, $item`figurine of a wretched-looking seal`);
+      },
+      outfit: () => oomfieOutfit({ weaponOverride: $item`seal-clubbing club` }),
+      combat: new CombatStrategy().autoattack(
+        Macro.trySkill($skill`Sing Along`)
+          .attack()
+          .repeat()
+      ),
+    },
+    {
       name: `Seal Fights`,
       completed: () => myClass() !== $class`Seal Clubber` || get(`_sealsSummoned`) >= 5,
       do: (): void => {
@@ -553,9 +622,12 @@ export const levellingQuest: Quest<Task> = {
         customMacro
           .if_(
             shadowRiftPocketTarget(),
-            customMacro.polarpocket(9).trySkill($skill`Perpetrate Mild Evil`)
+            customMacro
+              .polarpocket(9 - (100 - get(`_fireExtinguisherCharge`)) / 10)
+              .trySkill($skill`Perpetrate Mild Evil`)
           )
           .trySkill($skill`Sing Along`)
+          .trySkill($skill`Recall Facts: %phylum Circadian Rhythms`)
           .attack()
           .repeat()
       ),
@@ -570,6 +642,7 @@ export const levellingQuest: Quest<Task> = {
       combat: new CombatStrategy().autoattack(
         Macro.trySkill($skill`Sing Along`)
           .if_(shadowRiftPocketTarget(), Macro.trySkill($skill`Perpetrate Mild Evil`))
+          .trySkill($skill`Recall Facts: %phylum Circadian Rhythms`)
           .attack()
           .repeat()
       ),
@@ -695,7 +768,7 @@ export const levellingQuest: Quest<Task> = {
     {
       name: `Witchess Queen`,
       prepare: () => restoreHp(myMaxhp()),
-      completed: () => have($item`very pointy crown`),
+      completed: () => have($item`very pointy crown`) || Witchess.fightsDone() >= 5,
       do: () => Witchess.fightPiece($monster`Witchess Queen`),
       combat: new CombatStrategy().autoattack(
         Macro.trySkill($skill`Sing Along`)

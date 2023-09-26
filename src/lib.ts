@@ -1,11 +1,12 @@
 import { Args, Modes, OutfitSpec, Task } from "grimoire-kolmafia";
-import { Familiar, Item, abort, print } from "kolmafia";
+import { Familiar, Item, abort, myHash, print, visitUrl } from "kolmafia";
 import {
   $effect,
   $familiar,
   $item,
   $location,
   $skill,
+  BarrelShrine,
   CommunityService,
   Macro,
   byStat,
@@ -62,6 +63,99 @@ export function retroMainstat(): `vampire` | `heck` | `robot` {
     Moxie: `robot`,
   });
 }
+
+export const barrelItems: Item[] = [
+  $item`strongness elixir`,
+  $item`enchanted barbell`,
+  $item`extra-strength strongness elixir`,
+  $item`magicalness-in-a-can`,
+  $item`concentrated magicalness pill`,
+  $item`jug-o-magicalness`,
+  $item`moxie weed`,
+  $item`suntan lotion of moxiousness`,
+  $item`bottle of gin`,
+  $item`bottle of rum`,
+  $item`bottle of tequila`,
+  $item`bottle of vodka`,
+  $item`bottle of whiskey`,
+  $item`boxed wine`,
+  $item`fine wine`,
+  $item`shot of grapefruit schnapps`,
+  $item`shot of orange schnapps`,
+  $item`shot of tomato schnapps`,
+  $item`margarita`,
+  $item`martini`,
+  $item`monkey wrench`,
+  $item`salty dog`,
+  $item`screwdriver`,
+  $item`strawberry daiquiri`,
+  $item`strawberry wine`,
+  $item`tequila sunrise`,
+  $item`vodka martini`,
+  $item`whiskey and soda`,
+  $item`whiskey sour`,
+  $item`wine spritzer`,
+  $item`ducha de oro`,
+  $item`calle de miel`,
+  $item`pink pony`,
+  $item`rockin' wagon`,
+  $item`roll in the hay`,
+  $item`slip 'n' slide`,
+  $item`ocean motion`,
+  $item`horizontal tango`,
+  $item`perpendicular hula`,
+  $item`slap and tickle`,
+  $item`fuzzbump`,
+  $item`a little sump'm sump'm`,
+  $item`bean burrito`,
+  $item`spicy bean burrito`,
+  $item`enchanted bean burrito`,
+  $item`spicy enchanted bean burrito`,
+  $item`jumping bean burrito`,
+  $item`spicy jumping bean burrito`,
+  $item`Doc Galaktik's Homeopathic Elixir`,
+  $item`Doc Galaktik's Ailment Ointment`,
+  $item`cast`,
+];
+
+function barrelsAreSmashed(): boolean {
+  if (!BarrelShrine.have()) return true;
+  if (get(`_barrelsPopped`, false)) return true;
+  const barrel = visitUrl(`barrel.php`);
+  const brokenBarrelMatch = /img title="A broken barrel"/g;
+  const unbrokenBarrelMatch = /img title="A barrel"/g;
+  const brokenBarrelCount = barrel.match(brokenBarrelMatch)?.length ?? 0;
+  const unbrokenBarrelCount = barrel.match(unbrokenBarrelMatch)?.length ?? 9;
+  if (brokenBarrelCount > 0 && brokenBarrelCount + unbrokenBarrelCount === 9) {
+    set(`_barrelsPopped`, true);
+  }
+  return get(`_barrelsPopped`, false);
+}
+
+export const barrelSmashing: Task = {
+  name: `Smash Barrels!`,
+  completed: () => barrelsAreSmashed(),
+  do: (): void => {
+    const barrel = visitUrl(`barrel.php`);
+    const matcher = /div class="([a-z]+)".*?&slot=([0-9]+)/g;
+    const matches = barrel.match(matcher);
+    if (matches) {
+      for (const bar of matches) {
+        const slot = bar.match(`slot=([0-9]+)`);
+        if (slot) {
+          if (bar.includes(`mimic`)) {
+            print(`Mimic on slot ${slot[1]}`);
+          } else {
+            print(`No mimic on slot ${slot[1]}`);
+            visitUrl(`barrel.php`);
+            visitUrl(`choice.php?whichchoice=1099&pwd=${myHash()}&option=1&slot=${slot[1]}`);
+          }
+        }
+      }
+    }
+    set(`_barrelsPopped`, true);
+  },
+};
 
 function familiarChoice(): Familiar {
   if (args.fam) {
@@ -128,7 +222,9 @@ export function oomfieOutfit(options?: {
       pants: options?.pantsOverride ?? $item`designer sweatpants`,
       acc1: options?.acc1Override ?? $item`backup camera`,
       acc2: options?.acc2Override ?? $item`your cowboy boots`,
-      acc3: options?.acc3Override ?? $item`combat lover's locket`,
+      acc3:
+        options?.acc3Override ??
+        (have($item`Brutal brogues`) ? $item`Brutal brogues` : $item`combat lover's locket`),
       familiar: famOverride ?? options?.familiarOverride ?? familiarChoice(),
       famequip: famequipOverride ?? options?.famequipOverride ?? $item`tiny stillsuit`,
       modes: options?.modesOverride ?? undefined,
