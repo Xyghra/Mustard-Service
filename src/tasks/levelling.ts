@@ -197,8 +197,8 @@ export const levellingQuest: Quest<Task> = {
           uneffect($effect`Beaten Up`);
         }
       },
-      choices: {
-        1468: () =>
+      choices: () => ({
+        1468:
           myClass().primestat === $stat`Muscle`
             ? 2
             : myClass().primestat === $stat`Moxie`
@@ -206,10 +206,9 @@ export const levellingQuest: Quest<Task> = {
             : get(`_juneCleaverSkips`) < 5
             ? 4
             : 2,
-        1473: () =>
-          myClass().primestat === $stat`Muscle` ? 1 : get(`_juneCleaverSkips`) < 5 ? 4 : 1,
+        1473: myClass().primestat === $stat`Muscle` ? 1 : get(`_juneCleaverSkips`) < 5 ? 4 : 1,
         1469: 3,
-        1474: () =>
+        1474:
           myClass().primestat === $stat`Muscle`
             ? 3
             : myClass().primestat === $stat`Mysticality`
@@ -217,15 +216,12 @@ export const levellingQuest: Quest<Task> = {
             : get(`_juneCleaverSkips`) < 5
             ? 4
             : 3,
-        1475: () =>
-          myClass().primestat === $stat`Muscle` ? 2 : get(`_juneCleaverSkips`) < 5 ? 4 : 2,
+        1475: myClass().primestat === $stat`Muscle` ? 2 : get(`_juneCleaverSkips`) < 5 ? 4 : 2,
         1471: 1,
         1467: 3,
-        1472: () =>
-          myClass().primestat === $stat`Moxie` ? 3 : get(`_juneCleaverSkips`) < 5 ? 4 : 1,
-        1470: () =>
-          myClass().primestat === $stat`Muscle` ? 3 : get(`_juneCleaverSkips`) < 5 ? 4 : 2,
-      },
+        1472: myClass().primestat === $stat`Moxie` ? 3 : get(`_juneCleaverSkips`) < 5 ? 4 : 1,
+        1470: myClass().primestat === $stat`Muscle` ? 3 : get(`_juneCleaverSkips`) < 5 ? 4 : 2,
+      }),
     },
     {
       name: `Bastille Battalion`,

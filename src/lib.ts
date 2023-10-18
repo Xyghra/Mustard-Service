@@ -164,7 +164,8 @@ function familiarChoice(): Familiar {
     return $familiar`Melodramedary`;
   } else if (!have($item`short stack of pancakes`)) {
     return $familiar`Shorter-Order Cook`;
-  } else return $familiar`Patriotic Eagle`;
+    // eslint-disable-next-line libram/verify-constants
+  } else return $familiar`Jill-of-All-Trades`;
 }
 
 export function familiarAttacks(): boolean {
