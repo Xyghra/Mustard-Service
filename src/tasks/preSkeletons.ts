@@ -177,10 +177,18 @@ export const runStartQuest: Quest<Task> = {
     },
     {
       name: `Create Ebonee Epee`,
-      completed: () => have($item`ebony epee`),
+      completed: () => true || have($item`ebony epee`),
       do: (): void => {
         visitUrl(`shop.php?whichshop=lathe`);
         retrieveItem(1, $item`ebony epee`);
+      },
+    },
+    {
+      name: `Create Willow Wand`,
+      completed: () => have($item`weeping willow wand`),
+      do: (): void => {
+        visitUrl(`shop.php?whichshop=lathe`);
+        retrieveItem(1, $item`weeping willow wand`);
       },
     },
     {

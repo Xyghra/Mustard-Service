@@ -229,6 +229,12 @@ export const levellingQuest: Quest<Task> = {
       do: () => cliExecute(`bastille babar brutalist gesture`),
     },
     {
+      name: `Campway Cloudspeaking`,
+      completed: () => get(`_campAwayCloudBuffs`) === 1,
+      do: () => visitUrl("place.php?whichplace=campaway&action=campaway_sky"),
+      limit: { skip: 4 },
+    },
+    {
       name: `Restore HP`,
       ready: () => myHp() <= myMaxhp() / 2,
       completed: () => myHp() > myMaxhp() / 2,
@@ -244,8 +250,10 @@ export const levellingQuest: Quest<Task> = {
       },
       effects: [
         myClass() !== $class`Sauceror`
-          ? $effect`[1457]Blood Sugar Sauce Magic`
-          : $effect`[1458]Blood Sugar Sauce Magic`,
+          ? // eslint-disable-next-line libram/verify-constants
+            $effect`[1457]Blood Sugar Sauce Magic`
+          : // eslint-disable-next-line libram/verify-constants
+            $effect`[1458]Blood Sugar Sauce Magic`,
       ],
     },
     {
@@ -435,8 +443,10 @@ export const levellingQuest: Quest<Task> = {
         $effect`Song of Bravado`,
         $effect`Stevedave's Shanty of Superiority`,
         myClass() !== $class`Sauceror`
-          ? $effect`[1457]Blood Sugar Sauce Magic`
-          : $effect`[1458]Blood Sugar Sauce Magic`,
+          ? // eslint-disable-next-line libram/verify-constants
+            $effect`[1457]Blood Sugar Sauce Magic`
+          : // eslint-disable-next-line libram/verify-constants
+            $effect`[1458]Blood Sugar Sauce Magic`,
       ],
       combat: new CombatStrategy().autoattack(
         Macro.trySkill($skill`Gulp Latte`)
@@ -483,7 +493,9 @@ export const levellingQuest: Quest<Task> = {
     {
       name: `Remove Bloodsugar`,
       completed: () =>
+        // eslint-disable-next-line libram/verify-constants
         !have($effect`[1457]Blood Sugar Sauce Magic`) &&
+        // eslint-disable-next-line libram/verify-constants
         !have($effect`[1458]Blood Sugar Sauce Magic`),
       do: () => useSkill(1, $skill`Blood Sugar Sauce Magic`),
     },
@@ -497,6 +509,10 @@ export const levellingQuest: Quest<Task> = {
         ),
       outfit: () =>
         oomfieOutfit({
+          backOverride:
+            !have($effect`Wolfish Form`) || !have($effect`Bat-Adjacent Form`)
+              ? $item`vampyric cloake`
+              : undefined,
           offhandOverride: $item`unbreakable umbrella`,
           modesOverride: {
             umbrella: `broken`,
@@ -505,6 +521,11 @@ export const levellingQuest: Quest<Task> = {
       combat: new CombatStrategy().macro(
         Macro.ifHolidayWanderer(Macro.attack().repeat())
           .trySkill($skill`Feel Envy`)
+          .externalIf(!have($effect`Wolfish Form`), Macro.trySkill($skill`Become a Wolf`))
+          .externalIf(
+            have($effect`Wolfish Form`) && !have($effect`Bat-Adjacent Form`),
+            Macro.trySkill($skill`Become a Bat`)
+          )
           .attack()
           .repeat()
       ),
@@ -517,9 +538,21 @@ export const levellingQuest: Quest<Task> = {
         [$effect`Nanobrawny`, $effect`Nanobrainy`].some((ef) => have(ef)) ||
         args.fam,
       do: () => $location`An Unusually Quiet Barroom Brawl`,
-      outfit: () => oomfieOutfit({ familiarOverride: $familiar`Nanorhino` }),
+      outfit: () =>
+        oomfieOutfit({
+          backOverride:
+            !have($effect`Wolfish Form`) || !have($effect`Bat-Adjacent Form`)
+              ? $item`vampyric cloake`
+              : undefined,
+          familiarOverride: $familiar`Nanorhino`,
+        }),
       combat: new CombatStrategy().autoattack(
         Macro.trySkill($skill`Sing Along`)
+          .externalIf(!have($effect`Wolfish Form`), Macro.trySkill($skill`Become a Wolf`))
+          .externalIf(
+            have($effect`Wolfish Form`) && !have($effect`Bat-Adjacent Form`),
+            Macro.trySkill($skill`Become a Bat`)
+          )
           .trySkill($skill`Lunging Thrust-Smack`)
           .attack()
           .repeat()
@@ -529,9 +562,20 @@ export const levellingQuest: Quest<Task> = {
       name: `Oliver's Place`,
       completed: () => get(`_speakeasyFreeFights`) === 3,
       do: $location`An Unusually Quiet Barroom Brawl`,
-      outfit: () => oomfieOutfit(),
+      outfit: () =>
+        oomfieOutfit({
+          backOverride:
+            !have($effect`Wolfish Form`) || !have($effect`Bat-Adjacent Form`)
+              ? $item`vampyric cloake`
+              : undefined,
+        }),
       combat: new CombatStrategy().autoattack(
         Macro.trySkill($skill`Sing Along`)
+          .externalIf(!have($effect`Wolfish Form`), Macro.trySkill($skill`Become a Wolf`))
+          .externalIf(
+            have($effect`Wolfish Form`) && !have($effect`Bat-Adjacent Form`),
+            Macro.trySkill($skill`Become a Bat`)
+          )
           .attack()
           .repeat()
       ),
@@ -542,53 +586,39 @@ export const levellingQuest: Quest<Task> = {
       do: () => retrieveItem(1, $item`seal-clubbing club`),
     },
     {
-      name: `Seal Fights - Sweet and Red`,
-      completed: () =>
-        !have($skill`Just the Facts`) ||
-        myClass() !== $class`Seal Clubber` ||
-        get(`_sealsSummoned`) >= 5 ||
-        have($effect`Sweet and Red`),
-      do: (): void => {
-        retrieveItem(1, $item`figurine of a cute baby seal`);
-        retrieveItem(5, $item`seal-blubber candle`);
-        use(1, $item`figurine of a cute baby seal`);
-      },
-      outfit: () => oomfieOutfit({ weaponOverride: $item`seal-clubbing club` }),
-      combat: new CombatStrategy().autoattack(
-        Macro.trySkill($skill`Sing Along`)
-          .attack()
-          .repeat()
-      ),
-    },
-    {
-      name: `Seal Fights - Scrolls!`,
-      completed: () =>
-        !have($skill`Just the Facts`) ||
-        myClass() !== $class`Seal Clubber` ||
-        get(`_sealsSummoned`) >= 5,
-      do: (): void => {
-        retrieveItem(1, $item`figurine of a wretched-looking seal`);
-        retrieveItem(1, $item`seal-blubber candle`);
-        use(1, $item`figurine of a wretched-looking seal`);
-      },
-      outfit: () => oomfieOutfit({ weaponOverride: $item`seal-clubbing club` }),
-      combat: new CombatStrategy().autoattack(
-        Macro.trySkill($skill`Sing Along`)
-          .attack()
-          .repeat()
-      ),
-    },
-    {
       name: `Seal Fights`,
       completed: () => myClass() !== $class`Seal Clubber` || get(`_sealsSummoned`) >= 5,
       do: (): void => {
-        retrieveItem(1, $item`figurine of an ancient seal`);
-        retrieveItem(3, $item`seal-blubber candle`);
-        use(1, $item`figurine of an ancient seal`);
+        have($skill`Just the Facts`) && !have($effect`Sweet and Red`)
+          ? retrieveItem(1, $item`figurine of a cute baby seal`)
+          : retrieveItem(1, $item`figurine of a wretched-looking seal`);
+        have($skill`Just the Facts`) && !have($effect`Sweet and Red`)
+          ? retrieveItem(5, $item`seal-blubber candle`)
+          : retrieveItem(1, $item`seal-blubber candle`);
+        have($skill`Just the Facts`) && !have($effect`Sweet and Red`)
+          ? use(1, $item`figurine of a cute baby seal`)
+          : use(1, $item`figurine of a wretched-looking seal`);
       },
-      outfit: () => oomfieOutfit({ weaponOverride: $item`seal-clubbing club` }),
+      outfit: () =>
+        oomfieOutfit({
+          backOverride:
+            !have($effect`Wolfish Form`) || !have($effect`Bat-Adjacent Form`)
+              ? $item`vampyric cloake`
+              : undefined,
+          weaponOverride: $item`seal-clubbing club`,
+          offhandOverride: !have($effect`Peppermint Rush`)
+            ? $item`candy cane sword cane`
+            : undefined,
+        }),
       combat: new CombatStrategy().autoattack(
         Macro.trySkill($skill`Sing Along`)
+          .externalIf(!have($effect`Wolfish Form`), Macro.trySkill($skill`Become a Wolf`))
+          .externalIf(
+            have($effect`Wolfish Form`) && !have($effect`Bat-Adjacent Form`),
+            Macro.trySkill($skill`Become a Bat`)
+          )
+          .trySkill($skill`Surprisingly Sweet Slash`)
+          .trySkill($skill`Surprisingly Sweet Stab`)
           .attack()
           .repeat()
       ),
@@ -603,6 +633,7 @@ export const levellingQuest: Quest<Task> = {
       name: `Payphone Freefights (extingo)`,
       ready: () => have($effect`Shadow Affinity`),
       completed: () =>
+        true ||
         get(`encountersUntilSRChoice`) === 0 ||
         have($item`Rufus's shadow lodestone`) ||
         get(`_fireExtinguisherCharge`) <= 10,
@@ -634,11 +665,12 @@ export const levellingQuest: Quest<Task> = {
       completed: () =>
         get(`encountersUntilSRChoice`) === 0 || have($item`Rufus's shadow lodestone`),
       do: () => shadowRiftChoice(),
-      outfit: () => oomfieOutfit(),
+      outfit: () => oomfieOutfit({ offhandOverride: $item`candy cane sword cane` }),
       combat: new CombatStrategy().autoattack(
         Macro.trySkill($skill`Sing Along`)
-          .if_(shadowRiftPocketTarget(), Macro.trySkill($skill`Perpetrate Mild Evil`))
           .trySkill($skill`Recall Facts: %phylum Circadian Rhythms`)
+          .trySkill($skill`Surprisingly Sweet Slash`)
+          .trySkill($skill`Surprisingly Sweet Stab`)
           .attack()
           .repeat()
       ),
@@ -759,18 +791,17 @@ export const levellingQuest: Quest<Task> = {
           .trySkill($skill`Sing Along`)
           .trySkillRepeat($skill`Lunging Thrust-Smack`)
       ),
-      outfit: () => oomfieOutfit({ shirtOverride: $item`makeshift garbage shirt` }),
+      outfit: () =>
+        oomfieOutfit({
+          shirtOverride: $item`makeshift garbage shirt`,
+        }),
     },
     {
       name: `Witchess Queen`,
       prepare: () => restoreHp(myMaxhp()),
       completed: () => have($item`very pointy crown`) || Witchess.fightsDone() >= 5,
       do: () => Witchess.fightPiece($monster`Witchess Queen`),
-      combat: new CombatStrategy().autoattack(
-        Macro.trySkill($skill`Sing Along`)
-          .attack()
-          .repeat()
-      ),
+      combat: new CombatStrategy().autoattack(Macro.attack().repeat()),
       outfit: () => oomfieOutfit({ shirtOverride: $item`makeshift garbage shirt` }),
     },
     {

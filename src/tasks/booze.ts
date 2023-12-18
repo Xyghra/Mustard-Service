@@ -1,12 +1,16 @@
-import { Quest, Task } from "grimoire-kolmafia";
-import { cliExecute, print, retrieveItem, use, useSkill } from "kolmafia";
+import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
+import { cliExecute, holiday, print, retrieveItem, runChoice, use, useSkill } from "kolmafia";
 import {
   $effect,
+  $familiar,
   $item,
   $location,
+  $monster,
   $skill,
+  Cartography,
   CommunityService,
   DeckOfEveryCard,
+  Macro,
   get,
   have,
 } from "libram";
@@ -19,20 +23,63 @@ export const boozeQuest: Quest<Task> = {
   tasks: [
     {
       name: `Retreive Clover`,
-      completed: () => have($item`11-leaf clover`) || get(`_cloversPurchased`) >= 2,
+      ready: () =>
+        get(`_monstersMapped`) >= 3 ||
+        get(`_saberForceUses`) >= 5 ||
+        [`Feast of Boris`].includes(holiday()),
+      completed: () =>
+        have($item`11-leaf clover`) ||
+        get(`_cloversPurchased`) >= 2 ||
+        have($effect`All I Want For Crimbo Is Stuff`) ||
+        have($effect`Bat-Adjacent Form`),
       do: () => retrieveItem(1, $item`11-leaf clover`),
     },
     {
       name: `Retrieve Cyclops Eyedrops`,
       prepare: () => use(1, $item`11-leaf clover`),
-      completed: () => have($effect`One Very Clear Eye`) || have($item`cyclops eyedrops`),
+      ready: () =>
+        get(`_monstersMapped`) >= 3 ||
+        get(`_saberForceUses`) >= 5 ||
+        [`Feast of Boris`].includes(holiday()),
+      completed: () =>
+        have($effect`One Very Clear Eye`) ||
+        have($item`cyclops eyedrops`) ||
+        have($effect`All I Want For Crimbo Is Stuff`) ||
+        have($effect`Bat-Adjacent Form`),
       do: $location`The Limerick Dungeon`,
-      outfit: oomfieOutfit(),
+      outfit: () => oomfieOutfit(),
       limit: { tries: 1 },
     },
     {
+      name: `Carol + Cloake`,
+      ready: () =>
+        have($familiar`Ghost of Crimbo Carols`) &&
+        get(`_monstersMapped`) < 3 &&
+        get(`_saberForceUses`) < 5,
+      completed: () =>
+        [`Feast of Boris`].includes(holiday()) ||
+        have($effect`All I Want For Crimbo Is Stuff`) ||
+        have($effect`Bat-Adjacent Form`),
+      do: () => Cartography.mapMonster($location`Barf Mountain`, $monster`garbage tourist`),
+      choices: { 1387: 3 },
+      outfit: () => ({
+        weapon: $item`Fourth of May Cosplay Saber`,
+        back: $item`vampyric cloake`,
+        familiar: $familiar`Ghost of Crimbo Carols`,
+      }),
+      combat: new CombatStrategy().macro(
+        Macro.trySkill($skill`Become a Bat`)
+          .trySkill($skill`Use the Force`)
+          .abort()
+      ),
+      post: () => runChoice(3),
+    },
+    {
       name: `Use Eyedrops`,
-      completed: () => have($effect`One Very Clear Eye`),
+      completed: () =>
+        have($effect`All I Want For Crimbo Is Stuff`) ||
+        have($effect`Bat-Adjacent Form`) ||
+        have($effect`One Very Clear Eye`),
       do: () => use(1, $item`cyclops eyedrops`),
     },
     {
@@ -49,6 +96,9 @@ export const boozeQuest: Quest<Task> = {
       name: `Infernal Thirst Wish`,
       completed: () => get(`_genieWishesUsed`) >= 3 || have($effect`Infernal Thirst`),
       do: () => cliExecute(`genie effect Infernal Thirst`),
+      outfit: () => ({
+        familiar: $familiar`Left-Hand Man`,
+      }),
     },
     {
       name: `Bag of Grain`,

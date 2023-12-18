@@ -1,6 +1,16 @@
 import { Quest, Task } from "grimoire-kolmafia";
 import { cliExecute, familiarWeight, haveEffect, itemAmount, print, use } from "kolmafia";
-import { $effect, $familiar, $familiars, $item, Clan, CommunityService, get, have } from "libram";
+import {
+  $effect,
+  $familiar,
+  $familiars,
+  $item,
+  BeachComb,
+  Clan,
+  CommunityService,
+  get,
+  have,
+} from "libram";
 import { printModtrace } from "libram/dist/modifier";
 import { logTest } from "../lib";
 
@@ -64,6 +74,12 @@ export const famwtQuest: Quest<Task> = {
         have($effect`You Can Really Taste the Dormouse`) ||
         !have($item`sombrero-mounted sparkler`),
       do: () => cliExecute(`hatter sombrero-mounted sparkler`),
+    },
+    {
+      name: `Comb Familiar Weight head`,
+      ready: () => have($item`Beach Comb`) && BeachComb.headAvailable(`FAMILIAR`),
+      completed: () => have($effect`Do I Know You From Somewhere?`),
+      do: () => BeachComb.tryHead(`FAMILIAR`),
     },
     {
       name: `Familiar Weight Test`,

@@ -120,6 +120,7 @@ export const wdmgQuest: Quest<Task> = {
         );
       },
       outfit: {
+        weapon: $item`candy cane sword cane`,
         modifier: `1 weapon dmg percent, 0.9 weapon dmg, switch left-hand man `,
       },
       effects: [

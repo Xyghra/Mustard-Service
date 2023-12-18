@@ -1,5 +1,5 @@
 import { Quest, Task } from "grimoire-kolmafia";
-import { cliExecute, print, use } from "kolmafia";
+import { abort, cliExecute, print, use } from "kolmafia";
 import { $effect, $familiar, $item, $location, Clan, CommunityService, get, have } from "libram";
 import { printModtrace } from "libram/dist/modifier";
 import { logTest, oomfieOutfit } from "../lib";
@@ -29,9 +29,9 @@ export const noncombatQuest: Quest<Task> = {
       completed: () => !have($item`shady shades`) || have($effect`Throwing Some Shade`),
       do: () => use(1, $item`shady shades`),
       outfit: () => ({
-        hat: have($item`very pointy crown`) ? $item`very pointy crown` : undefined,
-        offhand: $item`unbreakable umbrella`,
-        modifier: `-60 combat rate, +switch left-hand man, +switch disgeist`,
+        //hat: have($item`very pointy crown`) ? $item`very pointy crown` : undefined,
+        //offhand: $item`unbreakable umbrella`,
+        modifier: `-combat, 0.04 familiar weight 75 max, switch disgeist, switch left-hand man, switch disembodied hand, -tie`,
       }),
       effects: [
         $effect`Empathy`,
@@ -48,8 +48,30 @@ export const noncombatQuest: Quest<Task> = {
       completed: () =>
         have($effect`Silent Running`) ||
         get(`_olympicSwimmingPool`) ||
-        CommunityService.Noncombat.actualCost() === 1,
-      do: () => cliExecute(`swim noncombat`),
+        CommunityService.Noncombat.prediction <= 1,
+      do: (): void => {
+        const actualTurncost = CommunityService.Noncombat.actualCost();
+        if (
+          CommunityService.Noncombat.prediction > 0 &&
+          actualTurncost !== CommunityService.Noncombat.prediction
+        ) {
+          print(`The Actual Cost and the Prediction are mismatched!`);
+          printModtrace(`combat rate`);
+          cliExecute(`refresh all`);
+          printModtrace(`combat rate`);
+          if (
+            CommunityService.Noncombat.prediction > 0 &&
+            actualTurncost !== CommunityService.Noncombat.prediction
+          ) {
+            abort(`Could not Resolve mismatch`);
+          }
+        }
+        if (actualTurncost <= 1) return;
+        cliExecute(`swim noncombat`);
+      },
+      outfit: () => ({
+        modifier: `-combat, 0.04 familiar weight 75 max, switch disgeist, switch left-hand man, switch disembodied hand, -tie`,
+      }),
     },
     {
       name: `Noncombat Test`,

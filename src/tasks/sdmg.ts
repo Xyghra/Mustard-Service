@@ -35,7 +35,7 @@ export const sdmgQuest: Quest<Task> = {
         get(`_roninStoragePulls`).split(`,`).length === 5,
       do: () =>
         myBasestat($stat`Mysticality`) >= 125
-          ? takeStorage(1, $item`Staff of Simmering Hatred`)
+          ? takeStorage(1, $item`tobiko marble soda`) //takeStorage(1, $item`Staff of Simmering Hatred`)
           : takeStorage(1, $item`tobiko marble soda`),
     },
     {
@@ -45,7 +45,10 @@ export const sdmgQuest: Quest<Task> = {
     },
     {
       name: `Obsidian Nutcracker`,
-      completed: () => have($item`Staff of Simmering Hatred`) || have($item`obsidian nutcracker`),
+      completed: () =>
+        have($item`weeping willow wand`) ||
+        have($item`Staff of Simmering Hatred`) ||
+        have($item`obsidian nutcracker`),
       do: () => retrieveItem(1, $item`obsidian nutcracker`),
     },
     {
