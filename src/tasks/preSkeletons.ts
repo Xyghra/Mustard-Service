@@ -26,6 +26,13 @@ export const runStartQuest: Quest<Task> = {
   completed: () =>
     get(guildQuest) === `started` || get(guildQuest) === `step1` || get(guildQuest) === `finished`,
   tasks: [
+    {
+      name: `Setting Properties`,
+      completed: () => get(`_mustardServiceTime`) !== ``,
+      do: (): void => {
+        set(`_mustardServiceTime`, `${nowToInt()}`);
+      },
+    },
     loss,
     {
       name: `Fall Guy!`,
@@ -44,13 +51,6 @@ export const runStartQuest: Quest<Task> = {
           $item`Stick-Knife of Loathing`,
           $item`wasabi marble soda`,
         ].forEach((i) => takeStorage(1, i)),
-    },
-    {
-      name: `Setting Properties`,
-      completed: () => get(`_mustardServiceTime`) !== ``,
-      do: (): void => {
-        set(`_mustardServiceTime`, `${nowToInt()}`);
-      },
     },
     {
       name: `Numberology Attempt`,
@@ -196,11 +196,6 @@ export const runStartQuest: Quest<Task> = {
       prepare: () => Clan.join(`Bonus Adventures from Hell`),
       completed: () => get(`_lookingGlass`),
       do: () => visitUrl(`clan_viplounge.php?action=lookingglass&whichfloor=2`),
-    },
-    {
-      name: `Enable Reverser`,
-      completed: () => get(`backupCameraReverserEnabled`),
-      do: () => cliExecute(`backupcamera reverser`),
     },
     {
       name: `Mind Control`,

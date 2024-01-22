@@ -74,7 +74,7 @@ export const skeletonsQuest: Quest<Task> = {
           offhandOverride: $item`Kramco Sausage-o-Matic™`,
           modesOverride: {
             parka: `kachungasaur`,
-            backupcamera: `init`,
+            backupcamera: `meat`,
           },
         }),
       combat: new CombatStrategy().autoattack(
@@ -179,7 +179,6 @@ export const skeletonsQuest: Quest<Task> = {
         hat: $item`sombrero-mounted sparkler`,
         acc1: get(`_reflexHammerUsed`) >= 3 ? $item`backup camera` : $item`Lil' Doctor™ bag`,
         familiar: args.familiar,
-        famequip: $item`tiny stillsuit`,
       }),
       combat: new CombatStrategy().autoattack(() =>
         Macro.externalIf(get(`_reflexHammerUsed`) < 3, Macro.trySkill($skill`Reflex Hammer`))

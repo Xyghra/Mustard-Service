@@ -9,9 +9,8 @@ import { finaleQuest, postFinaleQuest } from "./tasks/finale";
 import { hotresQuest } from "./tasks/hotres";
 import { levellingQuest } from "./tasks/levelling";
 import { noncombatQuest } from "./tasks/noncombat";
-import { runStartQuest } from "./tasks/preSkeletons";
+import { prequelQuest } from "./tasks/runStart";
 import { sdmgQuest } from "./tasks/sdmg";
-import { skeletonsQuest } from "./tasks/skeletons";
 import { hpQuest, moxQuest, muscleQuest, mystQuest } from "./tasks/stats";
 import { wdmgQuest } from "./tasks/wdmg";
 
@@ -33,8 +32,7 @@ export function main(argument = ``): void {
 
   if (args.run) {
     const tasks: Task[] = getTasks([
-      runStartQuest,
-      skeletonsQuest,
+      prequelQuest,
       CoilQuest,
       levellingQuest,
       muscleQuest,

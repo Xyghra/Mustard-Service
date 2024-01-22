@@ -1,11 +1,28 @@
-import { Args, Modes, OutfitSpec, Task } from "grimoire-kolmafia";
-import { Familiar, Item, abort, myHash, print, visitUrl } from "kolmafia";
+import {
+  Args,
+  CombatStrategy as GrimoireCombatStrategy,
+  Modes,
+  OutfitSpec,
+  Task,
+} from "grimoire-kolmafia";
+import {
+  Familiar,
+  Item,
+  abort,
+  myClass,
+  myFamiliar,
+  myHash,
+  myMeat,
+  print,
+  visitUrl,
+} from "kolmafia";
 import {
   $effect,
   $familiar,
   $item,
   $location,
   $skill,
+  $stat,
   BarrelShrine,
   CommunityService,
   Macro,
@@ -13,7 +30,10 @@ import {
   get,
   have,
   set,
+  uneffect,
 } from "libram";
+
+export class CombatStrategy extends GrimoireCombatStrategy {}
 
 export class customMacro extends Macro {
   polarpocket(pockets: number): customMacro {
@@ -134,7 +154,7 @@ function barrelsAreSmashed(): boolean {
 
 export const barrelSmashing: Task = {
   name: `Smash Barrels!`,
-  completed: () => barrelsAreSmashed(),
+  completed: () => barrelsAreSmashed() || myMeat() >= 81,
   do: (): void => {
     const barrel = visitUrl(`barrel.php`);
     const matcher = /div class="([a-z]+)".*?&slot=([0-9]+)/g;
@@ -170,6 +190,46 @@ function familiarChoice(): Familiar {
 export function familiarAttacks(): boolean {
   return args.familiar.elementalDamage || args.familiar.physicalDamage;
 }
+
+export const juneCleaverTask: Task = {
+  name: `June Cleave`,
+  completed: () => get(`_juneCleaverFightsLeft`) > 0,
+  do: () => $location`The Sleazy Back Alley`,
+  outfit: {
+    weapon: $item`June cleaver`,
+  },
+  post: (): void => {
+    if (have($effect`Beaten Up`)) {
+      uneffect($effect`Beaten Up`);
+    }
+  },
+  choices: () => ({
+    1468:
+      myClass().primestat === $stat`Muscle`
+        ? 2
+        : myClass().primestat === $stat`Moxie`
+        ? 1
+        : get(`_juneCleaverSkips`) < 5
+        ? 4
+        : 2,
+    1473: myClass().primestat === $stat`Muscle` ? 1 : get(`_juneCleaverSkips`) < 5 ? 4 : 1,
+    1469: 3,
+    1474:
+      myClass().primestat === $stat`Muscle`
+        ? 3
+        : myClass().primestat === $stat`Mysticality`
+        ? 1
+        : get(`_juneCleaverSkips`) < 5
+        ? 4
+        : 3,
+    1475: myClass().primestat === $stat`Muscle` ? 2 : get(`_juneCleaverSkips`) < 5 ? 4 : 2,
+    1471: 1,
+    1467: 3,
+    1472: myClass().primestat === $stat`Moxie` ? 3 : get(`_juneCleaverSkips`) < 5 ? 4 : 1,
+    1470: myClass().primestat === $stat`Muscle` ? 3 : get(`_juneCleaverSkips`) < 5 ? 4 : 2,
+  }),
+  combat: new CombatStrategy().autoattack(() => Macro.abort()),
+};
 
 export function oomfieOutfit(options?: {
   hatOverride?: Item | undefined;
@@ -209,7 +269,16 @@ export function oomfieOutfit(options?: {
       acc2: options?.acc2Override ?? undefined,
       acc3: options?.acc3Override ?? undefined,
       familiar: famOverride ?? options?.familiarOverride ?? familiarChoice(),
-      famequip: famequipOverride ?? options?.famequipOverride ?? $item`tiny stillsuit`,
+      famequip:
+        famequipOverride ??
+        options?.famequipOverride ??
+        [
+          $familiar`Ghost of Crimbo Carols`,
+          $familiar`Ghost of Crimbo Cheer`,
+          $familiar`Ghost of Crimbo Commerce`,
+        ].includes(myFamiliar())
+          ? $item.none
+          : $item`tiny stillsuit`,
       modes: options?.modesOverride ?? undefined,
     };
   } else {
@@ -226,7 +295,16 @@ export function oomfieOutfit(options?: {
         options?.acc3Override ??
         (have($item`Brutal brogues`) ? $item`Brutal brogues` : $item`combat lover's locket`),
       familiar: famOverride ?? options?.familiarOverride ?? familiarChoice(),
-      famequip: famequipOverride ?? options?.famequipOverride ?? $item`tiny stillsuit`,
+      famequip:
+        famequipOverride ??
+        options?.famequipOverride ??
+        [
+          $familiar`Ghost of Crimbo Carols`,
+          $familiar`Ghost of Crimbo Cheer`,
+          $familiar`Ghost of Crimbo Commerce`,
+        ].includes(myFamiliar())
+          ? $item.none
+          : $item`tiny stillsuit`,
       modes: options?.modesOverride ?? undefined,
     };
   }

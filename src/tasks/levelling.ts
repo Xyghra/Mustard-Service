@@ -18,7 +18,9 @@ import {
   myMp,
   myPrimestat,
   restoreHp,
+  restoreMp,
   retrieveItem,
+  runChoice,
   use,
   useSkill,
   visitUrl,
@@ -34,6 +36,7 @@ import {
   $stat,
   AutumnAton,
   Cartography,
+  Clan,
   Latte,
   Macro,
   Witchess,
@@ -45,7 +48,7 @@ import {
   have,
   uneffect,
 } from "libram";
-import { args, customMacro, familiarAttacks, loss, oomfieOutfit } from "../lib";
+import { args, customMacro, familiarAttacks, juneCleaverTask, loss, oomfieOutfit } from "../lib";
 
 function shadowRiftChoice(): Location {
   /*
@@ -130,6 +133,7 @@ const levellingEffects = [
   myClass() === $class`Pastamancer`
     ? $effect`Shield of the Pastalord`
     : $effect`Flimsy Shield of the Pastalord`,
+  $effect`Blood Bubble`,
 
   //Elemental Weapon Damage
   $effect`Your Fifteen Minutes`,
@@ -140,7 +144,7 @@ const levellingEffects = [
   $effect`Intimidating Mien`,
 
   //Familiar!
-  familiarAttacks() ? $effect`Big` : $effect`Curiosity of Br'er Tarrypin`,
+  $effect`Curiosity of Br'er Tarrypin`,
   familiarAttacks() ? $effect`Big` : $effect`Empathy`,
   familiarAttacks() ? $effect`Big` : $effect`Leash of Linguini`,
   familiarAttacks() ? $effect`Big` : $effect`Blood Bond`,
@@ -162,6 +166,7 @@ export const levellingQuest: Quest<Task> = {
       completed: () => !have($effect`Beaten Up`),
       do: () => abort(`Beaten up unexpectedly!`),
     },
+    juneCleaverTask,
     {
       name: `Fall Guy!`,
       ready: () => get(`_shadowAffinityToday`) && get(`shadowRiftIngress`) !== ``,
@@ -185,45 +190,6 @@ export const levellingQuest: Quest<Task> = {
       },
     },
     {
-      name: `June Cleave`,
-      ready: () => get(`_juneCleaverFightsLeft`) === 0,
-      completed: () => get(`_juneCleaverFightsLeft`) > 0,
-      do: () => adv1($location`The Sleazy Back Alley`, -1, "abort;"),
-      outfit: {
-        weapon: $item`June cleaver`,
-      },
-      post: (): void => {
-        if (have($effect`Beaten Up`)) {
-          uneffect($effect`Beaten Up`);
-        }
-      },
-      choices: () => ({
-        1468:
-          myClass().primestat === $stat`Muscle`
-            ? 2
-            : myClass().primestat === $stat`Moxie`
-            ? 1
-            : get(`_juneCleaverSkips`) < 5
-            ? 4
-            : 2,
-        1473: myClass().primestat === $stat`Muscle` ? 1 : get(`_juneCleaverSkips`) < 5 ? 4 : 1,
-        1469: 3,
-        1474:
-          myClass().primestat === $stat`Muscle`
-            ? 3
-            : myClass().primestat === $stat`Mysticality`
-            ? 1
-            : get(`_juneCleaverSkips`) < 5
-            ? 4
-            : 3,
-        1475: myClass().primestat === $stat`Muscle` ? 2 : get(`_juneCleaverSkips`) < 5 ? 4 : 2,
-        1471: 1,
-        1467: 3,
-        1472: myClass().primestat === $stat`Moxie` ? 3 : get(`_juneCleaverSkips`) < 5 ? 4 : 1,
-        1470: myClass().primestat === $stat`Muscle` ? 3 : get(`_juneCleaverSkips`) < 5 ? 4 : 2,
-      }),
-    },
-    {
       name: `Bastille Battalion`,
       completed: () => get(`_bastilleGames`) >= 1,
       do: () => cliExecute(`bastille babar brutalist gesture`),
@@ -239,6 +205,12 @@ export const levellingQuest: Quest<Task> = {
       ready: () => myHp() <= myMaxhp() / 2,
       completed: () => myHp() > myMaxhp() / 2,
       do: () => restoreHp(clamp(1000, myMaxhp() / 2 + 10, myMaxhp())),
+    },
+    {
+      name: `Restore MP`,
+      ready: () => myMp() < 50 && get(`sweat`) >= 95,
+      completed: () => myMp() >= 50,
+      do: () => useSkill(1, $skill`Sip Some Sweat`),
     },
     {
       name: `Eat sosig`,
@@ -265,7 +237,6 @@ export const levellingQuest: Quest<Task> = {
         oomfieOutfit({
           offhandOverride: $item`Kramco Sausage-o-Matic™`,
           shirtOverride: $item`makeshift garbage shirt`,
-          familiarOverride: $familiar`Ghost of Crimbo Carols`,
         }),
       combat: new CombatStrategy().autoattack(
         Macro.trySkill($skill`Sing Along`)
@@ -287,6 +258,7 @@ export const levellingQuest: Quest<Task> = {
     },
     {
       name: `April Shower`,
+      prepare: () => Clan.join(`Bonus Adventures from Hell`),
       completed: () => have(showerEffect) || get(`_aprilShower`),
       do: () => ensureEffect(showerEffect),
     },
@@ -517,8 +489,10 @@ export const levellingQuest: Quest<Task> = {
           modesOverride: {
             umbrella: `broken`,
           },
+          familiarOverride: $familiar`Ghost of Crimbo Carols`,
+          famequipOverride: $item.none,
         }),
-      combat: new CombatStrategy().macro(
+      combat: new CombatStrategy().autoattack(() =>
         Macro.ifHolidayWanderer(Macro.attack().repeat())
           .trySkill($skill`Feel Envy`)
           .externalIf(!have($effect`Wolfish Form`), Macro.trySkill($skill`Become a Wolf`))
@@ -546,7 +520,7 @@ export const levellingQuest: Quest<Task> = {
               : undefined,
           familiarOverride: $familiar`Nanorhino`,
         }),
-      combat: new CombatStrategy().autoattack(
+      combat: new CombatStrategy().autoattack(() =>
         Macro.trySkill($skill`Sing Along`)
           .externalIf(!have($effect`Wolfish Form`), Macro.trySkill($skill`Become a Wolf`))
           .externalIf(
@@ -569,7 +543,7 @@ export const levellingQuest: Quest<Task> = {
               ? $item`vampyric cloake`
               : undefined,
         }),
-      combat: new CombatStrategy().autoattack(
+      combat: new CombatStrategy().autoattack(() =>
         Macro.trySkill($skill`Sing Along`)
           .externalIf(!have($effect`Wolfish Form`), Macro.trySkill($skill`Become a Wolf`))
           .externalIf(
@@ -610,7 +584,7 @@ export const levellingQuest: Quest<Task> = {
             ? $item`candy cane sword cane`
             : undefined,
         }),
-      combat: new CombatStrategy().autoattack(
+      combat: new CombatStrategy().autoattack(() =>
         Macro.trySkill($skill`Sing Along`)
           .externalIf(!have($effect`Wolfish Form`), Macro.trySkill($skill`Become a Wolf`))
           .externalIf(
@@ -637,7 +611,7 @@ export const levellingQuest: Quest<Task> = {
         get(`encountersUntilSRChoice`) === 0 ||
         have($item`Rufus's shadow lodestone`) ||
         get(`_fireExtinguisherCharge`) <= 10,
-      do: shadowRiftChoice,
+      do: () => shadowRiftChoice,
       outfit: () =>
         oomfieOutfit({
           weaponOverride: $item`industrial fire extinguisher`,
@@ -666,7 +640,7 @@ export const levellingQuest: Quest<Task> = {
         get(`encountersUntilSRChoice`) === 0 || have($item`Rufus's shadow lodestone`),
       do: () => shadowRiftChoice(),
       outfit: () => oomfieOutfit({ offhandOverride: $item`candy cane sword cane` }),
-      combat: new CombatStrategy().autoattack(
+      combat: new CombatStrategy().autoattack(() =>
         Macro.trySkill($skill`Sing Along`)
           .trySkill($skill`Recall Facts: %phylum Circadian Rhythms`)
           .trySkill($skill`Surprisingly Sweet Slash`)
@@ -764,7 +738,29 @@ export const levellingQuest: Quest<Task> = {
       ),
     },
     {
+      name: `Observe NEP Quest`,
+      completed: () =>
+        get(`_questPartyFairQuest`) !== `` ||
+        get(`_questPartyFair`) === `` ||
+        get(`_neverendingPartyFreeTurns`) >= 10,
+      do: (): void => {
+        visitUrl(`adventure.php?snarfblat=528`);
+        runChoice(3);
+      },
+    },
+    {
+      name: `Accept/Deny NEP Quest`,
+      ready: () => get(`_questPartyFair`) === `unstarted`,
+      completed: () => get(`_neverendingPartyFreeTurns`) >= 10,
+      do: (): void => {
+        visitUrl(`adventure.php?snarfblat=528`);
+        if ([`food`, `booze`].includes(get(`_questPartyFairQuest`))) runChoice(1);
+        else runChoice(2);
+      },
+    },
+    {
       name: `Neverending Free Fights`,
+      prepare: () => restoreMp(50),
       completed: () => get(`_neverendingPartyFreeTurns`) >= 10,
       do: $location`The Neverending Party`,
       choices: { 1322: 2, 1324: 5, 1326: 2 },
@@ -783,7 +779,10 @@ export const levellingQuest: Quest<Task> = {
     },
     {
       name: `Witchess Witch`,
-      prepare: () => restoreHp(myMaxhp()),
+      prepare: (): void => {
+        restoreHp(myMaxhp());
+        restoreMp(100);
+      },
       completed: () => have($item`battle broom`),
       do: () => Witchess.fightPiece($monster`Witchess Witch`),
       combat: new CombatStrategy().autoattack(
@@ -806,6 +805,7 @@ export const levellingQuest: Quest<Task> = {
     },
     {
       name: `Shattering Punches`,
+      prepare: () => restoreMp(50),
       completed: () => get(`_shatteringPunchUsed`) >= 3,
       do: $location`The Neverending Party`,
       choices: { 1322: 2, 1324: 5, 1326: 2 },
@@ -848,6 +848,7 @@ export const levellingQuest: Quest<Task> = {
     },
     {
       name: `Mob-Hit`,
+      prepare: () => restoreMp(50),
       completed: () => get(`_gingerbreadMobHitUsed`),
       do: $location`The Neverending Party`,
       choices: { 1322: 2, 1324: 5, 1326: 2 },

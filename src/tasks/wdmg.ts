@@ -134,6 +134,7 @@ export const wdmgQuest: Quest<Task> = {
         myClass() === $class`Turtle Tamer`
           ? $effect`Blessing of the War Snapper`
           : $effect`Disdain of the War Snapper`,
+        $effect`Frenzied, Bloody`,
       ],
       limit: { tries: 1 },
     },

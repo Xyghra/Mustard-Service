@@ -1,5 +1,5 @@
 import { Quest, Task } from "grimoire-kolmafia";
-import { cliExecute, familiarWeight, haveEffect, itemAmount, print, use } from "kolmafia";
+import { Familiar, cliExecute, familiarWeight, haveEffect, itemAmount, print, use } from "kolmafia";
 import {
   $effect,
   $familiar,
@@ -14,10 +14,12 @@ import {
 import { printModtrace } from "libram/dist/modifier";
 import { logTest } from "../lib";
 
-const bestFam = $familiars
-  .all()
-  .filter((F) => have(F) && F !== $familiar`Homemade Robot`)
-  .sort((a, b) => familiarWeight(b) - familiarWeight(a))[0];
+function bestFam(): Familiar {
+  return $familiars
+    .all()
+    .filter((F) => have(F) && F !== $familiar`Homemade Robot`)
+    .sort((a, b) => familiarWeight(b) - familiarWeight(a))[0];
+}
 
 export const famwtQuest: Quest<Task> = {
   name: `Familiar Weight Test`,
@@ -96,11 +98,11 @@ export const famwtQuest: Quest<Task> = {
           42
         );
       },
-      outfit: {
+      outfit: () => ({
         modifier: `familiar weight, switch left-hand man, ${
           have($item`overloaded Yule battery`) ? `switch Mini-Trainbot,` : ``
-        } switch ${bestFam}`,
-      },
+        } switch ${bestFam()}`,
+      }),
       limit: { tries: 1 },
       effects: [$effect`Empathy`, $effect`Blood Bond`, $effect`Leash of Linguini`],
     },

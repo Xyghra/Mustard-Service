@@ -13,6 +13,7 @@ import {
   Macro,
   get,
   have,
+  set,
 } from "libram";
 import { printModtrace } from "libram/dist/modifier";
 import { logTest, oomfieOutfit } from "../lib";
@@ -72,7 +73,11 @@ export const boozeQuest: Quest<Task> = {
           .trySkill($skill`Use the Force`)
           .abort()
       ),
-      post: () => runChoice(3),
+      post: (): void => {
+        runChoice(3);
+        if (get(`_vampyreCloakeFormUses`) < 10)
+          set(`_vampyreCloakeFormUses`, get(`_vampyreCloakeFormUses`) + 1);
+      },
     },
     {
       name: `Use Eyedrops`,
