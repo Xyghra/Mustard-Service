@@ -293,7 +293,13 @@ export function oomfieOutfit(options?: {
       acc2: options?.acc2Override ?? $item`your cowboy boots`,
       acc3:
         options?.acc3Override ??
-        (have($item`Brutal brogues`) ? $item`Brutal brogues` : $item`combat lover's locket`),
+        // eslint-disable-next-line libram/verify-constants
+        (have($item`spring shoes`)
+          ? // eslint-disable-next-line libram/verify-constants
+            $item`spring shoes`
+          : have($item`Brutal brogues`)
+          ? $item`Brutal brogues`
+          : $item`combat lover's locket`),
       familiar: famOverride ?? options?.familiarOverride ?? familiarChoice(),
       famequip:
         famequipOverride ??

@@ -64,12 +64,14 @@ import {
   oomfieOutfit,
 } from "../lib";
 
-const prequelPulls = [
-  $item`Calzone of Legend`,
-  $item`Pizza of Legend`,
-  $item`Stick-Knife of Loathing`,
-  args.fam ? $item`wasabi marble soda` : $item`Great Wolf's beastly trousers`,
-];
+function prequelPulls(): Item[] {
+  return [
+    $item`Calzone of Legend`,
+    $item`Pizza of Legend`,
+    $item`Stick-Knife of Loathing`,
+    args.fam ? $item`wasabi marble soda` : $item`Great Wolf's beastly trousers`,
+  ];
+}
 
 function degreeTask(degreeChoice: "Psychogeologist" | "Insectologist" | "Cryptobotanist"): Task {
   return {
@@ -114,8 +116,8 @@ export const prequelQuest: Quest<Task> = {
     {
       name: `Pull!`,
       completed: () =>
-        prequelPulls.every((I) => get(`_roninStoragePulls`).split(`,`).includes(`${I.id}`)),
-      do: () => prequelPulls.forEach((I) => takeStorage(1, I)),
+        prequelPulls().every((I) => get(`_roninStoragePulls`).split(`,`).includes(`${I.id}`)),
+      do: () => prequelPulls().forEach((I) => takeStorage(1, I)),
     },
     {
       name: `Numberology Attempt`,
@@ -366,12 +368,6 @@ export const prequelQuest: Quest<Task> = {
       prepare: () => Clan.join(`Bonus Adventures from Hell`),
       completed: () => have($item`sombrero-mounted sparkler`),
       do: () => retrieveItem(1, $item`sombrero-mounted sparkler`),
-    },
-    {
-      name: `Buy: Codpiece`,
-      prepare: () => Clan.join(`Floundry`),
-      completed: () => have($item`red shoe`) || have($item`codpiece`),
-      do: () => retrieveItem(1, $item`codpiece`),
     },
     {
       name: `Unlock the Guild: Freeruns!`,

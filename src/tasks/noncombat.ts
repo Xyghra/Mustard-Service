@@ -16,6 +16,15 @@ export const noncombatQuest: Quest<Task> = {
       choices: { 1500: 2 },
     },
     {
+      name: `Ultra-Soft Steps`,
+      // eslint-disable-next-line libram/verify-constants
+      ready: () => have($item`ultra-soft ferns`),
+      // eslint-disable-next-line libram/verify-constants
+      completed: () => have($effect`ultra-soft steps`),
+      // eslint-disable-next-line libram/verify-constants
+      do: () => use(1, $item`ultra-soft ferns`),
+    },
+    {
       name: `Squeaky Rose`,
       completed: () =>
         !have($item`squeaky toy rose`) || have($effect`A Rose by Any Other Material`),

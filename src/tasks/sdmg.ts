@@ -76,6 +76,14 @@ export const sdmgQuest: Quest<Task> = {
       combat: new CombatStrategy().autoattack(Macro.trySkill($skill`Snokebomb`).abort()),
     },
     {
+      name: `Buy: Codpiece`,
+      prepare: () => Clan.join(`Floundry`),
+      completed: () =>
+        // eslint-disable-next-line libram/verify-constants
+        have($item`red shoe`) || have($item`ultra-soft ferns`) || have($item`codpiece`),
+      do: () => retrieveItem(1, $item`codpiece`),
+    },
+    {
       name: `Spell Damage Poolbuff`,
       prepare: () => Clan.join(`Bonus Adventures from Hell`),
       completed: () => have($effect`Mental A-cue-ity`),
