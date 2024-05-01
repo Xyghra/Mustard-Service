@@ -33,7 +33,7 @@ import {
   uneffect,
 } from "libram";
 
-export class CombatStrategy extends GrimoireCombatStrategy {}
+export class CombatStrategy extends GrimoireCombatStrategy { }
 
 export class customMacro extends Macro {
   polarpocket(pockets: number): customMacro {
@@ -208,20 +208,20 @@ export const juneCleaverTask: Task = {
       myClass().primestat === $stat`Muscle`
         ? 2
         : myClass().primestat === $stat`Moxie`
-        ? 1
-        : get(`_juneCleaverSkips`) < 5
-        ? 4
-        : 2,
+          ? 1
+          : get(`_juneCleaverSkips`) < 5
+            ? 4
+            : 2,
     1473: myClass().primestat === $stat`Muscle` ? 1 : get(`_juneCleaverSkips`) < 5 ? 4 : 1,
     1469: 3,
     1474:
       myClass().primestat === $stat`Muscle`
         ? 3
         : myClass().primestat === $stat`Mysticality`
-        ? 1
-        : get(`_juneCleaverSkips`) < 5
-        ? 4
-        : 3,
+          ? 1
+          : get(`_juneCleaverSkips`) < 5
+            ? 4
+            : 3,
     1475: myClass().primestat === $stat`Muscle` ? 2 : get(`_juneCleaverSkips`) < 5 ? 4 : 2,
     1471: 1,
     1467: 3,
@@ -271,12 +271,12 @@ export function oomfieOutfit(options?: {
       familiar: famOverride ?? options?.familiarOverride ?? familiarChoice(),
       famequip:
         famequipOverride ??
-        options?.famequipOverride ??
-        [
-          $familiar`Ghost of Crimbo Carols`,
-          $familiar`Ghost of Crimbo Cheer`,
-          $familiar`Ghost of Crimbo Commerce`,
-        ].includes(myFamiliar())
+          options?.famequipOverride ??
+          [
+            $familiar`Ghost of Crimbo Carols`,
+            $familiar`Ghost of Crimbo Cheer`,
+            $familiar`Ghost of Crimbo Commerce`,
+          ].includes(myFamiliar())
           ? $item.none
           : $item`tiny stillsuit`,
       modes: options?.modesOverride ?? undefined,
@@ -293,22 +293,21 @@ export function oomfieOutfit(options?: {
       acc2: options?.acc2Override ?? $item`your cowboy boots`,
       acc3:
         options?.acc3Override ??
-        // eslint-disable-next-line libram/verify-constants
         (have($item`spring shoes`)
-          ? // eslint-disable-next-line libram/verify-constants
-            $item`spring shoes`
+          ?
+          $item`spring shoes`
           : have($item`Brutal brogues`)
-          ? $item`Brutal brogues`
-          : $item`combat lover's locket`),
+            ? $item`Brutal brogues`
+            : $item`combat lover's locket`),
       familiar: famOverride ?? options?.familiarOverride ?? familiarChoice(),
       famequip:
         famequipOverride ??
-        options?.famequipOverride ??
-        [
-          $familiar`Ghost of Crimbo Carols`,
-          $familiar`Ghost of Crimbo Cheer`,
-          $familiar`Ghost of Crimbo Commerce`,
-        ].includes(myFamiliar())
+          options?.famequipOverride ??
+          [
+            $familiar`Ghost of Crimbo Carols`,
+            $familiar`Ghost of Crimbo Cheer`,
+            $familiar`Ghost of Crimbo Commerce`,
+          ].includes(myFamiliar())
           ? $item.none
           : $item`tiny stillsuit`,
       modes: options?.modesOverride ?? undefined,

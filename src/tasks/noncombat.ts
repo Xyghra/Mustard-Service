@@ -17,11 +17,8 @@ export const noncombatQuest: Quest<Task> = {
     },
     {
       name: `Ultra-Soft Steps`,
-      // eslint-disable-next-line libram/verify-constants
       ready: () => have($item`ultra-soft ferns`),
-      // eslint-disable-next-line libram/verify-constants
-      completed: () => have($effect`ultra-soft steps`),
-      // eslint-disable-next-line libram/verify-constants
+      completed: () => have($effect`Ultra-Soft Steps`),
       do: () => use(1, $item`ultra-soft ferns`),
     },
     {

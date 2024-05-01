@@ -38,6 +38,7 @@ import {
   $location,
   $monster,
   $skill,
+  AprilingBandHelmet,
   AutumnAton,
   Cartography,
   Clan,
@@ -182,6 +183,13 @@ export const prequelQuest: Quest<Task> = {
       do: () => use(1, $item`astral six-pack`),
     },
     {
+      name: `Apriling Band: +combat`,
+      ready: () => AprilingBandHelmet.have(),
+      completed: () =>
+        have($effect`Apriling Band Battle Cadence`) || !AprilingBandHelmet.canChangeSong(),
+      do: () => AprilingBandHelmet.conduct(`Apriling Band Battle Cadence`),
+    },
+    {
       name: `Open Skeleton Store!`,
       completed: () => get(`skeletonStoreAvailable`),
       do: (): void => {
@@ -282,7 +290,7 @@ export const prequelQuest: Quest<Task> = {
           .trySkill($skill`Summon Love Gnats`)
           .trySkill($skill`Summon Love Mosquito`)
           .attack()
-          .repeat()
+          .repeat(),
       ),
     },
     {
@@ -308,7 +316,7 @@ export const prequelQuest: Quest<Task> = {
       do: () =>
         retrieveItem(
           have($item`turtle totem`) || have($item`saucepan`) ? 1 : 2,
-          $item`chewing gum on a string`
+          $item`chewing gum on a string`,
         ),
       outfit: () => ({ pants: $item`designer sweatpants` }),
     },
@@ -342,11 +350,11 @@ export const prequelQuest: Quest<Task> = {
           $monster`novelty tropical skeleton`,
           Macro.trySkill($skill`Feel Nostalgic`)
             .trySkill($skill`Spit jurassic acid`)
-            .abort()
+            .abort(),
         )
           .trySkill($skill`CLEESH`)
           .trySkill($skill`Bowl a Curveball`)
-          .abort()
+          .abort(),
       ),
       outfit: () =>
         oomfieOutfit({
@@ -385,16 +393,18 @@ export const prequelQuest: Quest<Task> = {
           offhandOverride: $item`familiar scrapbook`,
           acc1Override:
             get(`_reflexHammerUsed`) >= 3 ? $item`backup camera` : $item`Lil' Doctor™ bag`,
+          acc2Override: have($item`spring shoes`) ? $item`spring shoes` : undefined,
           familiarOverride: args.fam ? args.familiar : $familiar`Pair of Stomping Boots`,
         }),
       combat: new CombatStrategy().autoattack(() =>
         Macro.externalIf(
-          myFamiliar() === $familiar`Pair of Stomping Boots`,
-          Macro.runaway().abort()
+          haveEquipped($item`spring shoes`) && !have($effect`Everything Looks Green`),
+          Macro.trySkill($skill`Spring Away`),
         )
+          .externalIf(myFamiliar() === $familiar`Pair of Stomping Boots`, Macro.runaway().abort())
           .externalIf(haveEquipped($item`Lil' Doctor™ bag`), Macro.trySkill($skill`Reflex Hammer`))
           .trySkill($skill`Feel Hatred`)
-          .abort()
+          .abort(),
       ),
     },
     {

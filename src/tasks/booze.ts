@@ -7,6 +7,7 @@ import {
   $location,
   $monster,
   $skill,
+  AprilingBandHelmet,
   Cartography,
   CommunityService,
   DeckOfEveryCard,
@@ -22,6 +23,13 @@ export const boozeQuest: Quest<Task> = {
   name: `Item and Booze Drop Test`,
   completed: () => CommunityService.BoozeDrop.isDone(),
   tasks: [
+    {
+      name: `Apriling Band Helmet: Party!`,
+      ready: () => AprilingBandHelmet.have(),
+      completed: () =>
+        !AprilingBandHelmet.canChangeSong() || have($effect`Apriling Band Celebration Bop`),
+      do: () => AprilingBandHelmet.conduct(`Apriling Band Celebration Bop`),
+    },
     {
       name: `Retreive Clover`,
       ready: () =>
@@ -71,7 +79,7 @@ export const boozeQuest: Quest<Task> = {
       combat: new CombatStrategy().macro(
         Macro.trySkill($skill`Become a Bat`)
           .trySkill($skill`Use the Force`)
-          .abort()
+          .abort(),
       ),
       post: (): void => {
         runChoice(3);
@@ -128,7 +136,7 @@ export const boozeQuest: Quest<Task> = {
 
         CommunityService.BoozeDrop.run(
           () => logTest(CommunityService.BoozeDrop, testTurns, predictedTestTurns),
-          1
+          1,
         );
       },
       outfit: {

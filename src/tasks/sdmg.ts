@@ -79,7 +79,6 @@ export const sdmgQuest: Quest<Task> = {
       name: `Buy: Codpiece`,
       prepare: () => Clan.join(`Floundry`),
       completed: () =>
-        // eslint-disable-next-line libram/verify-constants
         have($item`red shoe`) || have($item`ultra-soft ferns`) || have($item`codpiece`),
       do: () => retrieveItem(1, $item`codpiece`),
     },
