@@ -57,9 +57,9 @@ export const famwtQuest: Quest<Task> = {
         use(
           Math.min(
             4 - Math.floor(haveEffect($effect`Cold Hearted`) / 5),
-            itemAmount($item`love song of icy revenge`)
+            itemAmount($item`love song of icy revenge`),
           ),
-          $item`love song of icy revenge`
+          $item`love song of icy revenge`,
         ),
     },
     {
@@ -95,7 +95,7 @@ export const famwtQuest: Quest<Task> = {
 
         CommunityService.FamiliarWeight.run(
           () => logTest(CommunityService.FamiliarWeight, testTurns, predictedTestTurns),
-          42
+          42,
         );
       },
       outfit: () => ({

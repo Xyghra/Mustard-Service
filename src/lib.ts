@@ -33,7 +33,7 @@ import {
   uneffect,
 } from "libram";
 
-export class CombatStrategy extends GrimoireCombatStrategy { }
+export class CombatStrategy extends GrimoireCombatStrategy {}
 
 export class customMacro extends Macro {
   polarpocket(pockets: number): customMacro {
@@ -271,12 +271,12 @@ export function oomfieOutfit(options?: {
       familiar: famOverride ?? options?.familiarOverride ?? familiarChoice(),
       famequip:
         famequipOverride ??
-          options?.famequipOverride ??
-          [
-            $familiar`Ghost of Crimbo Carols`,
-            $familiar`Ghost of Crimbo Cheer`,
-            $familiar`Ghost of Crimbo Commerce`,
-          ].includes(myFamiliar())
+        options?.famequipOverride ??
+        [
+          $familiar`Ghost of Crimbo Carols`,
+          $familiar`Ghost of Crimbo Cheer`,
+          $familiar`Ghost of Crimbo Commerce`,
+        ].includes(myFamiliar())
           ? $item.none
           : $item`tiny stillsuit`,
       modes: options?.modesOverride ?? undefined,
@@ -294,20 +294,19 @@ export function oomfieOutfit(options?: {
       acc3:
         options?.acc3Override ??
         (have($item`spring shoes`)
-          ?
-          $item`spring shoes`
+          ? $item`spring shoes`
           : have($item`Brutal brogues`)
             ? $item`Brutal brogues`
             : $item`combat lover's locket`),
       familiar: famOverride ?? options?.familiarOverride ?? familiarChoice(),
       famequip:
         famequipOverride ??
-          options?.famequipOverride ??
-          [
-            $familiar`Ghost of Crimbo Carols`,
-            $familiar`Ghost of Crimbo Cheer`,
-            $familiar`Ghost of Crimbo Commerce`,
-          ].includes(myFamiliar())
+        options?.famequipOverride ??
+        [
+          $familiar`Ghost of Crimbo Carols`,
+          $familiar`Ghost of Crimbo Cheer`,
+          $familiar`Ghost of Crimbo Commerce`,
+        ].includes(myFamiliar())
           ? $item.none
           : $item`tiny stillsuit`,
       modes: options?.modesOverride ?? undefined,
@@ -341,9 +340,9 @@ export function printLoggedTests(): void {
     print(
       `${test.statName}: ${get(`${prefix}${test.id}`, 0)} [Predicted ${get(
         `${prefix}${test.id}p`,
-        0
+        0,
       )}]`,
-      `teal`
+      `teal`,
     );
   }
 }

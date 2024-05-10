@@ -70,8 +70,11 @@ export const sdmgQuest: Quest<Task> = {
         get(`_snokebombUsed`) >= 3,
       do: $location`The Slime Tube`,
       outfit: {
+        shirt: $item`Jurassic Parka`,
         familiar: $familiar`Machine Elf`,
+        modes: { parka: "kachungasaur" },
       },
+      effects: [$effect`Blood Bubble`],
       choices: { 326: 1 },
       combat: new CombatStrategy().autoattack(Macro.trySkill($skill`Snokebomb`).abort()),
     },
@@ -101,7 +104,7 @@ export const sdmgQuest: Quest<Task> = {
 
         CommunityService.SpellDamage.run(
           () => logTest(CommunityService.SpellDamage, testTurns, predictedTestTurns),
-          34
+          34,
         );
       },
       outfit: {

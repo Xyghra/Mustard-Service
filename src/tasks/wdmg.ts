@@ -56,8 +56,11 @@ export const wdmgQuest: Quest<Task> = {
       outfit: {
         weapon: $item.none,
         offhand: $item.none,
+        shirt: $item`Jurassic Parka`,
         familiar: $familiar`Machine Elf`,
+        modes: { parka: "kachungasaur" },
       },
+      effects: [$effect`Blood Bubble`],
       choices: { 326: 1 },
       combat: new CombatStrategy().autoattack(Macro.trySkill($skill`Snokebomb`).abort()),
     },
@@ -116,7 +119,7 @@ export const wdmgQuest: Quest<Task> = {
 
         CommunityService.WeaponDamage.run(
           () => logTest(CommunityService.WeaponDamage, testTurns, predictedTestTurns),
-          args.fam ? 11 : 1
+          args.fam ? 11 : 1,
         );
       },
       outfit: {

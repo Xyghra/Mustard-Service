@@ -91,7 +91,7 @@ export const noncombatQuest: Quest<Task> = {
 
         CommunityService.Noncombat.run(
           () => logTest(CommunityService.Noncombat, testTurns, predictedTestTurns),
-          1
+          1,
         );
       },
 

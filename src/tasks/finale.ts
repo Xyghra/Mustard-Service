@@ -30,13 +30,14 @@ export const postFinaleQuest: Quest<Task> = {
 
         print(
           `Took: ${Math.floor(
-            (get(`_mustardServiceTimeEnd`, nowToInt()) - Number(get(`_mustardServiceTime`))) / 60000
+            (get(`_mustardServiceTimeEnd`, nowToInt()) - Number(get(`_mustardServiceTime`))) /
+              60000,
           )} Minute(s), ${Math.floor(
             ((get(`_mustardServiceTimeEnd`, nowToInt()) - Number(get(`_mustardServiceTime`))) %
               60000) /
-              1000
+              1000,
           )} Second(s)`,
-          `green`
+          `green`,
         );
 
         set(`_mustardServiceTime`, ``);

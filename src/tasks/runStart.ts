@@ -144,6 +144,14 @@ export const prequelQuest: Quest<Task> = {
       },
     },
     {
+      name: `Vote!`,
+      completed: () => get(`_voteModifier`) !== ``,
+      do: () => {
+        visitUrl(`place.php?whichplace=town_right&action=townright_vote`);
+        cliExecute(`doublevote 3`);
+      },
+    },
+    {
       name: `Visit the Council`,
       completed: () => get(`lastCouncilVisit`) > 0,
       do: () => visitUrl(`council.php`),
@@ -393,7 +401,10 @@ export const prequelQuest: Quest<Task> = {
           offhandOverride: $item`familiar scrapbook`,
           acc1Override:
             get(`_reflexHammerUsed`) >= 3 ? $item`backup camera` : $item`Lil' Doctor™ bag`,
-          acc2Override: have($item`spring shoes`) ? $item`spring shoes` : undefined,
+          acc2Override:
+            have($item`spring shoes`) && !haveEquipped($item`spring shoes`)
+              ? $item`spring shoes`
+              : undefined,
           familiarOverride: args.fam ? args.familiar : $familiar`Pair of Stomping Boots`,
         }),
       combat: new CombatStrategy().autoattack(() =>

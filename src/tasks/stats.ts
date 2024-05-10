@@ -42,7 +42,7 @@ export const muscleQuest: Quest<Task> = {
 
         CommunityService.Muscle.run(
           () => logTest(CommunityService.Muscle, testTurns, predictedTestTurns),
-          1
+          1,
         );
       },
       outfit: {
@@ -80,7 +80,7 @@ export const mystQuest: Quest<Task> = {
 
         CommunityService.Mysticality.run(
           () => logTest(CommunityService.Mysticality, testTurns, predictedTestTurns),
-          1
+          1,
         );
       },
       outfit: {
@@ -119,7 +119,7 @@ export const moxQuest: Quest<Task> = {
 
         CommunityService.Moxie.run(
           () => logTest(CommunityService.Moxie, testTurns, predictedTestTurns),
-          1
+          1,
         );
       },
       outfit: {
@@ -159,7 +159,7 @@ export const hpQuest: Quest<Task> = {
 
         CommunityService.HP.run(
           () => logTest(CommunityService.HP, testTurns, predictedTestTurns),
-          1
+          1,
         );
       },
       outfit: {
