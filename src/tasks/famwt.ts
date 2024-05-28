@@ -1,18 +1,30 @@
-import { Quest, Task } from "grimoire-kolmafia";
-import { Familiar, cliExecute, familiarWeight, haveEffect, itemAmount, print, use } from "kolmafia";
+import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
+import {
+  cliExecute,
+  Familiar,
+  familiarWeight,
+  haveEffect,
+  itemAmount,
+  print,
+  runChoice,
+  use,
+} from "kolmafia";
 import {
   $effect,
   $familiar,
   $familiars,
   $item,
+  $location,
+  $skill,
   BeachComb,
   Clan,
   CommunityService,
   get,
   have,
+  Macro,
 } from "libram";
 import { printModtrace } from "libram/dist/modifier";
-import { logTest } from "../lib";
+import { logTest, oomfieOutfit } from "../lib";
 
 function bestFam(): Familiar {
   return $familiars
@@ -57,9 +69,9 @@ export const famwtQuest: Quest<Task> = {
         use(
           Math.min(
             4 - Math.floor(haveEffect($effect`Cold Hearted`) / 5),
-            itemAmount($item`love song of icy revenge`),
+            itemAmount($item`love song of icy revenge`)
           ),
-          $item`love song of icy revenge`,
+          $item`love song of icy revenge`
         ),
     },
     {
@@ -84,6 +96,22 @@ export const famwtQuest: Quest<Task> = {
       do: () => BeachComb.tryHead(`FAMILIAR`),
     },
     {
+      name: `Meteor Showered`,
+      ready: () => have($skill`Meteor Lore`) && get(`_saberForceUses`) < 5,
+      completed: () => have($effect`Meteor Showered`) || get(`_meteorShowerUses`) >= 5,
+      do: () => $location`Sloppy Seconds Diner`,
+      outfit: () =>
+        oomfieOutfit({
+          weaponOverride: $item`Fourth of May Cosplay Saber`,
+          familiarOverride: $familiar`Cookbookbat`,
+        }),
+      combat: new CombatStrategy().macro(
+        Macro.trySkill($skill`Meteor Shower`).trySkill($skill`Use the Force`)
+      ),
+      choices: () => ({ 1387: 3 }),
+      post: () => runChoice(3), //this is cringe
+    },
+    {
       name: `Familiar Weight Test`,
       completed: () => CommunityService.FamiliarWeight.isDone(),
       do: (): void => {
@@ -95,7 +123,7 @@ export const famwtQuest: Quest<Task> = {
 
         CommunityService.FamiliarWeight.run(
           () => logTest(CommunityService.FamiliarWeight, testTurns, predictedTestTurns),
-          42,
+          42
         );
       },
       outfit: () => ({

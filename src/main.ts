@@ -1,4 +1,4 @@
-import { Args, Engine, Task, getTasks } from "grimoire-kolmafia";
+import { Args, Engine, getTasks, Task } from "grimoire-kolmafia";
 import { abort, myFamiliar, setAutoAttack } from "kolmafia";
 import { $familiar, get } from "libram";
 import { args } from "./lib";

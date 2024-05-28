@@ -1,5 +1,14 @@
 import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
-import { cliExecute, myBasestat, print, retrieveItem, takeStorage, use, useSkill } from "kolmafia";
+import {
+  cliExecute,
+  myBasestat,
+  print,
+  retrieveItem,
+  runChoice,
+  takeStorage,
+  use,
+  useSkill,
+} from "kolmafia";
 import {
   $effect,
   $familiar,
@@ -9,12 +18,12 @@ import {
   $stat,
   Clan,
   CommunityService,
-  Macro,
   get,
   have,
+  Macro,
 } from "libram";
 import { printModtrace } from "libram/dist/modifier";
-import { args, logTest } from "../lib";
+import { args, logTest, oomfieOutfit } from "../lib";
 
 export const sdmgQuest: Quest<Task> = {
   name: `Spell Damage Test`,
@@ -92,6 +101,22 @@ export const sdmgQuest: Quest<Task> = {
       do: () => cliExecute(`pool 2`),
     },
     {
+      name: `Meteor Showered`,
+      ready: () => have($skill`Meteor Lore`) && get(`_saberForceUses`) < 5,
+      completed: () => have($effect`Meteor Showered`) || get(`_meteorShowerUses`) >= 5,
+      do: () => $location`Sloppy Seconds Diner`,
+      outfit: () =>
+        oomfieOutfit({
+          weaponOverride: $item`Fourth of May Cosplay Saber`,
+          familiarOverride: $familiar`Cookbookbat`,
+        }),
+      combat: new CombatStrategy().macro(
+        Macro.trySkill($skill`Meteor Shower`).trySkill($skill`Use the Force`)
+      ),
+      choices: () => ({ 1387: 3 }),
+      post: () => runChoice(3), //this is cringe
+    },
+    {
       name: `Spell Damage Test`,
       completed: () => CommunityService.SpellDamage.isDone(),
       do: (): void => {
@@ -104,7 +129,7 @@ export const sdmgQuest: Quest<Task> = {
 
         CommunityService.SpellDamage.run(
           () => logTest(CommunityService.SpellDamage, testTurns, predictedTestTurns),
-          34,
+          34
         );
       },
       outfit: {

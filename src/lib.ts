@@ -6,9 +6,9 @@ import {
   Task,
 } from "grimoire-kolmafia";
 import {
+  abort,
   Familiar,
   Item,
-  abort,
   myClass,
   myFamiliar,
   myHash,
@@ -24,11 +24,11 @@ import {
   $skill,
   $stat,
   BarrelShrine,
-  CommunityService,
-  Macro,
   byStat,
+  CommunityService,
   get,
   have,
+  Macro,
   set,
   uneffect,
 } from "libram";
@@ -208,20 +208,20 @@ export const juneCleaverTask: Task = {
       myClass().primestat === $stat`Muscle`
         ? 2
         : myClass().primestat === $stat`Moxie`
-          ? 1
-          : get(`_juneCleaverSkips`) < 5
-            ? 4
-            : 2,
+        ? 1
+        : get(`_juneCleaverSkips`) < 5
+        ? 4
+        : 2,
     1473: myClass().primestat === $stat`Muscle` ? 1 : get(`_juneCleaverSkips`) < 5 ? 4 : 1,
     1469: 3,
     1474:
       myClass().primestat === $stat`Muscle`
         ? 3
         : myClass().primestat === $stat`Mysticality`
-          ? 1
-          : get(`_juneCleaverSkips`) < 5
-            ? 4
-            : 3,
+        ? 1
+        : get(`_juneCleaverSkips`) < 5
+        ? 4
+        : 3,
     1475: myClass().primestat === $stat`Muscle` ? 2 : get(`_juneCleaverSkips`) < 5 ? 4 : 2,
     1471: 1,
     1467: 3,
@@ -296,8 +296,8 @@ export function oomfieOutfit(options?: {
         (have($item`spring shoes`)
           ? $item`spring shoes`
           : have($item`Brutal brogues`)
-            ? $item`Brutal brogues`
-            : $item`combat lover's locket`),
+          ? $item`Brutal brogues`
+          : $item`combat lover's locket`),
       familiar: famOverride ?? options?.familiarOverride ?? familiarChoice(),
       famequip:
         famequipOverride ??
@@ -340,9 +340,9 @@ export function printLoggedTests(): void {
     print(
       `${test.statName}: ${get(`${prefix}${test.id}`, 0)} [Predicted ${get(
         `${prefix}${test.id}p`,
-        0,
+        0
       )}]`,
-      `teal`,
+      `teal`
     );
   }
 }

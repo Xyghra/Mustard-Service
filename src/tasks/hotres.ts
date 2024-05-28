@@ -7,9 +7,9 @@ import {
   $skill,
   CombatLoversLocket,
   CommunityService,
-  Macro,
   get,
   have,
+  Macro,
 } from "libram";
 import { printModtrace } from "libram/dist/modifier";
 import { logTest, oomfieOutfit } from "../lib";
@@ -35,7 +35,7 @@ export const hotresQuest: Quest<Task> = {
       combat: new CombatStrategy().macro(
         Macro.trySkill($skill`Fire Extinguisher: Foam Yourself`)
           .trySkill($skill`Use the Force`)
-          .abort(),
+          .abort()
       ),
     },
     {
@@ -53,7 +53,7 @@ export const hotresQuest: Quest<Task> = {
 
         CommunityService.HotRes.run(
           () => logTest(CommunityService.HotRes, testTurns, predictedTestTurns),
-          1,
+          1
         );
       },
       outfit: {

@@ -11,9 +11,9 @@ import {
   Cartography,
   CommunityService,
   DeckOfEveryCard,
-  Macro,
   get,
   have,
+  Macro,
   set,
 } from "libram";
 import { printModtrace } from "libram/dist/modifier";
@@ -79,7 +79,7 @@ export const boozeQuest: Quest<Task> = {
       combat: new CombatStrategy().macro(
         Macro.trySkill($skill`Become a Bat`)
           .trySkill($skill`Use the Force`)
-          .abort(),
+          .abort()
       ),
       post: (): void => {
         runChoice(3);
@@ -136,7 +136,7 @@ export const boozeQuest: Quest<Task> = {
 
         CommunityService.BoozeDrop.run(
           () => logTest(CommunityService.BoozeDrop, testTurns, predictedTestTurns),
-          1,
+          1
         );
       },
       outfit: {

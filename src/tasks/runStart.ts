@@ -1,12 +1,11 @@
 import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
 import {
-  Item,
   abort,
   adv1,
   autosell,
   availableAmount,
-  canAdventure,
   canadiaAvailable,
+  canAdventure,
   changeMcd,
   cliExecute,
   create,
@@ -14,6 +13,7 @@ import {
   drink,
   getWorkshed,
   haveEquipped,
+  Item,
   knollAvailable,
   myAdventures,
   myClass,
@@ -44,13 +44,13 @@ import {
   Clan,
   CombatLoversLocket,
   CommunityService,
-  Macro,
-  TrainSet,
   ensureEffect,
   get,
   getKramcoWandererChance,
   have,
+  Macro,
   set,
+  TrainSet,
   uneffect,
 } from "libram";
 import {
@@ -298,7 +298,7 @@ export const prequelQuest: Quest<Task> = {
           .trySkill($skill`Summon Love Gnats`)
           .trySkill($skill`Summon Love Mosquito`)
           .attack()
-          .repeat(),
+          .repeat()
       ),
     },
     {
@@ -324,7 +324,7 @@ export const prequelQuest: Quest<Task> = {
       do: () =>
         retrieveItem(
           have($item`turtle totem`) || have($item`saucepan`) ? 1 : 2,
-          $item`chewing gum on a string`,
+          $item`chewing gum on a string`
         ),
       outfit: () => ({ pants: $item`designer sweatpants` }),
     },
@@ -358,11 +358,11 @@ export const prequelQuest: Quest<Task> = {
           $monster`novelty tropical skeleton`,
           Macro.trySkill($skill`Feel Nostalgic`)
             .trySkill($skill`Spit jurassic acid`)
-            .abort(),
+            .abort()
         )
           .trySkill($skill`CLEESH`)
           .trySkill($skill`Bowl a Curveball`)
-          .abort(),
+          .abort()
       ),
       outfit: () =>
         oomfieOutfit({
@@ -410,12 +410,12 @@ export const prequelQuest: Quest<Task> = {
       combat: new CombatStrategy().autoattack(() =>
         Macro.externalIf(
           haveEquipped($item`spring shoes`) && !have($effect`Everything Looks Green`),
-          Macro.trySkill($skill`Spring Away`),
+          Macro.trySkill($skill`Spring Away`)
         )
           .externalIf(myFamiliar() === $familiar`Pair of Stomping Boots`, Macro.runaway().abort())
           .externalIf(haveEquipped($item`Lil' Doctor™ bag`), Macro.trySkill($skill`Reflex Hammer`))
           .trySkill($skill`Feel Hatred`)
-          .abort(),
+          .abort()
       ),
     },
     {

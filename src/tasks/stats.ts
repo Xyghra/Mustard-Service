@@ -1,6 +1,6 @@
 import { Quest, Task } from "grimoire-kolmafia";
 import { print } from "kolmafia";
-import { $effect, CommunityService, TrainSet, get, uneffect } from "libram";
+import { $effect, CommunityService, get, TrainSet, uneffect } from "libram";
 import { printModtrace } from "libram/dist/modifier";
 import { logTest } from "../lib";
 
@@ -42,7 +42,7 @@ export const muscleQuest: Quest<Task> = {
 
         CommunityService.Muscle.run(
           () => logTest(CommunityService.Muscle, testTurns, predictedTestTurns),
-          1,
+          1
         );
       },
       outfit: {
@@ -80,7 +80,7 @@ export const mystQuest: Quest<Task> = {
 
         CommunityService.Mysticality.run(
           () => logTest(CommunityService.Mysticality, testTurns, predictedTestTurns),
-          1,
+          1
         );
       },
       outfit: {
@@ -119,7 +119,7 @@ export const moxQuest: Quest<Task> = {
 
         CommunityService.Moxie.run(
           () => logTest(CommunityService.Moxie, testTurns, predictedTestTurns),
-          1,
+          1
         );
       },
       outfit: {
@@ -159,7 +159,7 @@ export const hpQuest: Quest<Task> = {
 
         CommunityService.HP.run(
           () => logTest(CommunityService.HP, testTurns, predictedTestTurns),
-          1,
+          1
         );
       },
       outfit: {

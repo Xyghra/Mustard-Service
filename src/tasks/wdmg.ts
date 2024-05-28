@@ -20,10 +20,10 @@ import {
   Clan,
   CommunityService,
   CursedMonkeyPaw,
-  Macro,
-  SongBoom,
   get,
   have,
+  Macro,
+  SongBoom,
 } from "libram";
 import { printModtrace } from "libram/dist/modifier";
 import { args, logTest } from "../lib";
@@ -119,7 +119,7 @@ export const wdmgQuest: Quest<Task> = {
 
         CommunityService.WeaponDamage.run(
           () => logTest(CommunityService.WeaponDamage, testTurns, predictedTestTurns),
-          args.fam ? 11 : 1,
+          args.fam ? 11 : 1
         );
       },
       outfit: {

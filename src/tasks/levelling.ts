@@ -1,13 +1,13 @@
 import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
 import {
-  Location,
-  Monster,
   abort,
   adv1,
   availableAmount,
   cliExecute,
   drink,
   eat,
+  Location,
+  Monster,
   mpCost,
   myClass,
   myHash,
@@ -36,18 +36,18 @@ import {
   $stat,
   AprilingBandHelmet,
   AutumnAton,
-  Cartography,
-  Clan,
-  Latte,
-  Macro,
-  Witchess,
   byStat,
+  Cartography,
   clamp,
+  Clan,
   ensureEffect,
   get,
   getKramcoWandererChance,
   have,
+  Latte,
+  Macro,
   uneffect,
+  Witchess,
 } from "libram";
 import { args, customMacro, familiarAttacks, juneCleaverTask, loss, oomfieOutfit } from "../lib";
 
@@ -247,7 +247,7 @@ export const levellingQuest: Quest<Task> = {
       combat: new CombatStrategy().autoattack(
         Macro.trySkill($skill`Sing Along`)
           .attack()
-          .repeat(),
+          .repeat()
       ),
     },
     {
@@ -343,7 +343,7 @@ export const levellingQuest: Quest<Task> = {
       name: `Use Market Consumables`,
       completed: () =>
         [$effect`Glittering Eyelashes`, $effect`Go Get 'Em, Tiger!`, $effect`Butt-Rock Hair`].every(
-          (ef) => have(ef),
+          (ef) => have(ef)
         ),
       do: () =>
         [
@@ -427,7 +427,7 @@ export const levellingQuest: Quest<Task> = {
       combat: new CombatStrategy().autoattack(
         Macro.trySkill($skill`Gulp Latte`)
           .trySkill($skill`Throw Latte on Opponent`)
-          .abort(),
+          .abort()
       ),
     },
     {
@@ -463,7 +463,7 @@ export const levellingQuest: Quest<Task> = {
       combat: new CombatStrategy().autoattack(
         Macro.trySkill($skill`Gulp Latte`)
           .trySkill($skill`Throw Latte on Opponent`)
-          .abort(),
+          .abort()
       ),
     },
     {
@@ -479,7 +479,7 @@ export const levellingQuest: Quest<Task> = {
       do: () =>
         Cartography.mapMonster(
           $location`An Unusually Quiet Barroom Brawl`,
-          $monster`goblin flapper`,
+          $monster`goblin flapper`
         ),
       outfit: () =>
         oomfieOutfit({
@@ -500,10 +500,10 @@ export const levellingQuest: Quest<Task> = {
           .externalIf(!have($effect`Wolfish Form`), Macro.trySkill($skill`Become a Wolf`))
           .externalIf(
             have($effect`Wolfish Form`) && !have($effect`Bat-Adjacent Form`),
-            Macro.trySkill($skill`Become a Bat`),
+            Macro.trySkill($skill`Become a Bat`)
           )
           .attack()
-          .repeat(),
+          .repeat()
       ),
     },
     {
@@ -527,11 +527,11 @@ export const levellingQuest: Quest<Task> = {
           .externalIf(!have($effect`Wolfish Form`), Macro.trySkill($skill`Become a Wolf`))
           .externalIf(
             have($effect`Wolfish Form`) && !have($effect`Bat-Adjacent Form`),
-            Macro.trySkill($skill`Become a Bat`),
+            Macro.trySkill($skill`Become a Bat`)
           )
           .trySkill($skill`Lunging Thrust-Smack`)
           .attack()
-          .repeat(),
+          .repeat()
       ),
     },
     {
@@ -550,10 +550,10 @@ export const levellingQuest: Quest<Task> = {
           .externalIf(!have($effect`Wolfish Form`), Macro.trySkill($skill`Become a Wolf`))
           .externalIf(
             have($effect`Wolfish Form`) && !have($effect`Bat-Adjacent Form`),
-            Macro.trySkill($skill`Become a Bat`),
+            Macro.trySkill($skill`Become a Bat`)
           )
           .attack()
-          .repeat(),
+          .repeat()
       ),
     },
     {
@@ -591,12 +591,12 @@ export const levellingQuest: Quest<Task> = {
           .externalIf(!have($effect`Wolfish Form`), Macro.trySkill($skill`Become a Wolf`))
           .externalIf(
             have($effect`Wolfish Form`) && !have($effect`Bat-Adjacent Form`),
-            Macro.trySkill($skill`Become a Bat`),
+            Macro.trySkill($skill`Become a Bat`)
           )
           .trySkill($skill`Surprisingly Sweet Slash`)
           .trySkill($skill`Surprisingly Sweet Stab`)
           .attack()
-          .repeat(),
+          .repeat()
       ),
     },
     {
@@ -627,12 +627,12 @@ export const levellingQuest: Quest<Task> = {
             shadowRiftPocketTarget(),
             customMacro
               .polarpocket(9 - (100 - get(`_fireExtinguisherCharge`)) / 10)
-              .trySkill($skill`Perpetrate Mild Evil`),
+              .trySkill($skill`Perpetrate Mild Evil`)
           )
           .trySkill($skill`Sing Along`)
           .trySkill($skill`Recall Facts: %phylum Circadian Rhythms`)
           .attack()
-          .repeat(),
+          .repeat()
       ),
     },
     {
@@ -648,7 +648,7 @@ export const levellingQuest: Quest<Task> = {
           .trySkill($skill`Surprisingly Sweet Slash`)
           .trySkill($skill`Surprisingly Sweet Stab`)
           .attack()
-          .repeat(),
+          .repeat()
       ),
     },
     {
@@ -661,8 +661,8 @@ export const levellingQuest: Quest<Task> = {
       combat: new CombatStrategy().autoattack(
         Macro.if_(
           $monster`shadow matrix`,
-          Macro.trySkill($skill`Stuffed Mortar Shell`).trySkillRepeat($skill`Saucegeyser`),
-        ).trySkillRepeat($skill`Northern Explosion`),
+          Macro.trySkill($skill`Stuffed Mortar Shell`).trySkillRepeat($skill`Saucegeyser`)
+        ).trySkillRepeat($skill`Northern Explosion`)
       ),
     },
     {
@@ -689,7 +689,7 @@ export const levellingQuest: Quest<Task> = {
         Macro.trySkill($skill`%fn, spit on me!`)
           .trySkill($skill`Sing Along`)
           .attack()
-          .repeat(),
+          .repeat()
       ),
     },
     {
@@ -712,7 +712,7 @@ export const levellingQuest: Quest<Task> = {
         Macro.trySkill($skill`%fn, spit on me!`)
           .trySkill($skill`Sing Along`)
           .attack()
-          .repeat(),
+          .repeat()
       ),
       outfit: () => oomfieOutfit({ shirtOverride: $item`makeshift garbage shirt` }),
     },
@@ -730,13 +730,13 @@ export const levellingQuest: Quest<Task> = {
       combat: new CombatStrategy().autoattack(() =>
         Macro.externalIf(
           get(`lastCopyableMonster`) === $monster`Witchess Bishop`,
-          Macro.trySkill($skill`Feel Nostalgic`),
+          Macro.trySkill($skill`Feel Nostalgic`)
         )
           .if_($monster`Perceiver of Sensations`, Macro.tryItem($item`abstraction: thought`))
           .if_($monster`Thinker of Thoughts`, Macro.tryItem($item`abstraction: action`))
           .trySkill($skill`Sing Along`)
           .attack()
-          .repeat(),
+          .repeat()
       ),
     },
     {
@@ -771,11 +771,11 @@ export const levellingQuest: Quest<Task> = {
           .trySkill($skill`%fn, spit on me!`)
           .externalIf(
             get(`lastCopyableMonster`) === $monster`sausage goblin`,
-            Macro.trySkill($skill`Feel Nostalgic`),
+            Macro.trySkill($skill`Feel Nostalgic`)
           )
           .trySkill($skill`Sing Along`)
           .trySkill($skill`Recall Facts: %phylum Circadian Rhythms`)
-          .trySkillRepeat($skill`Lunging Thrust-Smack`),
+          .trySkillRepeat($skill`Lunging Thrust-Smack`)
       ),
       outfit: () => oomfieOutfit({ shirtOverride: $item`makeshift garbage shirt` }),
     },
@@ -790,7 +790,7 @@ export const levellingQuest: Quest<Task> = {
       combat: new CombatStrategy().autoattack(
         Macro.trySkill($skill`%fn, spit on me!`)
           .trySkill($skill`Sing Along`)
-          .trySkillRepeat($skill`Lunging Thrust-Smack`),
+          .trySkillRepeat($skill`Lunging Thrust-Smack`)
       ),
       outfit: () =>
         oomfieOutfit({
@@ -829,7 +829,7 @@ export const levellingQuest: Quest<Task> = {
           .trySkill($skill`Cincho: Confetti Extravaganza`)
           .trySkill($skill`Sing Along`)
           .trySkill($skill`Shattering Punch`)
-          .abort(),
+          .abort()
       ),
     },
     {
@@ -845,7 +845,7 @@ export const levellingQuest: Quest<Task> = {
           .trySkill($skill`Bowl Sideways`)
           .trySkill($skill`Sing Along`)
           .trySkill($skill`Chest X-Ray`)
-          .abort(),
+          .abort()
       ),
     },
     {
@@ -859,7 +859,7 @@ export const levellingQuest: Quest<Task> = {
           .trySkill($skill`Bowl Sideways`)
           .trySkill($skill`Sing Along`)
           .trySkill($skill`Gingerbread Mob Hit`)
-          .abort(),
+          .abort()
       ),
     },
   ],
